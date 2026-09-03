@@ -851,7 +851,7 @@ export const FH12_24S_0_5SH_55_ = (props: ChipProps<typeof pinLabels>) => {
 					"https://modelcdn.tscircuit.com/easyeda_models/assets/C202112.obj?uuid=80a519313ec9409481d237954e09dd94",
 				stepUrl:
 					"https://modelcdn.tscircuit.com/easyeda_models/assets/C202112.step?uuid=80a519313ec9409481d237954e09dd94",
-				pcbRotationOffset: 180,
+				pcbRotationOffset: 0,
 				modelOriginPosition: {
 					x: -0.000012699999984988608,
 					y: 1.3889803499999942,

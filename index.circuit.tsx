@@ -19,7 +19,7 @@ export default function ESP32EReader() {
 			layers={4}
 			thickness="1.6mm"
 			doubleSidedAssembly
-			autorouter="auto-local"
+			autorouter={{ preset: "auto-local", allowViaInPad: true }}
 			isViaInPadAllowed
 		>
 			<CircuitSections />

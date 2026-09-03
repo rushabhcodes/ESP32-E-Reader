@@ -120,10 +120,10 @@ export const supplierPartNumbersFor = (reference: string) => {
 export const kicad = (path: string) => `kicad:${path}`;
 
 export const FP = {
-	c0603: kicad("Capacitor_SMD/C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"),
-	c0805: kicad("Capacitor_SMD/C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"),
-	r0603: kicad("Resistor_SMD/R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"),
-	r0805: kicad("Resistor_SMD/R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"),
+	c0603: "0603",
+	c0805: "0805",
+	r0603: "0603",
+	r0805: "0805",
 } as const;
 
 export const polarizedPinLabels = {
@@ -185,7 +185,7 @@ export const capacitors: PassiveSpec[] = [
 	{
 		name: "C6",
 		value: "10uF",
-		footprint: kicad("Capacitor_SMD/C_0603_1608Metric"),
+		footprint: FP.c0603,
 		section: "battery_usb",
 		pcbX: -26.525599999999997,
 		pcbY: 39.012,

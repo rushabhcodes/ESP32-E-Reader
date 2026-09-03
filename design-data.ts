@@ -1184,6 +1184,23 @@ export const pinLabelsFor = (pins: readonly string[]) =>
 
 export const endpoint = (ref: string, pin: string) => `.${ref} > .pin${pin}`;
 
+/** Trace widths retained from the Rev. B KiCad design. */
+export const traceThicknessByNet: Record<string, string> = {
+	BATT_N_RAW: "0.5mm",
+	BATT_P: "0.5mm",
+	EPD_PUMP_NEG: "0.6mm",
+	EPD_PUMP_SWITCH: "0.5mm",
+	FL_INPUT: "0.4mm",
+	FL_LED_NEG: "0.3mm",
+	FL_LED_POS: "0.3mm",
+	FL_SWITCH: "0.6mm",
+	PREVGL: "0.4mm",
+	PROTECT_OC: "0.6mm",
+	PROTECT_OD: "0.6mm",
+	PROTECT_VCC: "0.3mm",
+	USB_VBUS: "0.5mm",
+};
+
 export const nets: Record<string, string[]> = {
 	V3V3: [
 		endpoint("C7", "1"),

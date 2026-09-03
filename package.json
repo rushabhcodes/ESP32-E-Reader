@@ -14,10 +14,9 @@
 		"build": "tsci build index.circuit.tsx",
 		"build:pcb": "tsci build index.circuit.tsx --ignore-warnings --pcb-png",
 		"format": "biome format . --write",
-		"routing:generate": "bun scripts/generate-routing-data.mjs",
 		"export:gerbers": "tsci export index.circuit.tsx --format gerbers --output dist/esp32-e-reader-gerbers.zip",
-		"snapshot": "tsci snapshot index.circuit.tsx",
-		"snapshot:update": "tsci snapshot index.circuit.tsx --update",
+		"snapshot": "tsci snapshot index.circuit.tsx --3d",
+		"snapshot:update": "tsci snapshot index.circuit.tsx --update --3d",
 		"start": "tsci dev",
 		"typecheck": "tsc --noEmit"
 	},

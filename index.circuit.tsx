@@ -7,8 +7,7 @@
 
 import { Fragment } from "react";
 import { CircuitSections } from "./circuit-sections";
-import { nets } from "./design-data";
-import { manualRoutesByNet, planeConnectionsByNet } from "./routing-data";
+import { nets, traceThicknessByNet } from "./design-data";
 
 export default function ESP32EReader() {
 	return (
@@ -20,53 +19,29 @@ export default function ESP32EReader() {
 			layers={4}
 			thickness="1.6mm"
 			doubleSidedAssembly
-			routingDisabled
+			autorouter="auto-local"
 			isViaInPadAllowed
 		>
 			<CircuitSections />
 
-			{Object.keys(nets).map((name) => (
+			{Object.entries(nets).map(([name, connections]) => (
 				<Fragment key={name}>
 					<net
 						name={name}
 						isGroundNet={name === "GND"}
 						isPowerNet={["GND", "V3V3", "USB_VBUS", "BATT_P"].includes(name)}
 					/>
+					{connections.map((connection, index) => (
+						<Fragment key={`${name}-${index}`}>
+							<trace
+								from={connection}
+								to={`net.${name}`}
+								thickness={traceThicknessByNet[name] ?? "0.2mm"}
+							/>
+						</Fragment>
+					))}
 				</Fragment>
 			))}
-
-			{Object.entries(planeConnectionsByNet).flatMap(([name, connections]) =>
-				connections.map((connection, index) => (
-					<Fragment key={`${name}-plane-${index}`}>
-						<trace
-							from={connection.from}
-							to={`net.${name}`}
-							thickness={connection.thickness}
-							pcbPath={connection.pcbPath}
-						/>
-					</Fragment>
-				)),
-			)}
-
-			{Object.entries(manualRoutesByNet).flatMap(([name, routes]) => [
-				<Fragment key={`${name}-net-root`}>
-					<trace
-						from={routes[0]?.to ?? nets[name][0]}
-						to={`net.${name}`}
-						pcbPath={[]}
-					/>
-				</Fragment>,
-				...routes.map((route, index) => (
-					<Fragment key={`${name}-route-${index}`}>
-						<trace
-							from={route.from}
-							to={`net.${name}`}
-							thickness={route.thickness}
-							pcbPath={route.pcbPath}
-						/>
-					</Fragment>
-				)),
-			])}
 
 			<cutout
 				name="ENCLOSURE_SLOT"

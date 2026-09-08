@@ -16,7 +16,6 @@ import {
 	chips,
 	diodes,
 	inductors,
-	kicad,
 	noConnectAliases,
 	pinLabelsFor,
 	polarizedPinLabels,
@@ -130,6 +129,7 @@ const renderChip = (spec: ChipSpec) => {
 				key={spec.name}
 				name="J1"
 				manufacturerPartNumber="USB4105-xx-A"
+				standard="usb_c"
 				pinCount={16}
 				pinLabels={pinLabelsFor(spec.pins)}
 				noConnect={noConnectAliases(spec)}
@@ -404,7 +404,7 @@ export const CircuitSections = () => (
 			name="D1"
 			color="red"
 			pinLabels={polarizedPinLabels}
-			footprint={kicad("LED_SMD/LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder")}
+			footprint="0805"
 			pcbX={-29.62440000000001}
 			pcbY={34.475}
 			pcbRotation={90}

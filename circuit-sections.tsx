@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { CR5040_470M } from "./imports/CR5040_470M";
 import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
 import { ESP32_C3_WROOM_02_N4 } from "./imports/ESP32_C3_WROOM_02_N4";
 import { EVQP7C01P } from "./imports/EVQP7C01P";
@@ -7,6 +8,10 @@ import { FPC_05FB_6PH20 } from "./imports/FPC_05FB_6PH20";
 import { FXL0420_100_M } from "./imports/FXL0420_100_M";
 import { JS102011SAQN } from "./imports/JS102011SAQN";
 import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
+import { MBR0530T1G } from "./imports/MBR0530T1G";
+import { NSR0240HT1G } from "./imports/NSR0240HT1G";
+import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
+import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
 import { SKRPACE010 } from "./imports/SKRPACE010";
 import { TPS61169DCKR } from "./imports/TPS61169DCKR";
 import {
@@ -66,6 +71,17 @@ const renderChip = (spec: ChipSpec) => {
 				noConnect={["pin10", "pin11", "pin12", "pin13", "pin14"]}
 			/>
 		);
+	if (spec.name === "BT1")
+		return (
+			<S2B_PH_K_S_LF__SN_
+				key={spec.name}
+				{...importedCommon}
+				pcbX={spec.pcbX - 0.975}
+				pcbRotation={0}
+			/>
+		);
+	if (spec.name === "Q2")
+		return <SI1308EDL_T1_GE3 key={spec.name} {...importedCommon} />;
 	if (spec.name === "U4")
 		return <ESP32_C3_WROOM_02_N4 key={spec.name} {...importedCommon} />;
 	if (spec.name === "U5")
@@ -115,6 +131,7 @@ const renderChip = (spec: ChipSpec) => {
 		pcbRotation: spec.pcbRotation,
 		layer: spec.layer,
 		supplierPartNumbers: supplierPartNumbersFor(spec.name),
+		doNotPlace: spec.name === "JP1",
 		schPinArrangement: {
 			leftSide: spec.pins.slice(0, half).map(aliasForPin),
 			rightSide: spec.pins.slice(half).map(aliasForPin),
@@ -128,7 +145,8 @@ const renderChip = (spec: ChipSpec) => {
 			<connector
 				key={spec.name}
 				name="J1"
-				manufacturerPartNumber="USB4105-xx-A"
+				manufacturerPartNumber="USB4105-GF-A"
+				supplierPartNumbers={supplierPartNumbersFor(spec.name)}
 				standard="usb_c"
 				pinCount={16}
 				pinLabels={pinLabelsFor(spec.pins)}
@@ -373,7 +391,18 @@ export const CircuitSections = () => (
 			/>
 		))}
 		{inductors.map((spec) =>
-			spec.name === "L2" ? (
+			spec.name === "L1" ? (
+				<CR5040_470M
+					key={spec.name}
+					name={spec.name}
+					pcbX={spec.pcbX}
+					pcbY={spec.pcbY}
+					pcbRotation={spec.pcbRotation}
+					layer={spec.layer}
+					supplierPartNumbers={supplierPartNumbersFor(spec.name)}
+					{...schematicPlacementFor(spec.name)}
+				/>
+			) : spec.name === "L2" ? (
 				<FXL0420_100_M
 					key={spec.name}
 					name={spec.name}
@@ -412,20 +441,21 @@ export const CircuitSections = () => (
 			{...schematicPlacementFor("D1")}
 		/>
 
-		{diodes.map((spec) => (
-			<diode
-				key={spec.name}
-				name={spec.name}
-				pinLabels={polarizedPinLabels}
-				footprint={spec.footprint}
-				supplierPartNumbers={supplierPartNumbersFor(spec.name)}
-				pcbX={spec.pcbX}
-				pcbY={spec.pcbY}
-				pcbRotation={spec.pcbRotation}
-				layer={spec.layer}
-				{...schematicPlacementFor(spec.name)}
-			/>
-		))}
+		{diodes.map((spec) => {
+			const ImportedDiode = spec.name === "D5" ? NSR0240HT1G : MBR0530T1G;
+			return (
+				<ImportedDiode
+					key={spec.name}
+					name={spec.name}
+					pcbX={spec.pcbX}
+					pcbY={spec.pcbY}
+					pcbRotation={spec.pcbRotation}
+					layer={spec.layer}
+					supplierPartNumbers={supplierPartNumbersFor(spec.name)}
+					{...schematicPlacementFor(spec.name)}
+				/>
+			);
+		})}
 
 		{chips.map(renderChip)}
 
@@ -436,6 +466,7 @@ export const CircuitSections = () => (
 				footprintVariant="pad"
 				padShape="circle"
 				padDiameter="1.5mm"
+				doNotPlace
 				pcbX={testpoint.pcbX}
 				pcbY={testpoint.pcbY}
 				{...schematicPlacementFor(testpoint.name)}

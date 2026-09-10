@@ -19,9 +19,23 @@ export default function ESP32EReader() {
 			layers={4}
 			thickness="1.6mm"
 			doubleSidedAssembly
-			autorouter={{ preset: "auto-local", allowViaInPad: true }}
-			isViaInPadAllowed
+			minViaHoleDiameter="0.2mm"
+			minViaPadDiameter="0.42mm"
+			// 0.1 mm copper clearance + 0.11 mm annulus gives 0.21 mm
+			// drill-to-trace clearance, above JLCPCB's 0.2 mm minimum.
+			minTraceToPadEdgeClearance="0.1mm"
+			autorouter={{ preset: "auto-local", allowViaInPad: false }}
 		>
+			{/* ESP32-C3-WROOM-02 antenna zone: no copper or routing on either side. */}
+			<keepout
+				shape="rect"
+				width="18.2mm"
+				height="6.65mm"
+				pcbX={0.25}
+				pcbY={44.755}
+				layers={["top", "inner1", "inner2", "bottom"]}
+			/>
+
 			<CircuitSections />
 
 			{Object.entries(nets).map(([name, connections]) => (
@@ -42,6 +56,36 @@ export default function ESP32EReader() {
 					))}
 				</Fragment>
 			))}
+
+			{/* Four-layer fills provide short returns and a dedicated 3.3 V plane. */}
+			<copperpour
+				name="GND_FILL_TOP"
+				connectsTo="net.GND"
+				layer="top"
+				clearance="0.2mm"
+				boardEdgeMargin="0.3mm"
+			/>
+			<copperpour
+				name="GND_FILL_BOTTOM"
+				connectsTo="net.GND"
+				layer="bottom"
+				clearance="0.2mm"
+				boardEdgeMargin="0.3mm"
+			/>
+			<copperpour
+				name="GND_PLANE_INNER1"
+				connectsTo="net.GND"
+				layer="inner1"
+				clearance="0.2mm"
+				boardEdgeMargin="0.3mm"
+			/>
+			<copperpour
+				name="V3V3_PLANE_INNER2"
+				connectsTo="net.V3V3"
+				layer="inner2"
+				clearance="0.2mm"
+				boardEdgeMargin="0.3mm"
+			/>
 
 			<cutout
 				name="ENCLOSURE_SLOT"

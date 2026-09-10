@@ -27,11 +27,26 @@ bunx tsci check netlist index.circuit.tsx
 bunx tsci check schematic-placement index.circuit.tsx
 bunx tsci check placement index.circuit.tsx
 bunx tsci check shorts index.circuit.tsx
+bun run build:release
 bun run snapshot
 bun run snapshot:update
 ```
 
 The fabrication archive is written to
-`dist/esp32-e-reader-gerbers.zip`. It contains four copper layers, solder mask,
-paste, silkscreen, fabrication and edge-cut Gerbers, plated/non-plated drill
-files, BOM, and pick-and-place CSVs.
+`dist/esp32-e-reader-gerbers.zip`. It contains four copper layers,
+solder mask, paste, silkscreen, fabrication and edge-cut Gerbers,
+plated/non-plated drill files, BOM, and pick-and-place CSVs.
+
+The top, bottom, and inner-1 copper layers have GND fills; inner-2 is the 3.3 V
+plane, matching the Rev. B KiCad stackup. The ESP32-C3-WROOM-02 antenna region
+has an explicit keepout on all four copper layers.
+
+Trace widths follow the electrical intent of the original Rev. B layout:
+0.5 mm for battery, USB power, and 3.3 V distribution; 0.4-0.6 mm for the
+pulsed e-paper charge-pump and frontlight boost paths; and 0.2 mm for ordinary
+logic. Ground pins use short 0.2 mm escapes into the GND fills. The
+original's isolated 0.8-1.0 mm pad expansions are represented by the pours and
+the sustained per-net widths because tscircuit currently assigns width per net.
+
+Via drill/pad diameters are constrained to 0.2/0.42 mm, with 0.1 mm
+trace-to-pad clearance targeting at least 0.21 mm drill-to-trace spacing.

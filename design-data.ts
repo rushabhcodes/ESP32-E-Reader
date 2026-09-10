@@ -67,11 +67,11 @@ export const topGroundOutline = [
 export const lcscGroups: Array<[string, string[]]> = [
 	["C29936", ["C1", "C11", "C13"]],
 	["C96446", ["C5", "C7", "C10", "C14", "C24"]],
+	["C19702", ["C6"]],
 	["C14663", ["C2", "C4", "C8", "C9", "C12", "C30"]],
-	[
-		"C1779",
-		["C3", "C15", "C16", "C17", "C18", "C22", "C23", "C26", "C28", "C29"],
-	],
+	["C1779", ["C3", "C15", "C16", "C17", "C18", "C22", "C23", "C28", "C29"]],
+	["C51205", ["C26"]],
+	["C49678", ["C20", "C31", "C32"]],
 	["C3039694", ["C19"]],
 	["C28323", ["C21", "C25", "C27"]],
 	["C114659", ["R1"]],
@@ -79,18 +79,22 @@ export const lcscGroups: Array<[string, string[]]> = [
 	["C14675", ["R12", "R13", "R24", "R25"]],
 	["C114669", ["R5", "R14"]],
 	["C105578", ["R16"]],
-	["C2907006", ["R17"]],
+	["C137549", ["R17"]],
 	["C125758", ["R27", "R28"]],
 	["C109318", ["R22"]],
 	["C105881", ["R26"]],
 	["C114627", ["R3"]],
 	["C113303", ["R6"]],
 	["C105580", ["R7", "R8"]],
+	["C3013546", ["R9"]],
+	["C13167", ["R15"]],
 	["C520357", ["L1"]],
-	["C520308", ["L2"]],
+	["C177242", ["L2"]],
+	["C84256", ["D1"]],
 	["C82046", ["D2", "D3", "D4"]],
 	["C152519", ["D5"]],
 	["C173752", ["BT1"]],
+	["C3020560", ["J1"]],
 	["C2856831", ["J2"]],
 	["C2856827", ["J3"]],
 	["C114218", ["J4"]],
@@ -122,13 +126,15 @@ export const kicad = (path: string) => `kicad:${path}`;
 export const FP = {
 	c0603: "0603",
 	c0805: "0805",
+	c1206: "1206",
 	r0603: "0603",
 	r0805: "0805",
 } as const;
 
 export const polarizedPinLabels = {
-	pin1: "anode",
-	pin2: "cathode",
+	// JEDEC diode packages use pad 1 for K and pad 2 for A.
+	pin1: "cathode",
+	pin2: "anode",
 } as const;
 
 export const capacitors: PassiveSpec[] = [
@@ -385,10 +391,10 @@ export const capacitors: PassiveSpec[] = [
 	{
 		name: "C26",
 		value: "4.7uF",
-		footprint: FP.c0805,
+		footprint: FP.c1206,
 		section: "frontlight",
-		pcbX: 20.19999999999999,
-		pcbY: -10.070000000000007,
+		pcbX: 20.05,
+		pcbY: -10.4,
 		pcbRotation: 90,
 		layer: "top",
 	},
@@ -1184,19 +1190,28 @@ export const pinLabelsFor = (pins: readonly string[]) =>
 
 export const endpoint = (ref: string, pin: string) => `.${ref} > .pin${pin}`;
 
-/** Trace widths retained from the Rev. B KiCad design. */
+/**
+ * Electrical trace-width policy derived from the Rev. B KiCad layout.
+ *
+ * The original uses wide copper for power distribution and the pulsed-current
+ * loops in the e-paper charge pump and frontlight boost converter. Its widest
+ * 0.8-1.0 mm pieces are short pad/loop expansions; because tscircuit currently
+ * assigns width per net, the values below use the original's sustained width
+ * rather than applying those local maxima to an entire net.
+ */
 export const traceThicknessByNet: Record<string, string> = {
 	BATT_N_RAW: "0.5mm",
 	BATT_P: "0.5mm",
+	// GND uses short 0.2 mm pad escapes into copper fills on both layers.
+	V3V3: "0.5mm",
 	EPD_PUMP_NEG: "0.6mm",
-	EPD_PUMP_SWITCH: "0.5mm",
+	EPD_PUMP_SWITCH: "0.6mm",
 	FL_INPUT: "0.4mm",
 	FL_LED_NEG: "0.3mm",
-	FL_LED_POS: "0.3mm",
+	FL_LED_POS: "0.6mm",
 	FL_SWITCH: "0.6mm",
+	PREVGH: "0.4mm",
 	PREVGL: "0.4mm",
-	PROTECT_OC: "0.6mm",
-	PROTECT_OD: "0.6mm",
 	PROTECT_VCC: "0.3mm",
 	USB_VBUS: "0.5mm",
 };

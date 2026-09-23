@@ -1,7 +1,7 @@
 # ESP32 E-Reader Rev. B
 
 A four-layer, battery-powered e-reader PCB built around the ESP32-C3 and a
-high-resolution monochrome e-paper display. This repository contains the
+high-resolution four-color e-paper display. This repository contains the
 [tscircuit](https://tscircuit.com/) implementation of the Rev. B hardware,
 including the schematic, PCB layout, component data, and fabrication export
 workflow.
@@ -10,23 +10,21 @@ workflow.
 
 ## Display
 
-The intended display is the **Good Display GDEQ0426T82-FL01C**.
+The intended display is the **EastRising ER-EPD3.97-1RY**.
 
 | Specification | Value |
 | --- | --- |
-| Display type | Reflective monochrome e-paper with integrated frontlight |
-| Diagonal | 4.26 inches |
-| Resolution | 800 × 480 pixels |
-| Controller | SSD1677 |
+| Display type | Reflective black, white, red, and yellow e-paper |
+| Diagonal | 3.97 inches |
+| Resolution | 480 × 800 pixels |
+| Controller | SSD2677 |
 | Interface | 4-wire SPI |
 | E-paper connector | 24-pin, 0.5 mm-pitch FPC (J2) |
-| Frontlight connector | 6-pin, 0.5 mm-pitch FPC (J3) |
-| Frontlight | 5 series LEDs, 15 V typical |
 
 J2 is a Hirose `FH12-24S-0.5SH(55)` connector. The board provides the panel's
 SPI signals and the external high-voltage bias network required by the
-SSD1677. J3 connects the display's separate frontlight tail to a TPS61169
-constant-current boost driver with PWM brightness control.
+SSD2677. This reflective display has no frontlight, so the former frontlight
+connector and boost-driver circuit are not fitted.
 
 The centered 35 × 2 mm PCB slot allows a display FPC to pass from the front of
 the assembly to the connector side. A panel whose integral tail cannot reach
@@ -39,7 +37,7 @@ J2; reversing the contact orientation reverses the pin order.
 > Do not select a panel based only on the “4.2-inch” description or the 24-pin
 > connector. Many e-paper panels use similar FPCs but have different pinouts,
 > resolutions, controllers, dimensions, and voltage requirements. The PCB and
-> firmware are designed for the **GDEQ0426T82-FL01C** pinout. Verify the full
+> firmware are designed for the **ER-EPD3.97-1RY** pinout. Verify the full
 > part number before purchasing or connecting a display.
 
 ## Hardware overview
@@ -47,15 +45,14 @@ J2; reversing the contact orientation reverses the pin order.
 | Function | Implementation |
 | --- | --- |
 | MCU | ESP32-C3-WROOM-02-N4, 4 MB flash, Wi-Fi and Bluetooth LE |
-| Display | Good Display GDEQ0426T82-FL01C, 800 × 480 monochrome e-paper |
+| Display | EastRising ER-EPD3.97-1RY, 480 × 800 four-color e-paper |
 | Storage | MicroSD card over shared SPI |
 | USB | USB-C power, native USB data, CC resistors, and USB ESD protection |
 | Battery | Single-cell LiPo through a 2-pin JST-PH connector |
 | Charging | MCP73831-2 linear LiPo charger |
 | Battery protection | DW01A with FS8205A dual MOSFET |
 | Logic supply | ME6211C33M5 3.3 V LDO |
-| Frontlight | TPS61169 PWM-controlled constant-current boost driver |
-| Controls | Back, Confirm, Left, Right, Power, Reset/Enable, and frontlight switch |
+| Controls | Back, Confirm, Left, Right, Power, and Reset/Enable |
 | Board | 62.5 × 96.16 mm, 1.6 mm thick, four copper layers |
 
 The four navigation buttons share one ESP32 ADC input through a resistor
@@ -94,7 +91,7 @@ routes, and 0.2/0.42 mm via drill/pad diameters.
 └── package.json            # Build, validation, and export commands
 ```
 
-The design currently contains 94 components and 53 connected nets. Placement,
+The design currently contains 83 components and 47 connected nets. Placement,
 board geometry, and electrical intent are transcribed from the Rev. B KiCad
 design; PCB routing is generated from the netlist by tscircuit's local
 autorouter.
@@ -163,17 +160,14 @@ Gerbers, plated/non-plated drill files, BOM, and pick-and-place CSV files.
 > This is an open hardware design, not a certified consumer product. Review the
 > schematic, battery polarity, component voltage ratings, PCB clearances, BOM,
 > and fabrication outputs before ordering or powering a board. E-paper bias
-> rails and the frontlight driver generate voltages well above the 3.3 V logic
-> rail.
+> rails generate voltages well above the 3.3 V logic rail.
 
 ## Design notes
 
 - Battery, USB, and 3.3 V distribution use 0.5 mm routes.
-- Pulsed e-paper charge-pump and frontlight paths use 0.4–0.6 mm routes.
+- Pulsed e-paper charge-pump paths use 0.4–0.6 mm routes.
 - Ordinary logic uses 0.2 mm routes.
 - The top, bottom, and inner-1 copper layers have GND fills; inner-2 is the
   dedicated 3.3 V plane.
 - Imported EasyEDA footprints live in `imports/`; any source-orientation
   corrections are applied there.
-- The frontlight connector carries only LED+ and LED− on pins 5 and 6; its
-  remaining pins are intentionally unconnected.

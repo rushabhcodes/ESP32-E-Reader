@@ -4,7 +4,6 @@ export type SectionName =
 	| "battery_usb"
 	| "mcu_power"
 	| "display_power"
-	| "frontlight"
 	| "storage"
 	| "controls";
 
@@ -69,34 +68,28 @@ export const lcscGroups: Array<[string, string[]]> = [
 	["C96446", ["C5", "C7", "C10", "C14", "C24"]],
 	["C19702", ["C6"]],
 	["C14663", ["C2", "C4", "C8", "C9", "C12", "C30"]],
-	["C1779", ["C3", "C15", "C16", "C17", "C18", "C22", "C23", "C28", "C29"]],
-	["C51205", ["C26"]],
-	["C49678", ["C20", "C31", "C32"]],
+	["C1779", ["C3", "C15", "C16", "C17", "C22", "C23", "C28", "C29"]],
+	["C49678", ["C20", "C32"]],
 	["C3039694", ["C19"]],
 	["C28323", ["C21", "C25", "C27"]],
-	["C114659", ["R1"]],
+	["C22790", ["R1"]],
 	["C98220", ["R4", "R10", "R11", "R18", "R19", "R20", "R21", "R23"]],
-	["C14675", ["R12", "R13", "R24", "R25"]],
-	["C114669", ["R5", "R14"]],
-	["C105578", ["R16"]],
+	["C25803", ["R12", "R13", "R24", "R25"]],
+	["C23179", ["R5", "R14"]],
+	["C22935", ["R16"]],
 	["C137549", ["R17"]],
 	["C125758", ["R27", "R28"]],
-	["C109318", ["R22"]],
-	["C105881", ["R26"]],
-	["C114627", ["R3"]],
-	["C113303", ["R6"]],
-	["C105580", ["R7", "R8"]],
+	["C23189", ["R3"]],
+	["C4190", ["R6"]],
+	["C23186", ["R7", "R8"]],
 	["C3013546", ["R9"]],
 	["C13167", ["R15"]],
 	["C520357", ["L1"]],
-	["C177242", ["L2"]],
 	["C84256", ["D1"]],
 	["C82046", ["D2", "D3", "D4"]],
-	["C152519", ["D5"]],
 	["C173752", ["BT1"]],
 	["C3020560", ["J1"]],
 	["C2856831", ["J2"]],
-	["C2856827", ["J3"]],
 	["C114218", ["J4"]],
 	["C2830320", ["Q1"]],
 	["C469327", ["Q2"]],
@@ -105,10 +98,8 @@ export const lcscGroups: Array<[string, string[]]> = [
 	["C2927799", ["U3"]],
 	["C2934560", ["U4"]],
 	["C82942", ["U5"]],
-	["C71045", ["U6"]],
 	["C388883", ["S1", "S2"]],
 	["C139797", ["SW2", "SW3", "SW4", "SW6"]],
-	["C49023765", ["SW7"]],
 ];
 
 export const lcscByRef = new Map(
@@ -309,16 +300,6 @@ export const capacitors: PassiveSpec[] = [
 		layer: "top",
 	},
 	{
-		name: "C18",
-		value: "4.7uF",
-		footprint: FP.c0805,
-		section: "frontlight",
-		pcbX: 19.620000000000005,
-		pcbY: -1.0700000000000074,
-		pcbRotation: 0,
-		layer: "top",
-	},
-	{
 		name: "C19",
 		value: "10uF",
 		footprint: FP.c0805,
@@ -389,16 +370,6 @@ export const capacitors: PassiveSpec[] = [
 		layer: "top",
 	},
 	{
-		name: "C26",
-		value: "4.7uF",
-		footprint: FP.c1206,
-		section: "frontlight",
-		pcbX: 20.05,
-		pcbY: -10.4,
-		pcbRotation: 90,
-		layer: "top",
-	},
-	{
 		name: "C27",
 		value: "1uF",
 		footprint: FP.c0805,
@@ -436,16 +407,6 @@ export const capacitors: PassiveSpec[] = [
 		pcbX: -9.761599999999987,
 		pcbY: -29.370800000000003,
 		pcbRotation: 0,
-		layer: "top",
-	},
-	{
-		name: "C31",
-		value: "100nF",
-		footprint: FP.c0805,
-		section: "frontlight",
-		pcbX: 16.879999999999995,
-		pcbY: -10.079999999999998,
-		pcbRotation: 90,
 		layer: "top",
 	},
 	{
@@ -662,16 +623,6 @@ export const resistors: PassiveSpec[] = [
 		layer: "top",
 	},
 	{
-		name: "R22",
-		value: "10",
-		footprint: FP.r0603,
-		section: "frontlight",
-		pcbX: 24.439999999999998,
-		pcbY: -7.814999999999998,
-		pcbRotation: -90,
-		layer: "top",
-	},
-	{
 		name: "R23",
 		value: "10k",
 		footprint: FP.r0603,
@@ -699,16 +650,6 @@ export const resistors: PassiveSpec[] = [
 		pcbX: -9.761599999999987,
 		pcbY: -32.81920000000001,
 		pcbRotation: 180,
-		layer: "top",
-	},
-	{
-		name: "R26",
-		value: "330",
-		footprint: FP.r0603,
-		section: "frontlight",
-		pcbX: 24.210000000000008,
-		pcbY: 1.0900000000000034,
-		pcbRotation: -90,
 		layer: "top",
 	},
 	{
@@ -741,16 +682,6 @@ export const inductors: PassiveSpec[] = [
 		section: "display_power",
 		pcbX: -22.377499999999998,
 		pcbY: 0.20250000000000057,
-		pcbRotation: -90,
-		layer: "top",
-	},
-	{
-		name: "L2",
-		value: "10uH",
-		footprint: kicad("Inductor_SMD/L_Bourns-SRN4018"),
-		section: "frontlight",
-		pcbX: 18.590000000000003,
-		pcbY: -5.049999999999997,
 		pcbRotation: -90,
 		layer: "top",
 	},
@@ -787,16 +718,6 @@ export const diodes: PassiveSpec[] = [
 		pcbRotation: 180,
 		layer: "top",
 	},
-	{
-		name: "D5",
-		value: "NSR0240",
-		footprint: kicad("Diode_SMD/D_SOD-323_HandSoldering"),
-		section: "frontlight",
-		pcbX: 22.28,
-		pcbY: -9.430000000000007,
-		pcbRotation: 90,
-		layer: "top",
-	},
 ];
 
 export const chips: ChipSpec[] = [
@@ -827,7 +748,7 @@ export const chips: ChipSpec[] = [
 	},
 	{
 		name: "J2",
-		value: "4.2in E-Paper",
+		value: "3.97in Quad-Color E-Paper",
 		kind: "connector",
 		footprint: kicad(
 			"Connector_FFC-FPC/Hirose_FH12-24S-0.5SH_1x24-1MP_P0.50mm_Horizontal",
@@ -837,21 +758,6 @@ export const chips: ChipSpec[] = [
 		section: "display_power",
 		pcbX: -0.75,
 		pcbY: -17.477599999999995,
-		pcbRotation: 0,
-		layer: "top",
-	},
-	{
-		name: "J3",
-		value: "E-Paper Frontlight",
-		kind: "connector",
-		footprint: kicad(
-			"Connector_FFC-FPC/Hirose_FH12-6S-0.5SH_1x06-1MP_P0.50mm_Horizontal",
-		),
-		pins: ["1", "2", "3", "4", "5", "6"],
-		noConnect: ["1", "2", "3", "4"],
-		section: "frontlight",
-		pcbX: 18.5,
-		pcbY: -17.92,
 		pcbRotation: 0,
 		layer: "top",
 	},
@@ -931,6 +837,7 @@ export const chips: ChipSpec[] = [
 		value: "ESP32-C3-WROOM-02",
 		footprint: kicad("RF_Module/ESP32-C3-WROOM-02"),
 		pins: Array.from({ length: 19 }, (_, i) => `${i + 1}`),
+		noConnect: ["11"],
 		section: "mcu_power",
 		pcbX: 0.25,
 		pcbY: 34.78,
@@ -947,17 +854,6 @@ export const chips: ChipSpec[] = [
 		pcbX: -10.462500000000006,
 		pcbY: 15.549999999999997,
 		pcbRotation: 0,
-		layer: "top",
-	},
-	{
-		name: "U6",
-		value: "TPS61169DCKR",
-		footprint: kicad("Package_TO_SOT_SMD/SOT-353_SC-70-5"),
-		pins: ["1", "2", "3", "4", "5"],
-		section: "frontlight",
-		pcbX: 23.55000000000001,
-		pcbY: -4.112499999999997,
-		pcbRotation: 90,
 		layer: "top",
 	},
 	{
@@ -1037,18 +933,6 @@ export const chips: ChipSpec[] = [
 		layer: "bottom",
 	},
 	{
-		name: "SW7",
-		value: "FRONTLIGHT",
-		footprint: kicad("Button_Switch_SMD/SW_SPDT_CK_JS102011SAQN"),
-		pins: ["1", "2", "3"],
-		noConnect: ["3"],
-		section: "frontlight",
-		pcbX: 27.349999999999994,
-		pcbY: 14.105000000000004,
-		pcbRotation: 90,
-		layer: "top",
-	},
-	{
 		name: "JP1",
 		value: "BOOT",
 		footprint: kicad("Jumper/SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"),
@@ -1116,15 +1000,6 @@ export const testpoints = [
 		pcbRotation: 0,
 		layer: "top",
 	},
-	{
-		name: "TP7",
-		label: "LED",
-		section: "frontlight" as const,
-		pcbX: 15.389999999999986,
-		pcbY: 1.9399999999999977,
-		pcbRotation: 0,
-		layer: "top",
-	},
 ];
 
 export const sectionOrigins: Record<SectionName, { x: number; y: number }> = {
@@ -1133,7 +1008,6 @@ export const sectionOrigins: Record<SectionName, { x: number; y: number }> = {
 	display_power: { x: 28, y: 20 },
 	storage: { x: -28, y: -7 },
 	controls: { x: 0, y: -7 },
-	frontlight: { x: 28, y: -7 },
 };
 
 export const schematicSpecs = [
@@ -1172,8 +1046,8 @@ export const schematicPlacementOverrides: Record<
 	{ schX?: number; schY?: number }
 > = {
 	R4: { schY: 21.201 },
-	J3: { schX: 36.53 },
-	U6: { schX: 41.47 },
+	Q2: { schX: 41.828 },
+	R17: { schY: 1.6 },
 };
 
 export const schematicPlacementFor = (reference: string) => {
@@ -1194,7 +1068,7 @@ export const endpoint = (ref: string, pin: string) => `.${ref} > .pin${pin}`;
  * Electrical trace-width policy derived from the Rev. B KiCad layout.
  *
  * The original uses wide copper for power distribution and the pulsed-current
- * loops in the e-paper charge pump and frontlight boost converter. Its widest
+ * loops in the e-paper charge pump. Its widest
  * 0.8-1.0 mm pieces are short pad/loop expansions; because tscircuit currently
  * assigns width per net, the values below use the original's sustained width
  * rather than applying those local maxima to an entire net.
@@ -1206,10 +1080,6 @@ export const traceThicknessByNet: Record<string, string> = {
 	V3V3: "0.5mm",
 	EPD_PUMP_NEG: "0.6mm",
 	EPD_PUMP_SWITCH: "0.6mm",
-	FL_INPUT: "0.4mm",
-	FL_LED_NEG: "0.3mm",
-	FL_LED_POS: "0.6mm",
-	FL_SWITCH: "0.6mm",
 	PREVGH: "0.4mm",
 	PREVGL: "0.4mm",
 	PROTECT_VCC: "0.3mm",
@@ -1263,7 +1133,6 @@ export const nets: Record<string, string[]> = {
 		endpoint("C14", "2"),
 		endpoint("C15", "2"),
 		endpoint("C17", "2"),
-		endpoint("C18", "2"),
 		endpoint("C19", "2"),
 		endpoint("C20", "2"),
 		endpoint("C21", "1"),
@@ -1271,12 +1140,10 @@ export const nets: Record<string, string[]> = {
 		endpoint("C23", "1"),
 		endpoint("C24", "2"),
 		endpoint("C25", "1"),
-		endpoint("C26", "2"),
 		endpoint("C27", "1"),
 		endpoint("C28", "1"),
 		endpoint("C29", "1"),
 		endpoint("C30", "2"),
-		endpoint("C31", "2"),
 		endpoint("C32", "2"),
 		endpoint("D3", "1"),
 		endpoint("J1", "1"),
@@ -1301,7 +1168,6 @@ export const nets: Record<string, string[]> = {
 		endpoint("R15", "1"),
 		endpoint("R16", "2"),
 		endpoint("R17", "2"),
-		endpoint("R22", "2"),
 		endpoint("S1", "1"),
 		endpoint("S1", "3"),
 		endpoint("S2", "1"),
@@ -1312,7 +1178,6 @@ export const nets: Record<string, string[]> = {
 		endpoint("U4", "9"),
 		endpoint("U4", "19"),
 		endpoint("U5", "2"),
-		endpoint("U6", "2"),
 	],
 	BATT_P: [
 		endpoint("BT1", "1"),
@@ -1321,7 +1186,6 @@ export const nets: Record<string, string[]> = {
 		endpoint("C11", "1"),
 		endpoint("R12", "1"),
 		endpoint("R14", "2"),
-		endpoint("SW7", "1"),
 		endpoint("U1", "3"),
 		endpoint("U5", "1"),
 		endpoint("U5", "3"),
@@ -1409,23 +1273,6 @@ export const nets: Record<string, string[]> = {
 		endpoint("U4", "18"),
 		endpoint("TP6", "1"),
 	],
-	FL_PWM: [endpoint("R26", "1"), endpoint("U4", "11")],
-	FL_CTRL: [endpoint("R26", "2"), endpoint("U6", "4")],
-	FL_INPUT: [
-		endpoint("C18", "1"),
-		endpoint("L2", "1"),
-		endpoint("SW7", "2"),
-		endpoint("U6", "5"),
-	],
-	FL_SWITCH: [endpoint("D5", "2"), endpoint("L2", "2"), endpoint("U6", "1")],
-	FL_LED_POS: [
-		endpoint("C26", "1"),
-		endpoint("C31", "1"),
-		endpoint("D5", "1"),
-		endpoint("J3", "5"),
-		endpoint("TP7", "1"),
-	],
-	FL_LED_NEG: [endpoint("J3", "6"), endpoint("R22", "1"), endpoint("U6", "3")],
 	EPD_PUMP_SWITCH: [
 		endpoint("C16", "2"),
 		endpoint("D4", "2"),
@@ -1467,6 +1314,4 @@ export const schematicHeights: Partial<Record<string, number>> = {
 	U1: 0.6,
 	U4: 2,
 	U5: 0.6,
-	U6: 0.6,
-	SW7: 0.4,
 };

@@ -119,7 +119,6 @@ export default function ESP32EReader() {
 				fontSize="1mm"
 			/>
 			<silkscreentext text="EPD" pcbX={1} pcbY={-23} fontSize="1mm" />
-			<silkscreentext text="EPD FL" pcbX={20} pcbY={-23} fontSize="1mm" />
 			<silkscreentext text="MICRO SD" pcbX={-22} pcbY={-38} fontSize="1mm" />
 			<silkscreentext
 				text="ESP32 E-Reader  Rev. B"

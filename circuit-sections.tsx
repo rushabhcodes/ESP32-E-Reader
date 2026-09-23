@@ -4,16 +4,11 @@ import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
 import { ESP32_C3_WROOM_02_N4 } from "./imports/ESP32_C3_WROOM_02_N4";
 import { EVQP7C01P } from "./imports/EVQP7C01P";
 import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
-import { FPC_05FB_6PH20 } from "./imports/FPC_05FB_6PH20";
-import { FXL0420_100_M } from "./imports/FXL0420_100_M";
-import { JS102011SAQN } from "./imports/JS102011SAQN";
 import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
 import { MBR0530T1G } from "./imports/MBR0530T1G";
-import { NSR0240HT1G } from "./imports/NSR0240HT1G";
 import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
 import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
 import { SKRPACE010 } from "./imports/SKRPACE010";
-import { TPS61169DCKR } from "./imports/TPS61169DCKR";
 import {
 	type ChipSpec,
 	aliasForPin,
@@ -54,15 +49,6 @@ const renderChip = (spec: ChipSpec) => {
 				noConnect={["pin1", "pin4", "pin6", "pin7", "pin19", "pin25", "pin26"]}
 			/>
 		);
-	if (spec.name === "J3")
-		return (
-			<FPC_05FB_6PH20
-				key={spec.name}
-				{...importedCommon}
-				pcbY={spec.pcbY + 0.0750353}
-				noConnect={["pin1", "pin2", "pin3", "pin4", "pin7", "pin8"]}
-			/>
-		);
 	if (spec.name === "J4")
 		return (
 			<DM3AT_SF_PEJM5
@@ -83,7 +69,13 @@ const renderChip = (spec: ChipSpec) => {
 	if (spec.name === "Q2")
 		return <SI1308EDL_T1_GE3 key={spec.name} {...importedCommon} />;
 	if (spec.name === "U4")
-		return <ESP32_C3_WROOM_02_N4 key={spec.name} {...importedCommon} />;
+		return (
+			<ESP32_C3_WROOM_02_N4
+				key={spec.name}
+				{...importedCommon}
+				noConnect={["pin11"]}
+			/>
+		);
 	if (spec.name === "U5")
 		return (
 			<ME6211C33M5G_N
@@ -91,14 +83,6 @@ const renderChip = (spec: ChipSpec) => {
 				{...importedCommon}
 				pcbRotation={(spec.pcbRotation ?? 0) - 90}
 				noConnect={["pin4"]}
-			/>
-		);
-	if (spec.name === "U6")
-		return (
-			<TPS61169DCKR
-				key={spec.name}
-				{...importedCommon}
-				pcbRotation={(spec.pcbRotation ?? 0) + 180}
 			/>
 		);
 	if (spec.name === "S1" || spec.name === "S2")
@@ -109,14 +93,6 @@ const renderChip = (spec: ChipSpec) => {
 				key={spec.name}
 				{...importedCommon}
 				noConnect={["pin2", "pin3"]}
-			/>
-		);
-	if (spec.name === "SW7")
-		return (
-			<JS102011SAQN
-				key={spec.name}
-				{...importedCommon}
-				pcbX={spec.pcbX - 1.75}
 			/>
 		);
 
@@ -340,10 +316,6 @@ export const DisplayPowerSection = () => (
 	/>
 );
 
-export const FrontlightSection = () => (
-	<schematicsection name="frontlight" displayName="15 V Frontlight Driver" />
-);
-
 export const StorageSection = () => (
 	<schematicsection name="storage" displayName="Micro SD Storage" />
 );
@@ -357,7 +329,6 @@ export const CircuitSections = () => (
 		<BatteryUsbSection />
 		<McuPowerSection />
 		<DisplayPowerSection />
-		<FrontlightSection />
 		<StorageSection />
 		<ControlsSection />
 
@@ -402,17 +373,6 @@ export const CircuitSections = () => (
 					supplierPartNumbers={supplierPartNumbersFor(spec.name)}
 					{...schematicPlacementFor(spec.name)}
 				/>
-			) : spec.name === "L2" ? (
-				<FXL0420_100_M
-					key={spec.name}
-					name={spec.name}
-					pcbX={spec.pcbX}
-					pcbY={spec.pcbY}
-					pcbRotation={spec.pcbRotation}
-					layer={spec.layer}
-					supplierPartNumbers={supplierPartNumbersFor(spec.name)}
-					{...schematicPlacementFor(spec.name)}
-				/>
 			) : (
 				<inductor
 					key={spec.name}
@@ -441,10 +401,8 @@ export const CircuitSections = () => (
 			{...schematicPlacementFor("D1")}
 		/>
 
-		{diodes.map((spec) => {
-			const ImportedDiode = spec.name === "D5" ? NSR0240HT1G : MBR0530T1G;
-			return (
-				<ImportedDiode
+		{diodes.map((spec) => (
+				<MBR0530T1G
 					key={spec.name}
 					name={spec.name}
 					pcbX={spec.pcbX}
@@ -454,8 +412,7 @@ export const CircuitSections = () => (
 					supplierPartNumbers={supplierPartNumbersFor(spec.name)}
 					{...schematicPlacementFor(spec.name)}
 				/>
-			);
-		})}
+		))}
 
 		{chips.map(renderChip)}
 

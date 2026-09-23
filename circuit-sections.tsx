@@ -4,6 +4,7 @@ import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
 import { ESP32_C3_WROOM_02_N4 } from "./imports/ESP32_C3_WROOM_02_N4";
 import { EVQP7C01P } from "./imports/EVQP7C01P";
 import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
+import { JS102011SAQN } from "./imports/JS102011SAQN";
 import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
 import { MBR0530T1G } from "./imports/MBR0530T1G";
 import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
@@ -93,6 +94,14 @@ const renderChip = (spec: ChipSpec) => {
 				key={spec.name}
 				{...importedCommon}
 				noConnect={["pin2", "pin3"]}
+			/>
+		);
+	if (spec.name === "SW7")
+		return (
+			<JS102011SAQN
+				key={spec.name}
+				{...importedCommon}
+				pcbX={spec.pcbX - 1.75}
 			/>
 		);
 

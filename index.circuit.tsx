@@ -105,8 +105,15 @@ export default function ESP32EReader() {
 				fontSize="1mm"
 			/>
 			<silkscreentext
-				text="POWER"
+				text="WAKE"
 				pcbX={-28}
+				pcbY={20}
+				pcbRotation={90}
+				fontSize="1mm"
+			/>
+			<silkscreentext
+				text="MAIN PWR"
+				pcbX={25}
 				pcbY={20}
 				pcbRotation={90}
 				fontSize="1mm"

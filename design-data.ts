@@ -74,7 +74,7 @@ export const lcscGroups: Array<[string, string[]]> = [
 	["C28323", ["C21", "C25", "C27"]],
 	["C22790", ["R1"]],
 	["C98220", ["R4", "R10", "R11", "R18", "R19", "R20", "R21", "R23"]],
-	["C25803", ["R12", "R13", "R24", "R25"]],
+	["C25803", ["R12", "R13", "R24", "R25", "R29"]],
 	["C23179", ["R5", "R14"]],
 	["C22935", ["R16"]],
 	["C137549", ["R17"]],
@@ -100,6 +100,7 @@ export const lcscGroups: Array<[string, string[]]> = [
 	["C82942", ["U5"]],
 	["C388883", ["S1", "S2"]],
 	["C139797", ["SW2", "SW3", "SW4", "SW6"]],
+	["C221660", ["SW7"]],
 ];
 
 export const lcscByRef = new Map(
@@ -672,6 +673,16 @@ export const resistors: PassiveSpec[] = [
 		pcbRotation: 90,
 		layer: "top",
 	},
+	{
+		name: "R29",
+		value: "100k",
+		footprint: FP.r0603,
+		section: "mcu_power",
+		pcbX: 21.5,
+		pcbY: 14.1,
+		pcbRotation: 0,
+		layer: "top",
+	},
 ];
 
 export const inductors: PassiveSpec[] = [
@@ -933,6 +944,17 @@ export const chips: ChipSpec[] = [
 		layer: "bottom",
 	},
 	{
+		name: "SW7",
+		value: "MAIN POWER",
+		footprint: kicad("Button_Switch_SMD/SW_SPDT_CK_JS102011SAQN"),
+		pins: ["1", "2", "3"],
+		section: "mcu_power",
+		pcbX: 27.35,
+		pcbY: 14.105,
+		pcbRotation: 90,
+		layer: "top",
+	},
+	{
 		name: "JP1",
 		value: "BOOT",
 		footprint: kicad("Jumper/SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"),
@@ -1168,6 +1190,7 @@ export const nets: Record<string, string[]> = {
 		endpoint("R15", "1"),
 		endpoint("R16", "2"),
 		endpoint("R17", "2"),
+		endpoint("R29", "2"),
 		endpoint("S1", "1"),
 		endpoint("S1", "3"),
 		endpoint("S2", "1"),
@@ -1186,9 +1209,9 @@ export const nets: Record<string, string[]> = {
 		endpoint("C11", "1"),
 		endpoint("R12", "1"),
 		endpoint("R14", "2"),
+		endpoint("SW7", "1"),
 		endpoint("U1", "3"),
 		endpoint("U5", "1"),
-		endpoint("U5", "3"),
 		endpoint("TP1", "1"),
 	],
 	BATT_N_RAW: [
@@ -1304,6 +1327,8 @@ export const nets: Record<string, string[]> = {
 	EPD_VSH2: [endpoint("C29", "2"), endpoint("J2", "5")],
 	EPD_VSL: [endpoint("C28", "2"), endpoint("J2", "22")],
 	VCOM: [endpoint("C27", "2"), endpoint("J2", "24")],
+	POWER_ENABLE: [endpoint("SW7", "2"), endpoint("U5", "3")],
+	POWER_OFF_PULLDOWN: [endpoint("R29", "1"), endpoint("SW7", "3")],
 };
 
 export const noConnectAliases = (spec: ChipSpec) =>
@@ -1314,4 +1339,5 @@ export const schematicHeights: Partial<Record<string, number>> = {
 	U1: 0.6,
 	U4: 2,
 	U5: 0.6,
+	SW7: 0.4,
 };

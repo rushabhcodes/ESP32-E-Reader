@@ -52,7 +52,7 @@ J2; reversing the contact orientation reverses the pin order.
 | Charging | MCP73831-2 linear LiPo charger |
 | Battery protection | DW01A with FS8205A dual MOSFET |
 | Logic supply | ME6211C33M5 3.3 V LDO |
-| Controls | Back, Confirm, Left, Right, Power, and Reset/Enable |
+| Controls | Back, Confirm, Left, Right, Wake, Reset/Enable, and main power switch |
 | Board | 62.5 × 96.16 mm, 1.6 mm thick, four copper layers |
 
 The four navigation buttons share one ESP32 ADC input through a resistor
@@ -91,7 +91,7 @@ routes, and 0.2/0.42 mm via drill/pad diameters.
 └── package.json            # Build, validation, and export commands
 ```
 
-The design currently contains 83 components and 47 connected nets. Placement,
+The design currently contains 85 components and 49 connected nets. Placement,
 board geometry, and electrical intent are transcribed from the Rev. B KiCad
 design; PCB routing is generated from the netlist by tscircuit's local
 autorouter.
@@ -169,5 +169,9 @@ Gerbers, plated/non-plated drill files, BOM, and pick-and-place CSV files.
 - Ordinary logic uses 0.2 mm routes.
 - The top, bottom, and inner-1 copper layers have GND fills; inner-2 is the
   dedicated 3.3 V plane.
+- SW7 is the hard main-power control. It switches the ME6211 LDO enable input
+  between the battery rail and an off-state pull-down, so the switch does not
+  carry the ESP32 or display load current. S2 remains a firmware wake/power
+  button.
 - Imported EasyEDA footprints live in `imports/`; any source-orientation
   corrections are applied there.

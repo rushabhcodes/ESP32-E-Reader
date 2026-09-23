@@ -88,11 +88,11 @@ export default function ESP32EReader() {
 			/>
 
 			<cutout
-				name="ENCLOSURE_SLOT"
+				name="DISPLAY_FPC_SLOT"
 				shape="rect"
 				width="35mm"
 				height="2mm"
-				pcbX={5.75}
+				pcbX={0}
 				pcbY={-39.92}
 			/>
 

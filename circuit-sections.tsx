@@ -1,18 +1,7 @@
 import { Fragment } from "react";
-import { CR5040_470M } from "./imports/CR5040_470M";
-import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
-import { ESP32_C3_WROOM_02_N4 } from "./imports/ESP32_C3_WROOM_02_N4";
-import { EVQP7C01P } from "./imports/EVQP7C01P";
-import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
-import { JS102011SAQN } from "./imports/JS102011SAQN";
-import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
-import { MBR0530T1G } from "./imports/MBR0530T1G";
-import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
-import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
-import { SKRPACE010 } from "./imports/SKRPACE010";
 import {
-	type ChipSpec,
 	aliasForPin,
+	type ChipSpec,
 	capacitors,
 	chips,
 	diodes,
@@ -26,6 +15,17 @@ import {
 	supplierPartNumbersFor,
 	testpoints,
 } from "./design-data";
+import { CR5040_470M } from "./imports/CR5040_470M";
+import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
+import { ESP32_C3_WROOM_02_N4 } from "./imports/ESP32_C3_WROOM_02_N4";
+import { EVQP7C01P } from "./imports/EVQP7C01P";
+import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
+import { JS102011SAQN } from "./imports/JS102011SAQN";
+import { KH_6X6X5H_STM } from "./imports/KH_6X6X5H_STM";
+import { MBR0530T1G } from "./imports/MBR0530T1G";
+import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
+import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
+import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
 
 const renderChip = (spec: ChipSpec) => {
 	const half = Math.ceil(spec.pins.length / 2);
@@ -90,7 +90,7 @@ const renderChip = (spec: ChipSpec) => {
 		return <EVQP7C01P key={spec.name} {...importedCommon} />;
 	if (["SW2", "SW3", "SW4", "SW6"].includes(spec.name))
 		return (
-			<SKRPACE010
+			<KH_6X6X5H_STM
 				key={spec.name}
 				{...importedCommon}
 				noConnect={["pin2", "pin3"]}
@@ -411,16 +411,16 @@ export const CircuitSections = () => (
 		/>
 
 		{diodes.map((spec) => (
-				<MBR0530T1G
-					key={spec.name}
-					name={spec.name}
-					pcbX={spec.pcbX}
-					pcbY={spec.pcbY}
-					pcbRotation={spec.pcbRotation}
-					layer={spec.layer}
-					supplierPartNumbers={supplierPartNumbersFor(spec.name)}
-					{...schematicPlacementFor(spec.name)}
-				/>
+			<MBR0530T1G
+				key={spec.name}
+				name={spec.name}
+				pcbX={spec.pcbX}
+				pcbY={spec.pcbY}
+				pcbRotation={spec.pcbRotation}
+				layer={spec.layer}
+				supplierPartNumbers={supplierPartNumbersFor(spec.name)}
+				{...schematicPlacementFor(spec.name)}
+			/>
 		))}
 
 		{chips.map(renderChip)}

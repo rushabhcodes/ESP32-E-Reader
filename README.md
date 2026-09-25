@@ -60,6 +60,12 @@ ladder. The e-paper display and MicroSD card share the SPI clock and MOSI lines
 while using independent chip-select signals. USB D+ and D− connect directly to
 the ESP32-C3's native USB pins.
 
+The four display-side navigation controls use 6 × 6 mm, 5 mm-high,
+top-actuated tactile switches on the bottom PCB layer. Their larger bodies and
+actuators are intended for reliable contact with molded or printed enclosure
+button plungers. The display faces the same side; the main circuitry remains on
+the top PCB layer.
+
 ## Board construction
 
 The layer arrangement is:

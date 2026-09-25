@@ -36,6 +36,15 @@ export default function ESP32EReader() {
 				layers={["top", "inner1", "inner2", "bottom"]}
 			/>
 
+			{/* Keep GND layer transitions clear of the nearby top-layer SPI clock. */}
+			<keepout
+				shape="circle"
+				radius="0.25mm"
+				pcbX={-0.35}
+				pcbY={-8.34}
+				layers={["inner2"]}
+			/>
+
 			<CircuitSections />
 
 			{Object.entries(nets).map(([name, connections]) => (

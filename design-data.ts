@@ -1098,7 +1098,8 @@ export const endpoint = (ref: string, pin: string) => `.${ref} > .pin${pin}`;
 export const traceThicknessByNet: Record<string, string> = {
 	BATT_N_RAW: "0.5mm",
 	BATT_P: "0.5mm",
-	// GND uses short 0.2 mm pad escapes into copper fills on both layers.
+	// Short pad escapes connect directly into the GND fills on three layers.
+	GND: "0.2mm",
 	V3V3: "0.5mm",
 	EPD_PUMP_NEG: "0.6mm",
 	EPD_PUMP_SWITCH: "0.6mm",

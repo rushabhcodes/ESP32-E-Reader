@@ -8,6 +8,7 @@
 import { Fragment } from "react";
 import { CircuitSections } from "./circuit-sections";
 import { nets, traceThicknessByNet } from "./design-data";
+import { createPreExpansionAutorouter } from "./pre-expansion-autorouter";
 
 export default function ESP32EReader() {
 	return (
@@ -24,7 +25,10 @@ export default function ESP32EReader() {
 			// 0.1 mm copper clearance + 0.11 mm annulus gives 0.21 mm
 			// drill-to-trace clearance, above JLCPCB's 0.2 mm minimum.
 			minTraceToPadEdgeClearance="0.1mm"
-			autorouter={{ preset: "auto-local", allowViaInPad: false }}
+			autorouter={{
+				algorithmFn: createPreExpansionAutorouter,
+				allowViaInPad: false,
+			}}
 		>
 			{/* ESP32-C3-WROOM-02 antenna zone: no copper or routing on either side. */}
 			<keepout

@@ -1,6 +1,6 @@
 {
 	"name": "@tsci/rushabhcodes.ESP32-E-Reader",
-	"version": "1.0.19",
+	"version": "1.0.20",
 	"description": "A tscircuit component package",
 	"main": "index.tsx",
 	"keywords": [

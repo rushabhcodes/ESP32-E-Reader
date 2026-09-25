@@ -29,6 +29,7 @@ import { MCP73831T_2ACI_OT } from "./imports/MCP73831T_2ACI_OT";
 import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
 import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
 import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
+import { USB4105_GF_A } from "./imports/USB4105_GF_A/USB4105_GF_A";
 import { USBLC6_2SC6 } from "./imports/USBLC6_2SC6";
 
 const renderChip = (spec: ChipSpec) => {
@@ -151,177 +152,14 @@ const renderChip = (spec: ChipSpec) => {
 
 	if (spec.name === "J1")
 		return (
-			<connector
+			<USB4105_GF_A
 				key={spec.name}
-				name="J1"
-				manufacturerPartNumber="USB4105-GF-A"
-				supplierPartNumbers={supplierPartNumbersFor(spec.name)}
-				standard="usb_c"
-				pinCount={16}
-				pinLabels={pinLabelsFor(spec.pins)}
-				noConnect={noConnectAliases(spec)}
-				pcbX={spec.pcbX}
+				{...importedCommon}
+				noConnect={["SBU1", "SBU2"]}
+				pcbX={spec.pcbX - 1.57}
 				pcbY={spec.pcbY}
-				pcbRotation={-90}
-				schPinArrangement={{
-					leftSide: ["P_1", "P_2", "P_3", "P_4", "P_5", "P_6", "P_7", "P_8"],
-					rightSide: [
-						"P_16",
-						"P_15",
-						"P_14",
-						"P_13",
-						"P_12",
-						"P_11",
-						"P_10",
-						"P_9",
-					],
-				}}
-				schHeight={1.4}
-				{...schematicPlacement}
-				footprint={
-					<footprint insertionDirection="from_top">
-						<smtpad
-							shape="rect"
-							width="0.6mm"
-							height="1.15mm"
-							pcbX={-3.2}
-							pcbY={-3.68}
-							portHints={["pin1"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.6mm"
-							height="1.15mm"
-							pcbX={-2.4}
-							pcbY={-3.68}
-							portHints={["pin2"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.3mm"
-							height="1.15mm"
-							pcbX={-1.25}
-							pcbY={-3.68}
-							portHints={["pin6"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.3mm"
-							height="1.15mm"
-							pcbX={-0.25}
-							pcbY={-3.68}
-							portHints={["pin5"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.3mm"
-							height="1.15mm"
-							pcbX={0.25}
-							pcbY={-3.68}
-							portHints={["pin4"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.3mm"
-							height="1.15mm"
-							pcbX={1.25}
-							pcbY={-3.68}
-							portHints={["pin3"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.3mm"
-							height="1.15mm"
-							pcbX={-1.75}
-							pcbY={-3.68}
-							portHints={["pin10"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.3mm"
-							height="1.15mm"
-							pcbX={-0.75}
-							pcbY={-3.68}
-							portHints={["pin9"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.3mm"
-							height="1.15mm"
-							pcbX={0.75}
-							pcbY={-3.68}
-							portHints={["pin8"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.3mm"
-							height="1.15mm"
-							pcbX={1.75}
-							pcbY={-3.68}
-							portHints={["pin7"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.6mm"
-							height="1.15mm"
-							pcbX={2.4}
-							pcbY={-3.68}
-							portHints={["pin11"]}
-						/>
-						<smtpad
-							shape="rect"
-							width="0.6mm"
-							height="1.15mm"
-							pcbX={3.2}
-							pcbY={-3.68}
-							portHints={["pin12"]}
-						/>
-						<platedhole
-							shape="pill"
-							outerWidth="1mm"
-							outerHeight="2.1mm"
-							holeWidth="0.6mm"
-							holeHeight="1.7mm"
-							pcbX={-4.32}
-							pcbY={-3.105}
-							portHints={["pin13"]}
-						/>
-						<platedhole
-							shape="pill"
-							outerWidth="1mm"
-							outerHeight="1.8mm"
-							holeWidth="0.6mm"
-							holeHeight="1.4mm"
-							pcbX={-4.32}
-							pcbY={1.075}
-							portHints={["pin14"]}
-						/>
-						<platedhole
-							shape="pill"
-							outerWidth="1mm"
-							outerHeight="2.1mm"
-							holeWidth="0.6mm"
-							holeHeight="1.7mm"
-							pcbX={4.32}
-							pcbY={-3.105}
-							portHints={["pin15"]}
-						/>
-						<platedhole
-							shape="pill"
-							outerWidth="1mm"
-							outerHeight="1.8mm"
-							holeWidth="0.6mm"
-							holeHeight="1.4mm"
-							pcbX={4.32}
-							pcbY={1.075}
-							portHints={["pin16"]}
-						/>
-						<hole diameter="0.65mm" pcbX={-2.89} pcbY={-2.605} />
-						<hole diameter="0.65mm" pcbX={2.89} pcbY={-2.605} />
-						<silkscreenrect width="9.4mm" height="7.2mm" pcbY="-0.25mm" />
-						<courtyardrect width="10.64mm" height="8.94mm" pcbY="-0.29mm" />
-					</footprint>
-				}
+				pcbRotation={spec.pcbRotation}
+				schWidth={1.385}
 			/>
 		);
 	if (spec.kind === "connector")

@@ -10,6 +10,13 @@ import { CircuitSections } from "./circuit-sections";
 import { nets, traceThicknessByNet } from "./design-data";
 import { createPreExpansionAutorouter } from "./pre-expansion-autorouter";
 
+const enclosureMountingHoles = [
+	{ name: "MOUNT_TL", x: -27, y: 44.75 },
+	{ name: "MOUNT_TR", x: 27, y: 44.75 },
+	{ name: "MOUNT_BL", x: -27.5, y: -44 },
+	{ name: "MOUNT_BR", x: 27.5, y: -44 },
+] as const;
+
 export default function ESP32EReader() {
 	return (
 		<board
@@ -30,6 +37,20 @@ export default function ESP32EReader() {
 				allowViaInPad: false,
 			}}
 		>
+			{/* M2.5 enclosure screws with clearance for printed standoffs/screw heads. */}
+			{enclosureMountingHoles.map(({ name, x, y }) => (
+				<Fragment key={name}>
+					<hole diameter="2.7mm" pcbX={x} pcbY={y} />
+					<keepout
+						shape="circle"
+						radius="3.2mm"
+						pcbX={x}
+						pcbY={y}
+						layers={["top", "inner1", "inner2", "bottom"]}
+					/>
+				</Fragment>
+			))}
+
 			{/* ESP32-C3-WROOM-02 antenna zone: no copper or routing on either side. */}
 			<keepout
 				shape="rect"

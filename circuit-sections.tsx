@@ -17,15 +17,19 @@ import {
 } from "./design-data";
 import { CR5040_470M } from "./imports/CR5040_470M";
 import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
+import { DW01A } from "./imports/DW01A";
 import { ESP32_C3_WROOM_02_N4 } from "./imports/ESP32_C3_WROOM_02_N4";
 import { EVQP7C01P } from "./imports/EVQP7C01P";
 import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
+import { FS8205A } from "./imports/FS8205A";
 import { JS102011SAQN } from "./imports/JS102011SAQN";
 import { KH_6X6X5H_STM } from "./imports/KH_6X6X5H_STM";
 import { MBR0530T1G } from "./imports/MBR0530T1G";
+import { MCP73831T_2ACI_OT } from "./imports/MCP73831T_2ACI_OT";
 import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
 import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
 import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
+import { USBLC6_2SC6 } from "./imports/USBLC6_2SC6";
 
 const renderChip = (spec: ChipSpec) => {
 	const half = Math.ceil(spec.pins.length / 2);
@@ -67,8 +71,28 @@ const renderChip = (spec: ChipSpec) => {
 				pcbRotation={0}
 			/>
 		);
+	if (spec.name === "Q1")
+		return (
+			<FS8205A
+				key={spec.name}
+				{...importedCommon}
+				noConnect={["pin2", "pin5"]}
+			/>
+		);
 	if (spec.name === "Q2")
 		return <SI1308EDL_T1_GE3 key={spec.name} {...importedCommon} />;
+	if (spec.name === "U1")
+		return <MCP73831T_2ACI_OT key={spec.name} {...importedCommon} />;
+	if (spec.name === "U2")
+		return (
+			<USBLC6_2SC6
+				key={spec.name}
+				{...importedCommon}
+				noConnect={["pin1", "pin4"]}
+			/>
+		);
+	if (spec.name === "U3")
+		return <DW01A key={spec.name} {...importedCommon} noConnect={["pin4"]} />;
 	if (spec.name === "U4")
 		return (
 			<ESP32_C3_WROOM_02_N4

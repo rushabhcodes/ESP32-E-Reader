@@ -1,6 +1,6 @@
 {
 	"name": "@tsci/rushabhcodes.ESP32-E-Reader",
-	"version": "1.0.21",
+	"version": "1.0.22",
 	"description": "A tscircuit component package",
 	"main": "index.tsx",
 	"keywords": [
@@ -23,7 +23,7 @@
 	},
 	"devDependencies": {
 		"@types/react": "^19.2.18",
-		"tscircuit": "^0.0.2467",
+		"tscircuit": "^0.0.2663",
 		"typescript": "^5.0.0"
 	},
 	"author": "rushabhcodes"

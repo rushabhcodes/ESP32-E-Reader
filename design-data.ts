@@ -1057,6 +1057,7 @@ export const schematicPlacementByReference = (() => {
 					schX: origin.x + (index % 5) * 4.4,
 					schY: origin.y - Math.floor(index / 5) * 4.4,
 					schSectionName: section,
+					schSheetName: section,
 				},
 			] as const;
 		}),
@@ -1065,11 +1066,23 @@ export const schematicPlacementByReference = (() => {
 
 export const schematicPlacementOverrides: Record<
 	string,
-	{ schX?: number; schY?: number }
+	{ schX?: number; schY?: number; schRotation?: number }
 > = {
-	R4: { schY: 21.201 },
+	R4: { schY: 21.201, schRotation: 90 },
 	Q2: { schX: 41.828 },
 	R17: { schY: 1.6 },
+	R12: { schRotation: -90 },
+	R10: { schRotation: -90 },
+	R11: { schRotation: -90 },
+	R14: { schRotation: 90 },
+	D1: { schRotation: -90 },
+	R18: { schRotation: 90 },
+	R19: { schRotation: 90 },
+	R21: { schRotation: 90 },
+	R20: { schRotation: -90 },
+	R23: { schRotation: -90 },
+	R24: { schRotation: -90 },
+	R25: { schRotation: -90 },
 };
 
 export const schematicPlacementFor = (reference: string) => {

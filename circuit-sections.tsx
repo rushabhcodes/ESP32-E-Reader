@@ -70,6 +70,7 @@ const renderChip = (spec: ChipSpec) => {
 				{...importedCommon}
 				pcbX={spec.pcbX - 0.975}
 				pcbRotation={0}
+				schPinArrangement={{ topSide: ["pin1"], bottomSide: ["pin2"] }}
 			/>
 		);
 	if (spec.name === "Q1")
@@ -197,6 +198,24 @@ export const ControlsSection = () => (
 
 export const CircuitSections = () => (
 	<Fragment>
+		<schematicsheet
+			name="battery_usb"
+			displayName="Battery, Protection, USB & Charging"
+			sheetIndex={0}
+		/>
+		<schematicsheet
+			name="mcu_power"
+			displayName="3.3 V Rail & ESP32-C3"
+			sheetIndex={1}
+		/>
+		<schematicsheet
+			name="display_power"
+			displayName="E-Paper Interface & Bias Rails"
+			sheetIndex={2}
+			sheetSize="ANSI_B"
+		/>
+		<schematicsheet name="storage" displayName="Micro SD Storage" sheetIndex={3} />
+		<schematicsheet name="controls" displayName="User Controls" sheetIndex={4} />
 		<BatteryUsbSection />
 		<McuPowerSection />
 		<DisplayPowerSection />

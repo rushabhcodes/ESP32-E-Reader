@@ -97,7 +97,7 @@ routes, and 0.2/0.42 mm via drill/pad diameters.
 └── package.json            # Build, validation, and export commands
 ```
 
-The design currently contains 85 components and 49 connected nets. Placement,
+The design currently contains 86 components and 49 connected nets. Placement,
 board geometry, and electrical intent are transcribed from the Rev. B KiCad
 design; PCB routing is generated from the netlist by tscircuit's local
 autorouter.
@@ -179,5 +179,31 @@ Gerbers, plated/non-plated drill files, BOM, and pick-and-place CSV files.
   between the battery rail and an off-state pull-down, so the switch does not
   carry the ESP32 or display load current. S2 remains a firmware wake/power
   button.
+- Charge the battery only with SW7 **OFF** and a battery connected. U1 is an
+  MCP73831 charger; its VBAT output also feeds U5 and the system. There is no
+  power-path/load-sharing circuit, so operating the reader while charging can
+  disturb charge termination. USB-only operation without a battery is not
+  supported. A future revision intended for simultaneous charging and use
+  needs a dedicated power path, such as an integrated load-sharing charger.
+  SW7 does not electrically interlock charging and operation; this is an
+  operating requirement.
+- R30 pulls ESP32-C3 GPIO8 high on the MCU side of the 20 Ω SPI-clock series
+  resistor R27. Closing JP1 pulls GPIO9 low for ROM download mode; GPIO8 must
+  stay high when reset is released. During bring-up, connect the display and SD
+  card, close JP1, reset with S1, confirm USB ROM download/programming works,
+  then open JP1 and confirm normal boot. Check GPIO8 at U4 during reset if
+  programming is unreliable. See the [ESP32-C3 boot-mode table](https://docs.espressif.com/projects/esp-hardware-design-guidelines/en/latest/esp32c3/schematic-checklist.html).
+- U5 is a 3.3 V LDO, so V3V3 cannot remain regulated through the full LiPo
+  discharge range. The ESP32-C3 module requires 3.0–3.6 V at its supply; the
+  LDO also needs load-dependent dropout headroom. The minimum usable battery
+  voltage has **not** been verified. Before field use, measure battery voltage
+  at TP1 and V3V3 at TP2 during Wi-Fi transmit, SD writes, and display refresh
+  at low state of charge. Set a firmware low-battery shutdown threshold that
+  keeps V3V3 above 3.0 V and within every peripheral's specified range under
+  those loads, with margin. The firmware threshold is not implemented in this
+  hardware repository. Use a buck-boost supply if operation through the full
+  cell discharge range is required. See
+  the [ESP32-C3-WROOM-02 supply specification](https://documentation.espressif.com/esp32-c3-wroom-02_datasheet_en.html)
+  and [ME6211 datasheet](https://datasheet.lcsc.com/szlcsc/Nanjing-Micro-One-Elec-ME6211C33M5G-N_C82942.pdf).
 - Imported EasyEDA footprints live in `imports/`; any source-orientation
   corrections are applied there.

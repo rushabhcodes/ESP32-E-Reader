@@ -23,7 +23,7 @@
 	},
 	"devDependencies": {
 		"@types/react": "^19.2.18",
-		"tscircuit": "^0.0.2663",
+		"tscircuit": "^0.0.2687",
 		"typescript": "^5.0.0"
 	},
 	"author": "rushabhcodes"

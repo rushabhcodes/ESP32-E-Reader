@@ -73,7 +73,7 @@ export const lcscGroups: Array<[string, string[]]> = [
 	["C3039694", ["C19"]],
 	["C28323", ["C21", "C25", "C27"]],
 	["C22790", ["R1"]],
-	["C98220", ["R4", "R10", "R11", "R18", "R19", "R20", "R21", "R23"]],
+	["C98220", ["R4", "R10", "R11", "R18", "R19", "R20", "R21", "R23", "R30"]],
 	["C25803", ["R12", "R13", "R24", "R25", "R29"]],
 	["C23179", ["R5", "R14"]],
 	["C22935", ["R16"]],
@@ -500,7 +500,7 @@ export const resistors: PassiveSpec[] = [
 		section: "battery_usb",
 		pcbX: -15.320400000000006,
 		pcbY: 27.9122,
-		pcbRotation: 90,
+		pcbRotation: 270,
 		layer: "top",
 	},
 	{
@@ -510,7 +510,7 @@ export const resistors: PassiveSpec[] = [
 		section: "controls",
 		pcbX: -25.54249999999999,
 		pcbY: 17.069999999999993,
-		pcbRotation: 0,
+		pcbRotation: 180,
 		layer: "top",
 	},
 	{
@@ -560,7 +560,7 @@ export const resistors: PassiveSpec[] = [
 		section: "battery_usb",
 		pcbX: -19.870800000000003,
 		pcbY: 35.608399999999996,
-		pcbRotation: -90,
+		pcbRotation: 90,
 		layer: "top",
 	},
 	{
@@ -680,7 +680,17 @@ export const resistors: PassiveSpec[] = [
 		section: "mcu_power",
 		pcbX: 21.5,
 		pcbY: 14.1,
-		pcbRotation: 0,
+		pcbRotation: 180,
+		layer: "top",
+	},
+	{
+		name: "R30",
+		value: "10k",
+		footprint: FP.r0603,
+		section: "mcu_power",
+		pcbX: -11.15,
+		pcbY: 29.5,
+		pcbRotation: 90,
 		layer: "top",
 	},
 ];
@@ -739,7 +749,7 @@ export const chips: ChipSpec[] = [
 		footprint: kicad("Connector_JST/JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal"),
 		pins: ["1", "2"],
 		section: "battery_usb",
-		pcbX: -21.05000000000001,
+		pcbX: -18.55,
 		pcbY: 40.629999999999995,
 		pcbRotation: 180,
 		layer: "top",
@@ -805,7 +815,7 @@ export const chips: ChipSpec[] = [
 		section: "display_power",
 		pcbX: -18.810000000000002,
 		pcbY: -5.560000000000002,
-		pcbRotation: 90,
+		pcbRotation: 270,
 		layer: "top",
 	},
 	{
@@ -972,7 +982,7 @@ export const testpoints = [
 		name: "TP1",
 		label: "BATT",
 		section: "battery_usb" as const,
-		pcbX: -16.6704,
+		pcbX: -12.5,
 		pcbY: 43.431599999999996,
 		pcbRotation: 0,
 		layer: "top",
@@ -1056,7 +1066,7 @@ export const schematicPlacementByReference = (() => {
 				{
 					schX: origin.x + (index % 5) * 4.4,
 					schY: origin.y - Math.floor(index / 5) * 4.4,
-					schSectionName: section,
+					schSectionName: `${section}_section`,
 					schSheetName: section,
 				},
 			] as const;
@@ -1083,6 +1093,7 @@ export const schematicPlacementOverrides: Record<
 	R23: { schRotation: -90 },
 	R24: { schRotation: -90 },
 	R25: { schRotation: -90 },
+	R30: { schRotation: -90 },
 };
 
 export const schematicPlacementFor = (reference: string) => {
@@ -1149,6 +1160,7 @@ export const nets: Record<string, string[]> = {
 		endpoint("R23", "1"),
 		endpoint("R24", "1"),
 		endpoint("R25", "1"),
+		endpoint("R30", "1"),
 		endpoint("U4", "1"),
 		endpoint("U5", "5"),
 		endpoint("TP2", "1"),
@@ -1286,7 +1298,7 @@ export const nets: Record<string, string[]> = {
 	SPI_MISO: [endpoint("J4", "7"), endpoint("R20", "2"), endpoint("U4", "6")],
 	SPI_SCLK: [endpoint("J2", "13"), endpoint("J4", "5"), endpoint("R27", "1")],
 	SPI_MOSI: [endpoint("J2", "14"), endpoint("J4", "3"), endpoint("R28", "1")],
-	MCU_IO8: [endpoint("R27", "2"), endpoint("U4", "7")],
+	MCU_IO8: [endpoint("R27", "2"), endpoint("R30", "2"), endpoint("U4", "7")],
 	MCU_IO10: [endpoint("R28", "2"), endpoint("U4", "10")],
 	SD_CS: [endpoint("J4", "2"), endpoint("R23", "2"), endpoint("U4", "16")],
 	SD_DAT1: [endpoint("J4", "8"), endpoint("R24", "2")],

@@ -172,28 +172,28 @@ const renderChip = (spec: ChipSpec) => {
 
 export const BatteryUsbSection = () => (
 	<schematicsection
-		name="battery_usb"
+		name="battery_usb_section"
 		displayName="Battery, Protection, USB & Charging"
 	/>
 );
 
 export const McuPowerSection = () => (
-	<schematicsection name="mcu_power" displayName="3.3 V Rail & ESP32-C3" />
+	<schematicsection name="mcu_power_section" displayName="3.3 V Rail & ESP32-C3" />
 );
 
 export const DisplayPowerSection = () => (
 	<schematicsection
-		name="display_power"
+		name="display_power_section"
 		displayName="E-Paper Interface & Bias Rails"
 	/>
 );
 
 export const StorageSection = () => (
-	<schematicsection name="storage" displayName="Micro SD Storage" />
+	<schematicsection name="storage_section" displayName="Micro SD Storage" />
 );
 
 export const ControlsSection = () => (
-	<schematicsection name="controls" displayName="User Controls" />
+	<schematicsection name="controls_section" displayName="User Controls" />
 );
 
 export const CircuitSections = () => (

@@ -6,6 +6,13 @@
  */
 
 import { Fragment } from "react";
+import { assembly } from "tscircuit";
+import batteryEnvelopeUrl from "./assets/enclosure/battery-envelope.glb";
+import buttonCapsUrl from "./assets/enclosure/button-caps.glb";
+import displayPanelUrl from "./assets/enclosure/display-panel.glb";
+import frontBezelUrl from "./assets/enclosure/front-bezel.glb";
+import powerSliderUrl from "./assets/enclosure/power-slider.glb";
+import rearTrayUrl from "./assets/enclosure/rear-tray.glb";
 import { CircuitSections } from "./circuit-sections";
 import { nets, traceThicknessByNet } from "./design-data";
 import { createPreExpansionAutorouter } from "./pre-expansion-autorouter";
@@ -13,20 +20,34 @@ import { createPreExpansionAutorouter } from "./pre-expansion-autorouter";
 const enclosureMountingHoles = [
 	{ name: "MOUNT_TL", x: -27, y: 44.75 },
 	{ name: "MOUNT_TR", x: 27, y: 44.75 },
-	{ name: "MOUNT_BL", x: -27.5, y: -44 },
-	{ name: "MOUNT_BR", x: 27.5, y: -44 },
 ] as const;
 
-export default function ESP32EReader() {
+// The compact tactile switches fit inside the display-width lower section.
+const boardOutline = [
+	{ x: -26.25, y: 48.08 },
+	{ x: 26.25, y: 48.08 },
+	{ x: 29.79, y: 46.62 },
+	{ x: 31.25, y: 43.08 },
+	{ x: 31.25, y: -44 },
+	{ x: 30.37, y: -46.12 },
+	{ x: 28.25, y: -47 },
+	{ x: -28.25, y: -47 },
+	{ x: -30.37, y: -46.12 },
+	{ x: -31.25, y: -44 },
+	{ x: -31.25, y: 43.08 },
+	{ x: -29.79, y: 46.62 },
+];
+
+function EReaderBoard() {
 	return (
 		<board
 			title="ESP32 E-Reader Rev. B"
 			width="62.5mm"
-			height="96.16mm"
-			borderRadius="5mm"
+			height="95.08mm"
+			outline={boardOutline}
+			doubleSidedAssembly
 			layers={4}
 			thickness="1.6mm"
-			doubleSidedAssembly
 			minViaHoleDiameter="0.2mm"
 			minViaPadDiameter="0.42mm"
 			// 0.1 mm copper clearance + 0.11 mm annulus gives 0.21 mm
@@ -37,7 +58,7 @@ export default function ESP32EReader() {
 				allowViaInPad: false,
 			}}
 		>
-			{/* M2.5 enclosure screws with clearance for printed standoffs/screw heads. */}
+			{/* Upper M2.5 mounting holes; the lower edge seats in case rails. */}
 			{enclosureMountingHoles.map(({ name, x, y }) => (
 				<Fragment key={name}>
 					<hole diameter="2.7mm" pcbX={x} pcbY={y} />
@@ -124,13 +145,13 @@ export default function ESP32EReader() {
 			<cutout
 				name="DISPLAY_FPC_SLOT"
 				shape="rect"
-				width="35mm"
+				width="26mm"
 				height="2mm"
 				pcbX={0}
-				pcbY={-39.92}
+				pcbY={-36.2}
 			/>
 
-			<silkscreentext text="BATT" pcbX={-22} pcbY={43} fontSize="1mm" />
+			<silkscreentext text="BATT" pcbX={25} pcbY={-25} fontSize="1mm" />
 			<silkscreentext
 				text="USB"
 				pcbX={27}
@@ -155,18 +176,53 @@ export default function ESP32EReader() {
 			<silkscreentext
 				text="EN"
 				pcbX={-28}
-				pcbY={-16}
+				pcbY={-31}
 				pcbRotation={90}
 				fontSize="1mm"
 			/>
 			<silkscreentext text="EPD" pcbX={1} pcbY={-23} fontSize="1mm" />
-			<silkscreentext text="MICRO SD" pcbX={-22} pcbY={-38} fontSize="1mm" />
+			<silkscreentext text="MICRO SD" pcbX={-22} pcbY={-28} fontSize="1mm" />
 			<silkscreentext
 				text="ESP32 E-Reader  Rev. B"
 				pcbX={13}
-				pcbY={-37}
+				pcbY={-23}
 				fontSize="1mm"
 			/>
 		</board>
+	);
+}
+
+export default function ESP32EReader() {
+	return (
+		<assembly.device name="ESP32_E_READER">
+			<EReaderBoard />
+			<assembly.screen
+				name="EPD1"
+				connectsTo=".J2"
+				width="56.24mm"
+				height="96.62mm"
+				modelUrl={displayPanelUrl}
+			/>
+			<assembly.cadassembly
+				name="battery_envelope"
+				cadModel={{ glbUrl: batteryEnvelopeUrl, modelUnitToMmScale: 1 }}
+			/>
+			<assembly.cadassembly
+				name="front_bezel"
+				cadModel={{ glbUrl: frontBezelUrl, modelUnitToMmScale: 1 }}
+			/>
+			<assembly.cadassembly
+				name="button_caps_preview"
+				cadModel={{ glbUrl: buttonCapsUrl, modelUnitToMmScale: 1 }}
+			/>
+			<assembly.cadassembly
+				name="rear_tray"
+				cadModel={{ glbUrl: rearTrayUrl, modelUnitToMmScale: 1 }}
+			/>
+			<assembly.cadassembly
+				name="power_slider_preview"
+				cadModel={{ glbUrl: powerSliderUrl, modelUnitToMmScale: 1 }}
+			/>
+		</assembly.device>
 	);
 }

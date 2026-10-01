@@ -23,12 +23,12 @@ import { EVQP7C01P } from "./imports/EVQP7C01P";
 import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
 import { FS8205A } from "./imports/FS8205A";
 import { JS102011SAQN } from "./imports/JS102011SAQN";
-import { KH_6X6X5H_STM } from "./imports/KH_6X6X5H_STM";
 import { MBR0530T1G } from "./imports/MBR0530T1G";
 import { MCP73831T_2ACI_OT } from "./imports/MCP73831T_2ACI_OT";
 import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
 import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
 import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
+import { SKRPACE010 } from "./imports/SKRPACE010";
 import { USB4105_GF_A } from "./imports/USB4105_GF_A/USB4105_GF_A";
 import { USBLC6_2SC6 } from "./imports/USBLC6_2SC6";
 
@@ -116,7 +116,7 @@ const renderChip = (spec: ChipSpec) => {
 		return <EVQP7C01P key={spec.name} {...importedCommon} />;
 	if (["SW2", "SW3", "SW4", "SW6"].includes(spec.name))
 		return (
-			<KH_6X6X5H_STM
+			<SKRPACE010
 				key={spec.name}
 				{...importedCommon}
 				noConnect={["pin2", "pin3"]}
@@ -178,7 +178,10 @@ export const BatteryUsbSection = () => (
 );
 
 export const McuPowerSection = () => (
-	<schematicsection name="mcu_power_section" displayName="3.3 V Rail & ESP32-C3" />
+	<schematicsection
+		name="mcu_power_section"
+		displayName="3.3 V Rail & ESP32-C3"
+	/>
 );
 
 export const DisplayPowerSection = () => (
@@ -214,8 +217,16 @@ export const CircuitSections = () => (
 			sheetIndex={2}
 			sheetSize="ANSI_B"
 		/>
-		<schematicsheet name="storage" displayName="Micro SD Storage" sheetIndex={3} />
-		<schematicsheet name="controls" displayName="User Controls" sheetIndex={4} />
+		<schematicsheet
+			name="storage"
+			displayName="Micro SD Storage"
+			sheetIndex={3}
+		/>
+		<schematicsheet
+			name="controls"
+			displayName="User Controls"
+			sheetIndex={4}
+		/>
 		<BatteryUsbSection />
 		<McuPowerSection />
 		<DisplayPowerSection />

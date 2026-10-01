@@ -25,5 +25,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Generated Python bytecode
+__pycache__/
+*.pyc
+
 # tscircuit cache
 .tscircuit/

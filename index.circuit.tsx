@@ -15,6 +15,7 @@ import button3Url from "./assets/enclosure/button-3.glb";
 import button4Url from "./assets/enclosure/button-4.glb";
 import displayPanelUrl from "./assets/enclosure/display-panel.glb";
 import frontShellUrl from "./assets/enclosure/front-shell.glb";
+import rearCoverUrl from "./assets/enclosure/rear-cover.glb";
 import { CircuitSections } from "./circuit-sections";
 import { nets, traceThicknessByNet } from "./design-data";
 import { createPreExpansionAutorouter } from "./pre-expansion-autorouter";
@@ -223,6 +224,10 @@ export default function ESP32EReader() {
 			<assembly.cadassembly
 				name="battery_partition"
 				cadModel={{ glbUrl: partitionUrl, modelUnitToMmScale: 1 }}
+			/>
+			<assembly.cadassembly
+				name="rear_cover"
+				cadModel={{ glbUrl: rearCoverUrl, modelUnitToMmScale: 1 }}
 			/>
 		</assembly.device>
 	);

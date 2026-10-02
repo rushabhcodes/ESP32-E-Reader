@@ -63,13 +63,16 @@ const renderChip = (spec: ChipSpec) => {
 				noConnect={["pin10", "pin11", "pin12", "pin13", "pin14"]}
 			/>
 		);
+	// Turn BT1's keyed mating face toward the partition lead slot (-Y).
+	// Move it 2 mm inward for plug insertion room at the PCB's lower edge.
 	if (spec.name === "BT1")
 		return (
 			<S2B_PH_K_S_LF__SN_
 				key={spec.name}
 				{...importedCommon}
 				pcbX={spec.pcbX - 0.975}
-				pcbRotation={0}
+				pcbY={spec.pcbY + 2}
+				pcbRotation={180}
 				schPinArrangement={{ topSide: ["pin1"], bottomSide: ["pin2"] }}
 			/>
 		);

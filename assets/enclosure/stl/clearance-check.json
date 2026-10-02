@@ -1,0 +1,34 @@
+{
+  "input_glb": "/tmp/esp-reader-current.glb",
+  "modeled_component_shell_intersections": [],
+  "modeled_component_partition_intersections": [],
+  "modeled_component_button_intersections": [],
+  "button_shell_solid_overlap_mm3": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "battery_shell_surface_intersections": 0,
+  "battery_cover_surface_intersections": 0,
+  "solid_overlap_mm3": {
+    "shell_partition": 0.0,
+    "shell_cover": 0.0,
+    "shell_battery": 0.0,
+    "partition_battery": 0.0,
+    "cover_battery": 0.0
+  },
+  "expected_part_contacts": {
+    "partition_on_shell_ledges": true,
+    "battery_on_partition": true,
+    "cover_on_shell": true
+  },
+  "unmodeled": [
+    "USB-C J1 body placement",
+    "display FPC",
+    "battery lead and plug",
+    "solder fillets",
+    "battery dimensional tolerance or swelling",
+    "printer material shrinkage"
+  ]
+}

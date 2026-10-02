@@ -6,9 +6,27 @@ high-resolution four-color e-paper display. This repository contains the
 including the schematic, PCB layout, component data, and fabrication export
 workflow.
 
-![3D preview of the ESP32 E-Reader PCB in a reconstructed enclosure](__snapshots__/index.circuit-3d.snap.png)
+## At a glance
 
-![Front preview showing the compact e-paper reader and four slim tactile buttons](assets/enclosure/front-preview.png)
+| Specification | Current design |
+| --- | --- |
+| Enclosure outside | 68.0 × 109.5 × **21.1 mm**; prototype CAD, not a measured print |
+| PCB | 62.5 × 95.08 × 1.6 mm; four copper layers |
+| Display | EastRising ER-EPD3.97-1RY; 3.97 in, 480 × 800, four colors, no frontlight |
+| Processor | ESP32-C3-WROOM-02-N4; 4 MB flash, Wi-Fi, Bluetooth LE |
+| Storage | MicroSD over SPI |
+| Battery | Protected 1-cell LiPo, 3.7 V nominal; modeled around 2000 mAh SparkFun PRT-13855 |
+| Battery envelope | 49.2 × 68.8 × 5.6 mm nominal, excluding unverified lead and plug |
+| USB | USB-C for charging and native ESP32-C3 USB data |
+| Input | Four recessed navigation buttons, wake, reset, main power switch |
+
+This repository is the **hardware and printable enclosure prototype**. It
+does not contain e-reader firmware. Battery runtime, display cable fit, and
+final printed fit have not been measured on an assembled device.
+
+![Front of the dimensioned e-reader print prototype](assets/enclosure/printable-front.png)
+
+![Exploded view of the screen, PCB, partition, battery and rear cover](assets/enclosure/printable-exploded.png)
 
 ## Display
 
@@ -70,6 +88,28 @@ are not modeled.
 | Controls | Back, Confirm, Left, Right, Wake, Reset/Enable, and main power switch |
 | Board | 62.5 × 95.08 mm, 1.6 mm thick, four copper layers |
 
+### Parts and supplies for one prototype
+
+| Item | Selection / requirement |
+| --- | --- |
+| U4 microcontroller | ESP32-C3-WROOM-02-N4 |
+| Display | EastRising ER-EPD3.97-1RY, matching the **verified** J2 pinout |
+| J2 display connector | Hirose FH12-24S-0.5SH(55), 24 positions at 0.5 mm pitch |
+| J4 MicroSD socket | Hirose DM3AT-SF-PEJM5 |
+| J1 USB-C receptacle | GCT USB4105-GF-A |
+| BT1 battery header | JST S2B-PH-K-S(LF)(SN), 2-pin, 2.0 mm pitch, side entry |
+| Battery | Protected 3.7 V nominal single-cell pack; modeled PRT-13855, 2000 mAh, 49.2 × 68.8 × 5.6 mm |
+| Navigation switches | 4 × Alps Alpine SKRPACE010, bottom-side assembly |
+| Other controls | 2 × Panasonic EVQP7C01P (S1/S2); 1 × C&K JS102011SAQN (SW7) |
+| Printed parts | Front shell, battery partition, rear cover, and 4 separate button caps |
+| Assembly supplies | 2 suitable M2.5 PCB screws, 4 nominal M2.5 × 6 mm cover screws, display-safe perimeter adhesive, and thin nonconductive cell cushioning |
+
+The [source component list and LCSC/JLCPCB mappings](design-data.ts) and the
+[generated BOM](#fabrication-files) cover the remaining passives, charger,
+protection devices, ESD device, and e-paper bias circuit. The USB-C body and
+the display FPC fold are missing from the 3D collision model. Confirm the
+delivered display tail, battery plug polarity, and screw fit before assembly.
+
 The four navigation buttons share one ESP32 ADC input through a resistor
 ladder. The e-paper display and MicroSD card share the SPI clock and MOSI lines
 while using independent chip-select signals. USB D+ and D− connect directly to
@@ -84,83 +124,66 @@ They sit on 14 mm centers within the 62.5 mm board width. Moving the row 4 mm
 closer to the display removes 5 mm from the lower PCB edge while keeping about
 2 mm between the panel outline and the button openings. Four separate slim
 case caps reproduce the reference reader's recessed front-button appearance;
-they are not hot-swappable. This requires bottom-side assembly. The cap stems,
-retention, button travel, and print tolerances are visual concepts that need
-a physical prototype before the enclosure can be fabricated. Check the actual
+they are not hot-swappable. This requires bottom-side assembly. Printable caps
+include a rear retention flange and nominal 0.14 mm clearance to the switch
+body, but actuation and print fit need a physical prototype. Check the actual
 display ribbon width and fold radius against the 26 mm FPC slot before ordering
 the PCB.
 
-## Compact enclosure direction
+## Dimensioned enclosure print prototype
 
-The enclosure preview takes its straight-sided, rounded pocket-reader shape
-from the [Xteink X3 product](https://www.xteink.com/products/xteink-x3). The
-four recessed front buttons echo the source board and the dedicated physical
-page buttons of the [Kindle Oasis](https://www.aboutamazon.com/news/devices/read-anywhere-with-the-all-new-kindle-oasis).
-The visual shell is **68 × 109.5 mm**, versus the X3's published **63.7 × 97.6
-mm**. It spans about 20.7 mm in thickness including the button caps and back.
-The narrower shell leaves about 5.9 mm from each side of the panel outline to
-the outside edge. The PCB remains 62.5 mm wide because its mounting holes and
-edge connectors are already close to its sides; the modeled cavity has 0.75 mm
-of nominal clearance on each side of the board. These are concept dimensions,
-not validated manufacturing clearances.
-Shake-to-turn and its motion sensor are left for a later hardware revision.
+The slim case has a **68.0 × 109.5 × 21.1 mm** outside envelope. From front
+through back it contains the display, 62.5 × 95.08 mm PCB, a 1.4 mm rigid
+partition, a protected 2000 mAh LiPo compartment, and a removable rear cover.
+The case separates the battery from the component side of the board. The
+selected [SparkFun PRT-13855 pack](https://www.sparkfun.com/lithium-ion-battery-2ah.html)
+has published **49.2 × 68.8 × 5.6 mm nominal dimensions**. It sits left of BT1
+in an extended guide pocket, with 1.5 mm nominal clearance to the rear cover.
+The partition has a local opening for BT1 and its lead. BT1's side-entry
+mating face points toward the opening, so the plug enters from the bottom of
+the PCB before the partition is seated. The thinner front section moves the
+display 1.5 mm closer to the PCB; check its short FPC fold on a real sample.
+Verify BT1 polarity against the actual battery plug before connection.
+SparkFun's store currently restricts international shipment of this pack;
+equivalent 2000 mAh packs must be checked for the complete protected-pack
+envelope, lead, plug, and polarity before substitution.
 
-## Battery and enclosure visual reference
+| Thickness contribution | mm |
+| --- | ---: |
+| Front outer face to PCB center | 6.5 |
+| PCB center to battery base, including partition | 6.0 |
+| Nominal battery thickness | 5.6 |
+| Nominal battery-to-cover clearance | 1.5 |
+| Rear cover | 1.5 |
+| **Modeled outside thickness** | **21.1** |
 
-The battery connection is **BT1**, the side-entry two-pin JST-PH header on
-the component side below the planned battery bay. Its mating plug is a
-two-position PH housing such as [JST
-PHR-2](https://order.jst-mfg.com/InternetShop/app/pdf_show.php?kbn=1&key=ePH.pdf)
-with properly crimped contacts. In this circuit, BT1 pin 1 is `BATT_P` and pin
-2 is `BATT_N_RAW`; verify the finished battery cable's polarity against those
-pins before plugging it in. A one-cell LiPo connects to BT1; USB-C powers U1,
-the on-board charger. Charge with SW7 OFF as described under Hardware notes.
+The pack gives 2000 mAh in a 5.6 mm nominal thickness. A 1200 mAh, 5 mm
+pack would save 0.6 mm in this stack but reduce rated capacity by 40%.
+Actual runtime has not been measured; the LDO may stop regulating before the
+cell reaches its protection cutoff. The [full coordinate and tolerance
+table](assets/enclosure/PRINTING.md) describes the printed parts.
 
-The selected size target is the [Adafruit 1578 3.7 V, 500 mAh protected
-LiPo](https://www.adafruit.com/product/1578), whose nominal body is
-**29 × 36 × 4.75 mm** and whose lead is 102 mm long. The 3D model places that
-nominal body behind the upper PCB, above a 31 × 38 mm shelf and clear of the
-tactile switches in plan view. BT1 is just below the bay, shortening the
-lead route. The panel outline starts about 1.7 mm below the case top; the
-visible window starts about 6.4 mm below it. The nominal model leaves 1.25 mm
-between the pack and the inside of the rear cover.
-Confirm the actual pack's dimensions, lead routing, insulation, swelling
-space, shelf support, and clearance over components and the ESP32 antenna
-before fabrication. The model represents the nominal cell body, not a
-validated mechanical or thermal envelope. The existing charger setting is
-about 400 mA; measure it on a prototype and verify that the supplied pack and
-connector polarity match this circuit before connecting the battery.
+![BT1 facing the partition cable opening](assets/enclosure/printable-battery-connector.png)
 
-The 3D view includes a front bezel on the display side, an open rear tray
-around the PCB, a battery envelope, and a side power-slider preview through
-tscircuit's `assembly.cadassembly` elements. The rear cover is a separate
-`assets/enclosure/rear-cover.glb` model and is omitted from the default 3D
-view so the board remains visible. It is a removable case part, rather than
-another PCB or display layer. All enclosure models are generated from
-`scripts/generate-enclosure.py`.
+The [printable STL files and full dimension table](assets/enclosure/PRINTING.md)
+include the shell, partition, rear cover, and four independent front caps.
+The [component inventory](assets/enclosure/component-inventory.csv) lists
+all 86 PCB references with footprint size and available 3D model envelopes.
+The source models have missing body geometry for J1 (USB-C) and omit the
+screen FPC fold, real battery lead, and manufacturing tolerances. The meshes
+are manifold, but the first physical print and fit measurements remain
+necessary before treating the case as a finished product.
 
-The rear tray's USB-C, MicroSD, and power-switch openings now pass all the
-way through their side walls. A separate thumb slider is shown at the right
-edge, spanning the gap from the outer wall toward SW7. The selected
-[C&K JS102011SAQN](https://www.ckswitches.de/media/1434/slides.pdf) has
-2 mm of travel along the board edge. The slider's guide, coupling to the
-switch, and fit in the case are only a visual proposal; verify these with a
-physical switch and printed prototype before treating the power control as
-accessible in a manufactured enclosure.
+![Open-back view of the battery compartment](assets/enclosure/printable-open-back.png)
 
-![Right-side switch opening and slider preview](assets/enclosure/power-access-preview.png)
+![Side view of the slim enclosure](assets/enclosure/printable-side.png)
 
-These are **visual reconstructions**, informed by the [original Rev. B KiCad
-project](https://github.com/IS7V4N/ESP32_E-Reader), its [front enclosure
-photo](https://github.com/IS7V4N/ESP32_E-Reader/blob/main/Hardware/Images/ESP32Ereader-cover.png),
-and its [open-back
-photo](https://github.com/IS7V4N/ESP32_E-Reader/blob/main/Hardware/Images/Backplate_off.jpg).
-The original repository currently marks `Hardware/3D CAD` as work in progress
-and does not publish its enclosure mesh. These models are not the original
-snap-fit parts; the tactile-button caps and battery bay are new design
-proposals. They have not been checked for print tolerances, button travel,
-display clearance, or assembly fit. Regenerate them with
-`blender --background --python scripts/generate-enclosure.py`.
+The outer silhouette follows the [Xteink X3 product](https://www.xteink.com/products/xteink-x3)
+and the original [Rev. B KiCad project](https://github.com/IS7V4N/ESP32_E-Reader),
+whose enclosure source mesh is unpublished. The front navigation switches
+remain low-profile tactile buttons, and motion controls remain a later
+hardware revision. The power-switch side slot is open for access, but a
+coupled thumb slider is not included in the printable set.
 
 ## Board construction
 
@@ -175,8 +198,9 @@ Bottom   — components and signals
 
 Ground fills are also present on the top and bottom layers. The
 ESP32-C3-WROOM-02 antenna area has a keepout across all four copper layers.
-The design uses 0.2 mm signal traces, wider power and e-paper charge-pump
-routes, and 0.2/0.42 mm via drill/pad diameters.
+The design uses 0.2 mm ordinary signal traces, 0.5 mm battery/USB/3.3 V
+routes, 0.4–0.6 mm e-paper charge-pump routes, and 0.2/0.42 mm via drill/pad
+diameters.
 
 ![PCB layout](__snapshots__/index.circuit-pcb.snap.svg)
 
@@ -189,6 +213,8 @@ routes, and 0.2/0.42 mm via drill/pad diameters.
 ├── design-data.ts          # Parts, placement, sourcing, nets, and trace widths
 ├── imports/                # Imported component footprints and models
 ├── __snapshots__/          # PCB, schematic, and 3D reference renders
+├── assets/enclosure/       # Printable STLs, assembly GLBs, guide, and renders
+├── scripts/                # Enclosure generation and clearance checks
 ├── tscircuit.config.json   # tscircuit project configuration
 └── package.json            # Build, validation, and export commands
 ```
@@ -237,7 +263,8 @@ bunx tsci check schematic-placement index.circuit.tsx
 bunx tsci check placement index.circuit.tsx
 bunx tsci check trace-length index.circuit.tsx
 bunx tsci check routing-difficulty index.circuit.tsx
-bunx tsci check shorts index.circuit.tsx
+bun run build
+bunx tsci check shorts dist/index/circuit.json
 ```
 
 Update the checked-in schematic, PCB, and 3D snapshots with:
@@ -245,6 +272,41 @@ Update the checked-in schematic, PCB, and 3D snapshots with:
 ```sh
 bun run snapshot:update
 ```
+
+The latest routed build produced **191 traces, zero routing errors**, and the
+Gerber-derived shorts check found **no shorts**. The enclosure meshes have
+one connected shell each and no non-manifold edges. The modeled shell,
+partition, cell, cover, button caps, and available component meshes have no
+unintended solid intersections. See [mesh-check.json](assets/enclosure/stl/mesh-check.json)
+and [clearance-check.json](assets/enclosure/stl/clearance-check.json).
+These checks do not validate the unmodeled USB-C body, display tail and bend,
+battery lead and plug, button travel, or print tolerances.
+
+`tsci check placement` currently exits with one **BT1 suboptimal-orientation
+suggestion**: rotating the header would uncross its direct pad-connection
+lines. BT1 is deliberately oriented with its mating face toward the case's
+cable opening. The placement report lists zero placement DRC errors and zero
+warnings; the routed build and shorts check above still pass. Inspect the
+physical lead path and polarity before fabrication rather than changing that
+orientation based only on the heuristic.
+
+## Printable enclosure
+
+The [print package](assets/enclosure/esp32-reader-printable-stls.zip)
+contains the seven printable parts and the dimensioned guide. The separate
+[STLs](assets/enclosure/stl/) and [print instructions](assets/enclosure/PRINTING.md)
+are also available. Do **not** print the `battery-envelope-DO-NOT-PRINT` file;
+it is a fit gauge.
+
+To regenerate the meshes from source, install Blender and run:
+
+```sh
+blender --background --python scripts/generate-printable-enclosure.py
+```
+
+The generator updates the STL files, matching GLBs for the tscircuit
+assembly, mesh checks, and ZIP package. The [print guide](assets/enclosure/PRINTING.md)
+also gives the component-clearance and preview-render commands.
 
 ## Fabrication files
 
@@ -257,20 +319,22 @@ bun run export:gerbers
 The output is written to `dist/esp32-e-reader-gerbers.zip` and includes the
 four copper layers, solder mask, paste, silkscreen, fabrication and edge-cut
 Gerbers, plated/non-plated drill files, BOM, and pick-and-place CSV files.
+The export completes, but the CLI cannot verify pick-and-place rotation for
+U1, U2, U3, SW2, SW3, SW4, SW6, and SW7 against supplier pin-1 data. Check
+those placements manually against the component drawings before ordering
+assembled boards.
 
 > [!CAUTION]
-> This is an open hardware design, not a certified consumer product. Review the
+> This is a prototype hardware design, not a certified consumer product. Review the
 > schematic, battery polarity, component voltage ratings, PCB clearances, BOM,
 > and fabrication outputs before ordering or powering a board. E-paper bias
 > rails generate voltages well above the 3.3 V logic rail.
 
-## Design notes
+## Power, charging, and bring-up
 
-- Battery, USB, and 3.3 V distribution use 0.5 mm routes.
-- Pulsed e-paper charge-pump paths use 0.4–0.6 mm routes.
-- Ordinary logic uses 0.2 mm routes.
-- The top, bottom, and inner-1 copper layers have GND fills; inner-2 is the
-  dedicated 3.3 V plane.
+- R9 is 2.5 kΩ on MCP73831 PROG, giving approximately **400 mA** programmed
+  charge current. Verify the delivered pack's permitted charging current and
+  measure the actual rate before relying on it.
 - SW7 is the hard main-power control. It switches the ME6211 LDO enable input
   between the battery rail and an off-state pull-down, so the switch does not
   carry the ESP32 or display load current. S2 remains a firmware wake/power
@@ -301,5 +365,3 @@ Gerbers, plated/non-plated drill files, BOM, and pick-and-place CSV files.
   cell discharge range is required. See
   the [ESP32-C3-WROOM-02 supply specification](https://documentation.espressif.com/esp32-c3-wroom-02_datasheet_en.html)
   and [ME6211 datasheet](https://datasheet.lcsc.com/szlcsc/Nanjing-Micro-One-Elec-ME6211C33M5G-N_C82942.pdf).
-- Imported EasyEDA footprints live in `imports/`; any source-orientation
-  corrections are applied there.

@@ -1,0 +1,154 @@
+{
+  "front-shell.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 18640.855,
+    "bounds_mm": [
+      [
+        -34.0,
+        34.0
+      ],
+      [
+        -49.0,
+        60.5
+      ],
+      [
+        -6.5,
+        13.1
+      ]
+    ]
+  },
+  "battery-partition.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 7006.582,
+    "bounds_mm": [
+      [
+        -31.5,
+        31.5
+      ],
+      [
+        -45.0,
+        35.0
+      ],
+      [
+        4.6,
+        7.4
+      ]
+    ]
+  },
+  "rear-cover.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 11563.585,
+    "bounds_mm": [
+      [
+        -34.0,
+        34.0
+      ],
+      [
+        -49.0,
+        60.5
+      ],
+      [
+        11.9,
+        14.6
+      ]
+    ]
+  },
+  "button-1.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 111.745,
+    "bounds_mm": [
+      [
+        -26.8,
+        -15.2
+      ],
+      [
+        -45.5,
+        -39.5
+      ],
+      [
+        -6.4,
+        -3.45
+      ]
+    ]
+  },
+  "button-2.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 111.745,
+    "bounds_mm": [
+      [
+        -12.8,
+        -1.2
+      ],
+      [
+        -45.5,
+        -39.5
+      ],
+      [
+        -6.4,
+        -3.45
+      ]
+    ]
+  },
+  "button-3.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 111.745,
+    "bounds_mm": [
+      [
+        1.2,
+        12.8
+      ],
+      [
+        -45.5,
+        -39.5
+      ],
+      [
+        -6.4,
+        -3.45
+      ]
+    ]
+  },
+  "button-4.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 111.745,
+    "bounds_mm": [
+      [
+        15.2,
+        26.8
+      ],
+      [
+        -45.5,
+        -39.5
+      ],
+      [
+        -6.4,
+        -3.45
+      ]
+    ]
+  },
+  "battery-envelope-DO-NOT-PRINT.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 18946.3,
+    "bounds_mm": [
+      [
+        -30.8,
+        18.4
+      ],
+      [
+        -39.4,
+        29.4
+      ],
+      [
+        6.0,
+        11.6
+      ]
+    ]
+  }
+}

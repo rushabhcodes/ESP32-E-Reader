@@ -7,12 +7,14 @@
 
 import { Fragment } from "react";
 import { assembly } from "tscircuit";
-import batteryEnvelopeUrl from "./assets/enclosure/battery-envelope.glb";
-import buttonCapsUrl from "./assets/enclosure/button-caps.glb";
+import batteryEnvelopeUrl from "./assets/enclosure/battery-envelope-DO-NOT-PRINT.glb";
+import partitionUrl from "./assets/enclosure/battery-partition.glb";
+import button1Url from "./assets/enclosure/button-1.glb";
+import button2Url from "./assets/enclosure/button-2.glb";
+import button3Url from "./assets/enclosure/button-3.glb";
+import button4Url from "./assets/enclosure/button-4.glb";
 import displayPanelUrl from "./assets/enclosure/display-panel.glb";
-import frontBezelUrl from "./assets/enclosure/front-bezel.glb";
-import powerSliderUrl from "./assets/enclosure/power-slider.glb";
-import rearTrayUrl from "./assets/enclosure/rear-tray.glb";
+import frontShellUrl from "./assets/enclosure/front-shell.glb";
 import { CircuitSections } from "./circuit-sections";
 import { nets, traceThicknessByNet } from "./design-data";
 import { createPreExpansionAutorouter } from "./pre-expansion-autorouter";
@@ -208,20 +210,19 @@ export default function ESP32EReader() {
 				cadModel={{ glbUrl: batteryEnvelopeUrl, modelUnitToMmScale: 1 }}
 			/>
 			<assembly.cadassembly
-				name="front_bezel"
-				cadModel={{ glbUrl: frontBezelUrl, modelUnitToMmScale: 1 }}
+				name="front_shell"
+				cadModel={{ glbUrl: frontShellUrl, modelUnitToMmScale: 1 }}
 			/>
+			{[button1Url, button2Url, button3Url, button4Url].map((url, i) => (
+				<assembly.cadassembly
+					key={i}
+					name={`button_${i + 1}`}
+					cadModel={{ glbUrl: url, modelUnitToMmScale: 1 }}
+				/>
+			))}
 			<assembly.cadassembly
-				name="button_caps_preview"
-				cadModel={{ glbUrl: buttonCapsUrl, modelUnitToMmScale: 1 }}
-			/>
-			<assembly.cadassembly
-				name="rear_tray"
-				cadModel={{ glbUrl: rearTrayUrl, modelUnitToMmScale: 1 }}
-			/>
-			<assembly.cadassembly
-				name="power_slider_preview"
-				cadModel={{ glbUrl: powerSliderUrl, modelUnitToMmScale: 1 }}
+				name="battery_partition"
+				cadModel={{ glbUrl: partitionUrl, modelUnitToMmScale: 1 }}
 			/>
 		</assembly.device>
 	);

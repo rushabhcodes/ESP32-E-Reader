@@ -3,6 +3,11 @@
   "modeled_component_shell_intersections": [],
   "modeled_component_partition_intersections": [],
   "modeled_component_button_intersections": [],
+  "usb_c_body_intersections": {
+    "shell": false,
+    "partition": false,
+    "cover": false
+  },
   "button_shell_solid_overlap_mm3": [
     0.0,
     0.0,
@@ -24,8 +29,8 @@
     "cover_on_shell": true
   },
   "unmodeled": [
-    "USB-C J1 body placement",
     "display FPC",
+    "antenna coax and plug",
     "battery lead and plug",
     "solder fillets",
     "battery dimensional tolerance or swelling",

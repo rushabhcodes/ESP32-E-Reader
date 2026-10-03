@@ -24,7 +24,7 @@ export const DW01A = (props: ChipProps<typeof pinLabels>) => {
 				jlcpcb: ["C2927799"],
 			}}
 			manufacturerPartNumber="DW01A"
-			footprint="dfn6_p0.95mm_w3.3702mm_pw0.532mm_pl1.072mm_pin1location(leftside,bottom)"
+			footprint="jlcpcb:C2927799"
 			cadModel={{
 				objUrl:
 					"https://modelcdn.tscircuit.com/easyeda_models/assets/C2927799.obj?uuid=229b69761e2c45dba6a83d8866dec72d",

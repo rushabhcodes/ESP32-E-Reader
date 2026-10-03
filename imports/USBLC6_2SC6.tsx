@@ -235,7 +235,7 @@ export const USBLC6_2SC6 = (props: ChipProps<typeof pinLabels>) => {
 				jlcpcb: ["C7519"],
 			}}
 			manufacturerPartNumber="USBLC6-2SC6"
-			footprint="dfn6_p0.95mm_w3.3702mm_pw0.532mm_pl1.072mm_pin1location(leftside,bottom)"
+			footprint="jlcpcb:C7519"
 			cadModel={{
 				objUrl:
 					"https://modelcdn.tscircuit.com/easyeda_models/assets/C7519.obj?uuid=229b69761e2c45dba6a83d8866dec72d",

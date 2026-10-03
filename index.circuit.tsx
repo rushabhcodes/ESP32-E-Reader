@@ -8,6 +8,7 @@
 import { Fragment } from "react";
 import { assembly } from "tscircuit";
 import batteryEnvelopeUrl from "./assets/enclosure/battery-envelope-DO-NOT-PRINT.glb";
+import antennaEnvelopeUrl from "./assets/enclosure/antenna-envelope-DO-NOT-PRINT.glb";
 import partitionUrl from "./assets/enclosure/battery-partition.glb";
 import button1Url from "./assets/enclosure/button-1.glb";
 import button2Url from "./assets/enclosure/button-2.glb";
@@ -53,6 +54,7 @@ function EReaderBoard() {
 			thickness="1.6mm"
 			minViaHoleDiameter="0.2mm"
 			minViaPadDiameter="0.42mm"
+			minViaEdgeToPadEdgeClearance="0.25mm"
 			// 0.1 mm copper clearance + 0.11 mm annulus gives 0.21 mm
 			// drill-to-trace clearance, above JLCPCB's 0.2 mm minimum.
 			minTraceToPadEdgeClearance="0.1mm"
@@ -75,16 +77,6 @@ function EReaderBoard() {
 				</Fragment>
 			))}
 
-			{/* ESP32-C3-WROOM-02 antenna zone: no copper or routing on either side. */}
-			<keepout
-				shape="rect"
-				width="18.2mm"
-				height="6.65mm"
-				pcbX={0.25}
-				pcbY={44.755}
-				layers={["top", "inner1", "inner2", "bottom"]}
-			/>
-
 			{/* Keep GND layer transitions clear of the nearby top-layer SPI clock. */}
 			<keepout
 				shape="circle"
@@ -93,10 +85,25 @@ function EReaderBoard() {
 				pcbY={-8.34}
 				layers={["inner2"]}
 			/>
+			{/* The RESE escape must not drill through J2's adjacent pin-3
+			    contact. Keep its via clear of the connector pad on buried layers. */}
+			<keepout
+				shape="circle"
+				radius="0.65mm"
+				pcbX={-13.28}
+				pcbY={-28.19}
+				layers={["inner1", "inner2", "bottom"]}
+			/>
 
 			<CircuitSections />
 
-			{Object.entries(nets).map(([name, connections]) => (
+			{/* Route the display D/C and reset signals as explicit point-to-point
+			    connections. The net-level autorouter split these two paths into
+			    disconnected copper segments beside J2's fine-pitch contacts. */}
+			<trace from={nets.EPD_DC[0]} to={nets.EPD_DC[1]} thickness="0.2mm" />
+			<trace from={nets.EPD_RST[0]} to={nets.EPD_RST[1]} thickness="0.2mm" />
+			<trace from={nets.EPD_RST[1]} to={nets.EPD_RST[2]} thickness="0.2mm" />
+			{Object.entries(nets).filter(([name]) => !["EPD_DC", "EPD_RST"].includes(name)).map(([name, connections]) => (
 				<Fragment key={name}>
 					<net
 						name={name}
@@ -150,7 +157,7 @@ function EReaderBoard() {
 				shape="rect"
 				width="26mm"
 				height="2mm"
-				pcbX={0}
+				pcbX={-16}
 				pcbY={-36.2}
 			/>
 
@@ -209,6 +216,10 @@ export default function ESP32EReader() {
 			<assembly.cadassembly
 				name="battery_envelope"
 				cadModel={{ glbUrl: batteryEnvelopeUrl, modelUnitToMmScale: 1 }}
+			/>
+			<assembly.cadassembly
+				name="wifi_antenna_envelope"
+				cadModel={{ glbUrl: antennaEnvelopeUrl, modelUnitToMmScale: 1 }}
 			/>
 			<assembly.cadassembly
 				name="front_shell"

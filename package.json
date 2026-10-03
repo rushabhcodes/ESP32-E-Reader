@@ -1,30 +1,27 @@
 {
-	"name": "@tsci/rushabhcodes.ESP32-E-Reader",
-	"version": "1.0.39",
-	"description": "A tscircuit component package",
-	"main": "index.circuit.tsx",
-	"keywords": [
-		"tscircuit",
-		"circuit",
-		"pcb",
-		"electronics"
-	],
-	"scripts": {
-		"dev": "tsci dev",
-		"build": "tsci build index.circuit.tsx",
-		"build:release": "tsci build index.circuit.tsx --autorouter-timeout 30m",
-		"build:pcb": "tsci build index.circuit.tsx --ignore-warnings --pcb-png",
-		"format": "biome format . --write",
-		"export:gerbers": "tsci export index.circuit.tsx --format gerbers --output dist/esp32-e-reader-gerbers.zip",
-		"snapshot": "tsci snapshot index.circuit.tsx --3d",
-		"snapshot:update": "tsci snapshot index.circuit.tsx --update --3d",
-		"start": "tsci dev",
-		"typecheck": "tsc --noEmit"
-	},
-	"devDependencies": {
-		"@types/react": "^19.2.18",
-		"tscircuit": "^0.0.2687",
-		"typescript": "^5.0.0"
-	},
-	"author": "rushabhcodes"
+  "name": "@tsci/rushabhcodes.ESP32-E-Reader",
+  "version": "1.0.43",
+  "description": "ESP32-C3 e-reader PCB and printable enclosure prototype",
+  "main": "index.circuit.tsx",
+  "keywords": [
+    "tscircuit",
+    "circuit",
+    "pcb",
+    "electronics"
+  ],
+  "scripts": {
+    "dev": "tsci dev",
+    "build": "tsci build index.circuit.tsx",
+    "build:release": "tsci build index.circuit.tsx --autorouter-timeout 30m",
+    "build:pcb": "tsci build index.circuit.tsx --pcb-png",
+    "export:gerbers": "tsci export dist/index/circuit.json --format gerbers --output ../esp32-e-reader-gerbers.zip && python3 scripts/check-assembly-export.py dist/esp32-e-reader-gerbers.zip",
+    "snapshot:update": "tsci snapshot index.circuit.tsx --update --3d",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "tscircuit": "^0.0.2687",
+    "typescript": "^5.0.0"
+  },
+  "author": "rushabhcodes"
 }

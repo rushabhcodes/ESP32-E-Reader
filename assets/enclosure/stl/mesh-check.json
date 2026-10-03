@@ -150,5 +150,24 @@
         11.6
       ]
     ]
+  },
+  "antenna-envelope-DO-NOT-PRINT.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 5.797,
+    "bounds_mm": [
+      [
+        22.05,
+        27.95
+      ],
+      [
+        41.95,
+        46.05
+      ],
+      [
+        12.86,
+        13.1
+      ]
+    ]
   }
 }

@@ -121,7 +121,7 @@ def export(obj, filename):
     obj.select_set(True)
     bpy.context.view_layer.objects.active = obj
     bpy.ops.wm.stl_export(filepath=str(OUT / filename), export_selected_objects=True, apply_modifiers=True)
-    if filename in {"front-shell.stl", "battery-partition.stl", "rear-cover.stl", "battery-envelope-DO-NOT-PRINT.stl"} or filename.startswith("button-"):
+    if filename in {"front-shell.stl", "battery-partition.stl", "rear-cover.stl", "battery-envelope-DO-NOT-PRINT.stl", "antenna-envelope-DO-NOT-PRINT.stl"} or filename.startswith("button-"):
         bpy.ops.export_scene.gltf(
             filepath=str(OUT.parent / filename.replace(".stl", ".glb")),
             export_format="GLB", export_yup=False, use_selection=True,
@@ -207,12 +207,19 @@ reset()
 cell = prism("SparkFun-PRT-13855-nominal-body", CELL_W, CELL_H, 1.4, CELL_BASE, CELL_BASE + CELL_T, x=CELL_X, y=CELL_Y)
 export(cell, "battery-envelope-DO-NOT-PRINT.stl")
 
+# Taoglas FXP75.07.0045B antenna film, bonded to the inside rear cover.
+# The 45 mm micro-coax exits toward U4; the cable and U.FL plug remain to be
+# checked with a physical sample and are intentionally not represented here.
+reset()
+antenna = prism("Taoglas-FXP75-nominal-film", 5.9, 4.1, .2, 12.86, 13.10, x=25.0, y=44.0)
+export(antenna, "antenna-envelope-DO-NOT-PRINT.stl")
+
 # `assembly.screen` positions this display model relative to J2. Keep it in
 # the same generator so legacy visual-case scripts cannot overwrite the new
 # enclosure files by accident.
 reset()
-panel = prism("ER-EPD3.97-1RY-outline", 56.24, 96.62, 1.0, -4.65, -3.75, x=.75, y=40.0)
-active = prism("480x800-active-area", 51.84, 86.4, .3, -4.71, -4.65, x=.75, y=40.0)
+panel = prism("Waveshare-3.97inch-e-Paper-G-outline", 56.24, 96.62, 1.0, -4.65, -3.75, x=18.0, y=40.0)
+active = prism("480x800-active-area", 51.84, 86.4, .3, -4.71, -4.65, x=18.0, y=40.0)
 bpy.ops.object.select_all(action="DESELECT")
 for obj in (panel, active):
     obj.select_set(True)

@@ -16,16 +16,17 @@ import {
 	testpoints,
 } from "./design-data";
 import { CR5040_470M } from "./imports/CR5040_470M";
+import { BQ24074RGTR } from "./imports/BQ24074RGTR";
 import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
 import { DW01A } from "./imports/DW01A";
-import { ESP32_C3_WROOM_02_N4 } from "./imports/ESP32_C3_WROOM_02_N4";
+import { ESP32_C3_WROOM_02U_N4 } from "./imports/ESP32_C3_WROOM_02U_N4";
 import { EVQP7C01P } from "./imports/EVQP7C01P";
 import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
 import { FS8205A } from "./imports/FS8205A";
 import { JS102011SAQN } from "./imports/JS102011SAQN";
 import { MBR0530T1G } from "./imports/MBR0530T1G";
-import { MCP73831T_2ACI_OT } from "./imports/MCP73831T_2ACI_OT";
-import { ME6211C33M5G_N } from "./imports/ME6211C33M5G_N";
+import { SMMS0420_1R5M } from "./imports/SMMS0420_1R5M";
+import { TPS63021DSJR } from "./imports/TPS63021DSJR";
 import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
 import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
 import { SKRPACE010 } from "./imports/SKRPACE010";
@@ -81,13 +82,12 @@ const renderChip = (spec: ChipSpec) => {
 			<FS8205A
 				key={spec.name}
 				{...importedCommon}
-				noConnect={["pin2", "pin5"]}
 			/>
 		);
 	if (spec.name === "Q2")
 		return <SI1308EDL_T1_GE3 key={spec.name} {...importedCommon} />;
 	if (spec.name === "U1")
-		return <MCP73831T_2ACI_OT key={spec.name} {...importedCommon} />;
+		return <BQ24074RGTR key={spec.name} {...importedCommon} noConnect={["pin7", "pin14", "pin15"]} />;
 	if (spec.name === "U2")
 		return (
 			<USBLC6_2SC6
@@ -100,7 +100,7 @@ const renderChip = (spec: ChipSpec) => {
 		return <DW01A key={spec.name} {...importedCommon} noConnect={["pin4"]} />;
 	if (spec.name === "U4")
 		return (
-			<ESP32_C3_WROOM_02_N4
+			<ESP32_C3_WROOM_02U_N4
 				key={spec.name}
 				{...importedCommon}
 				noConnect={["pin11"]}
@@ -108,11 +108,10 @@ const renderChip = (spec: ChipSpec) => {
 		);
 	if (spec.name === "U5")
 		return (
-			<ME6211C33M5G_N
+			<TPS63021DSJR
 				key={spec.name}
 				{...importedCommon}
-				pcbRotation={(spec.pcbRotation ?? 0) - 90}
-				noConnect={["pin4"]}
+				noConnect={["pin14"]}
 			/>
 		);
 	if (spec.name === "S1" || spec.name === "S2")
@@ -213,6 +212,7 @@ export const CircuitSections = () => (
 			name="mcu_power"
 			displayName="3.3 V Rail & ESP32-C3"
 			sheetIndex={1}
+			sheetSize="ANSI_B"
 		/>
 		<schematicsheet
 			name="display_power"
@@ -275,6 +275,16 @@ export const CircuitSections = () => (
 					pcbRotation={spec.pcbRotation}
 					layer={spec.layer}
 					supplierPartNumbers={supplierPartNumbersFor(spec.name)}
+					{...schematicPlacementFor(spec.name)}
+				/>
+			) : spec.name === "L2" ? (
+				<SMMS0420_1R5M
+					key={spec.name}
+					name={spec.name}
+					pcbX={spec.pcbX}
+					pcbY={spec.pcbY}
+					pcbRotation={spec.pcbRotation}
+					layer={spec.layer}
 					{...schematicPlacementFor(spec.name)}
 				/>
 			) : (

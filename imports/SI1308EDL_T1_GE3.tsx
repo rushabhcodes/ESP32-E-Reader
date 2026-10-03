@@ -12,6 +12,7 @@ export const SI1308EDL_T1_GE3 = (props: ChipProps<typeof pinLabels>) => {
 			pinLabels={pinLabels}
 			symbol={
 				<symbol>
+					<schematictext text="{REF}" schX={0.25} schY={0.15} fontSize={0.25} />
 					<schematicpath
 						points={[
 							{ x: -0.2, y: 0 },

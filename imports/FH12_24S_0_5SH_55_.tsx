@@ -35,6 +35,7 @@ export const FH12_24S_0_5SH_55_ = (props: ChipProps<typeof pinLabels>) => {
 			pinLabels={pinLabels}
 			symbol={
 				<symbol>
+					<schematictext text="{REF}" schX={0.17} schY={2.5} fontSize={0.25} />
 					<port
 						name="pin2"
 						pinNumber={2}

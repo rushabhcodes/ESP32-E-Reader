@@ -15,6 +15,7 @@ export const USBLC6_2SC6 = (props: ChipProps<typeof pinLabels>) => {
 			pinLabels={pinLabels}
 			symbol={
 				<symbol>
+					<schematictext text="{REF}" schX={0} schY={0.9} fontSize={0.25} />
 					<schematicrect
 						schX={0}
 						schY={0}

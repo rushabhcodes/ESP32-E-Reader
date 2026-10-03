@@ -15,15 +15,15 @@ export const USBLC6_2SC6 = (props: ChipProps<typeof pinLabels>) => {
 			pinLabels={pinLabels}
 			symbol={
 				<symbol>
-					<schematictext text="{REF}" schX={0} schY={0.9} fontSize={0.25} />
+					<schematictext text="{REF}" schX={0} schY={0.8} fontSize={0.18} />
 					<schematicrect
 						schX={0}
 						schY={0}
 						width={1.8}
 						height={2}
 						color="#880000"
-						isFilled
-						fillColor="#FFFFFF"
+						strokeWidth={0.04}
+						isFilled={false}
 					/>
 					<port
 						name="pin1"

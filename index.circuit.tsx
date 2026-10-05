@@ -42,6 +42,14 @@ const boardOutline = [
 	{ x: -29.79, y: 46.62 },
 ];
 
+// A 2 mm router creates rounded slot ends; avoid impossible square corners.
+const displayFpcSlot = [-1, 1].flatMap((side) =>
+	Array.from({ length: 17 }, (_, i) => {
+		const angle = (side === 1 ? -Math.PI / 2 : Math.PI / 2) + i * Math.PI / 16;
+		return { x: side * 12 + Math.cos(angle), y: Math.sin(angle) };
+	}),
+);
+
 function EReaderBoard() {
 	return (
 		<board
@@ -52,11 +60,14 @@ function EReaderBoard() {
 			doubleSidedAssembly
 			layers={4}
 			thickness="1.6mm"
-			minViaHoleDiameter="0.2mm"
-			minViaPadDiameter="0.42mm"
+			minViaHoleDiameter="0.3mm"
+			minViaPadDiameter="0.6mm"
 			minViaEdgeToPadEdgeClearance="0.25mm"
-			// 0.1 mm copper clearance + 0.11 mm annulus gives 0.21 mm
-			// drill-to-trace clearance, above JLCPCB's 0.2 mm minimum.
+			// Standard-cost through vias, with a 0.15 mm radial annulus.
+			minViaHoleEdgeToViaHoleEdgeClearance="0.2mm"
+			minPlatedHoleDrillEdgeToDrillEdgeClearance="0.45mm"
+			minTraceToHoleEdgeClearance="0.2mm"
+			minBoardEdgeClearance="0.3mm"
 			minTraceToPadEdgeClearance="0.1mm"
 			autorouter={{
 				algorithmFn: createPreExpansionAutorouter,
@@ -90,8 +101,28 @@ function EReaderBoard() {
 			<keepout
 				shape="circle"
 				radius="0.65mm"
-				pcbX={-13.28}
+				pcbX={4.72}
 				pcbY={-28.19}
+				layers={["inner1", "inner2", "bottom"]}
+			/>
+
+			{/* Fine-pitch contacts must stay free of through-drills, including
+			    vias on their own net. Top copper remains available for escapes. */}
+			<keepout
+				shape="rect"
+				width="13mm"
+				height="1.8mm"
+				pcbX={0}
+				pcbY={-27.68723375}
+				layers={["inner1", "inner2", "bottom"]}
+			/>
+			{/* Keep layer-transition pads clear of the C28 pin-2 edge. */}
+			<keepout
+				shape="rect"
+				width="1.6mm"
+				height="1.225mm"
+				pcbX={-5.9}
+				pcbY={-11.57}
 				layers={["inner1", "inner2", "bottom"]}
 			/>
 
@@ -154,10 +185,9 @@ function EReaderBoard() {
 
 			<cutout
 				name="DISPLAY_FPC_SLOT"
-				shape="rect"
-				width="26mm"
-				height="2mm"
-				pcbX={-16}
+				shape="polygon"
+				points={displayFpcSlot}
+				pcbX={0}
 				pcbY={-36.2}
 			/>
 

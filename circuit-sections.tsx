@@ -53,7 +53,7 @@ const renderChip = (spec: ChipSpec) => {
 				key={spec.name}
 				{...importedCommon}
 				pcbY={spec.pcbY + 0.03723375}
-				noConnect={["pin1", "pin4", "pin6", "pin7", "pin19", "pin25", "pin26"]}
+				noConnect={["pin1", "pin4", "pin19", "pin25", "pin26"]}
 			/>
 		);
 	if (spec.name === "J4")

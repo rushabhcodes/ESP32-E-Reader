@@ -19,8 +19,8 @@ Y = −49.0 to +60.5, Z = −6.5 to +14.6. Corner radius is 5.0.
 | Item | Nominal body / opening | Position or Z span | Source / allowance |
 | --- | ---: | --- | --- |
 | PCB | 62.5 × 95.08 × 1.6 | X ±31.25; Y −47.0…48.08; Z ±0.8 | tsci `pcb_board`; 0.75 side gap to 64.0 inner case |
-| Display panel | 56.24 × 96.62 × 0.9 | center X 0, Y 10.5; Z −4.65…−3.75 | [Waveshare panel drawing](https://files.waveshare.com/wiki/3.97inch_e-Paper_HAT%2B_G/3.97inch_e-Paper_G.pdf); FPC omitted |
-| Display FPC slot | 26 × 2 | center X −16, Y −36.2 | tail tip centered near X −18; check fold on real panel |
+| Display panel | 56.24 × 96.62 × 0.9 | center X 0, Y 10.5; Z −4.65…−3.75 | [EastRising panel listing](https://www.buydisplay.com/3-97-inch-quad-color-e-paper-screen-e-ink-display-480x800); FPC omitted |
+| Display FPC slot | 26 × 2 | center X 0, Y −36.2 | 1 mm-radius ends; J2 centered at X 0; verify actual panel pinout and fold |
 | External Wi-Fi antenna film | 5.9 × 4.1 × 0.24 | center X 25, Y 44; Z 12.86…13.10 | [Taoglas FXP75.07.0045B](https://www.taoglas.com/product/atom-fxp75-2-4ghz-flex-super-micro-pcb-antenna/), 45 mm cable not modeled |
 | Display rebate | 56.8 × 97.2 | Z −4.8…−4.1 | 0.28 each side, 0.29 each end; 0.15 front gap for perimeter adhesive |
 | Visible screen window | 52.8 × 87.2 | center Y 10.5 | 0.48 each side and 0.4 each end beyond 51.84 × 86.4 active area |
@@ -67,8 +67,8 @@ only a measured discharge test can establish usable runtime.
    validated for a specific printer or material.
 2. Put thin, display-compatible perimeter adhesive in the 0.15 deep rebate
    gap and seat the display from the rear without pressing on the active area.
-   Verify the FPC tail orientation and bend first. Route the off-center tail
-   through the PCB slot at X = −16 mm to J2 at X = −18 mm. Inspect the actual
+   Verify the FPC tail orientation and bend first. Route the centered tail
+   through the PCB slot at X = 0 mm to J2 at X = 0 mm. Inspect the actual
    panel contact face and pin 1 before inserting the tail.
 3. Install the four caps from behind, then the PCB on its edge ledges. Use two
    suitable M2.5 screws at the upper mounting holes after measuring pilot-hole

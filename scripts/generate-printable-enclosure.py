@@ -218,8 +218,8 @@ export(antenna, "antenna-envelope-DO-NOT-PRINT.stl")
 # the same generator so legacy visual-case scripts cannot overwrite the new
 # enclosure files by accident.
 reset()
-panel = prism("Waveshare-3.97inch-e-Paper-G-outline", 56.24, 96.62, 1.0, -4.65, -3.75, x=18.0, y=40.0)
-active = prism("480x800-active-area", 51.84, 86.4, .3, -4.71, -4.65, x=18.0, y=40.0)
+panel = prism("Waveshare-3.97inch-e-Paper-G-outline", 56.24, 96.62, 1.0, -4.65, -3.75, x=0.0, y=40.0)
+active = prism("480x800-active-area", 51.84, 86.4, .3, -4.71, -4.65, x=0.0, y=40.0)
 bpy.ops.object.select_all(action="DESELECT")
 for obj in (panel, active):
     obj.select_set(True)

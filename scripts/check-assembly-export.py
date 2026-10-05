@@ -8,6 +8,7 @@ explicitly against the C&K JS102011SAQN terminal drawing.
 import csv
 import io
 import json
+import re
 import sys
 from pathlib import Path
 from zipfile import ZipFile
@@ -66,6 +67,15 @@ def main(path: Path):
         bom = rows_by_designator(archive, "bom.csv")
         placements = rows_by_designator(archive, "pick_and_place.csv")
 
+        drill = archive.read("drill-L1-L4.drl").decode()
+        if "METRIC" not in drill:
+            raise ValueError("Expected metric drill file")
+        drills = [float(size) for size in re.findall(r"^T\d+C([0-9.]+)$", drill, re.M)]
+        if not drills or min(drills) < 0.3 - 1e-6:
+            raise ValueError("Export contains plated drills below 0.30 mm")
+        if not any(abs(size - 0.3) < 1e-6 for size in drills):
+            raise ValueError("Export is missing the expected 0.30 mm via tool")
+
     if bom.keys() != placements.keys():
         raise ValueError("BOM and pick-and-place designators differ")
     missing = [ref for ref, row in bom.items() if not row["JLCPCB Part #"]]
@@ -86,6 +96,40 @@ def main(path: Path):
         for item in circuit
         if item.get("type") == "source_component"
     }
+    # Guard the fabrication settings in the actual routed artifact, not only JSX.
+    errors = [item for item in circuit if item["type"].endswith("_error")]
+    if errors:
+        raise ValueError(f"Circuit has {len(errors)} unresolved errors; do not fabricate")
+    vias = [item for item in circuit if item["type"] == "pcb_via"]
+    if not vias or not any(item["type"] == "pcb_trace" for item in circuit):
+        raise ValueError("Expected a fully routed board with vias")
+    for via in vias:
+        if via["hole_diameter"] < 0.3 - 1e-6 or via["outer_diameter"] < 0.6 - 1e-6:
+            raise ValueError(f"Nonstandard via size: {via}")
+        if set(via["layers"]) != {"top", "inner1", "inner2", "bottom"}:
+            raise ValueError("Only ordinary through vias are allowed")
+    for hole in (item for item in circuit if item["type"] == "pcb_hole"):
+        if hole.get("hole_shape") == "circle" and hole["hole_diameter"] < 0.5 - 1e-6:
+            raise ValueError("NPTH below JLCPCB 0.50 mm minimum")
+    j2 = [item for item in circuit if item["type"] == "pcb_component"
+          and source_names.get(item.get("source_component_id")) == "J2"]
+    if len(j2) != 1 or abs(j2[0]["center"]["x"]) > 1e-6:
+        raise ValueError("J2 must remain centered at X = 0")
+    j2_source_id = j2[0]["source_component_id"]
+    ground_id = next(item["source_net_id"] for item in circuit
+                     if item["type"] == "source_net" and item["name"] == "GND")
+    for pin in (6, 7):
+        port = next(item for item in circuit if item["type"] == "source_port"
+                    and item.get("source_component_id") == j2_source_id
+                    and item.get("pin_number") == pin)
+        grounded = any(item["type"] == "source_trace"
+                       and port["source_port_id"] in item.get("connected_source_port_ids", [])
+                       and ground_id in item.get("connected_source_net_ids", [])
+                       for item in circuit)
+        if port.get("do_not_connect") or not grounded:
+            raise ValueError(f"J2 pin {pin} must have its unused sensor input tied to GND")
+    print(f"Fabrication sizes checked: {len(vias)} vias at least 0.30/0.60 mm; J2 centered.")
+
     sw7_ids = {
         item["pcb_component_id"]
         for item in circuit

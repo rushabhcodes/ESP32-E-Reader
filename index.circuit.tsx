@@ -125,6 +125,38 @@ function EReaderBoard() {
 				pcbY={-11.57}
 				layers={["inner1", "inner2", "bottom"]}
 			/>
+			{/* Through vias span every copper layer, even when a route only
+			    changes between buried layers. Protect the USB-C contact row. */}
+			<keepout
+				shape="rect"
+				width="1.65mm"
+				height="7.5mm"
+				pcbX={23.875}
+				pcbY={36.26}
+				layers={["inner1", "inner2", "bottom"]}
+			/>
+			{/* Keep drills out of both contact rows on protection IC U3. */}
+			{[-22.100304, -24.398496].map((x) => (
+				<Fragment key={`protection-pad-via-clearance-${x}`}>
+					<keepout
+						shape="rect"
+						width="1.6mm"
+						height="2.95mm"
+						pcbX={x}
+						pcbY={36.6244}
+						layers={["inner1", "inner2", "bottom"]}
+					/>
+				</Fragment>
+			))}
+			{/* C19/C20 ground pads must remain clear of display-signal vias. */}
+			<keepout
+				shape="rect"
+				width="4.05mm"
+				height="1.525mm"
+				pcbX={3.525}
+				pcbY={-9.745}
+				layers={["inner1", "inner2", "bottom"]}
+			/>
 
 			<CircuitSections />
 

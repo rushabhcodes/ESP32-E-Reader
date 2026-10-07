@@ -272,6 +272,13 @@ an increased autorouter timeout, use:
 bun run build:release
 ```
 
+Cloud builds use a 40-minute worker limit from `tscircuit.config.json`. The
+default 10-minute limit stopped release 1.0.51 during PCB routing, before the
+schematic, PCB, and 3D artifacts could be generated.
+
+The cloud prebuild also copies local GLB, OBJ, and STEP models into `dist` at
+the paths referenced by circuit JSON, so the hosted 3D view can load them.
+
 ## Validation
 
 Run the checks in this order so connectivity errors are caught before layout
@@ -293,15 +300,15 @@ Update the checked-in schematic, PCB, and 3D snapshots with:
 bun run snapshot:update
 ```
 
-The last completed centered-connector / standard-via build routed 226 traces
-with zero DRC errors and no Gerber-derived shorts. Its 150 vias were all
-0.30/0.60 mm ordinary through vias.
+The current cloud-style build completes with 228 routed traces, zero DRC
+errors, and no Gerber-derived shorts across all four layers. Its 157 vias are
+all 0.30/0.60 mm ordinary through vias. Netlist, schematic placement, PCB
+placement, and TypeScript checks pass. Schematic style analysis reports no
+issues across all five sheets. Buried-layer keepouts prevent through vias from
+overlapping the USB-C contacts, U3 contacts, and C19/C20 ground pads.
 
-The latest source additionally grounds J2 pins 6 and 7. Netlist, schematic
-placement, PCB placement, and TypeScript checks pass for this revision. The
-latest router completed 228 traces, but final build processing stalled after
-routing and was stopped. **The current fabrication ZIP predates the sensor-pin
-fix and must be rebuilt and rechecked before ordering.** The export guard
+The source grounds J2 pins 6 and 7. **The current fabrication ZIP predates the
+sensor-pin fix and must be rebuilt and rechecked before ordering.** The export guard
 rejects artifacts without both sensor pins grounded. Connector pitch follows
 the supplier listing at the user's direction. Physical screen-tail, battery
 lead, button travel and printed-fit checks remain necessary.

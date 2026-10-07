@@ -1,3 +1,7 @@
 {
-	"$schema": "https://cdn.jsdelivr.net/npm/@tscircuit/cli/types/tscircuit.config.schema.json"
+	"$schema": "https://cdn.jsdelivr.net/npm/@tscircuit/cli/types/tscircuit.config.schema.json",
+	"prebuildCommand": "bun run build:preview-assets",
+	"build": {
+		"workerTimeoutMs": 2400000
+	}
 }

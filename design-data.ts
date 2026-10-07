@@ -1055,8 +1055,10 @@ export const schematicPlacementOverrides: Record<
 > = {
 	J1: { schX: -14.91 },
 	Q1: { schX: -10.29 },
-	U1: { schX: -20.0 },
-	R4: { schY: 21.201, schRotation: 90 },
+	U1: { schX: -20.0, schY: 9.5 },
+	// Keep the reset capacitor and pull-up close to the ESP32's EN pin.
+	C1: { schX: -3, schY: 4.6 },
+	R4: { schX: -3, schY: 6.2, schRotation: 90 },
 	Q2: { schX: 41.828 },
 	R17: { schY: 1.6 },
 	R12: { schRotation: -90 },

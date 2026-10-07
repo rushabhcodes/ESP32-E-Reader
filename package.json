@@ -1,6 +1,6 @@
 {
   "name": "@tsci/rushabhcodes.ESP32-E-Reader",
-  "version": "1.0.50",
+  "version": "1.0.52",
   "description": "ESP32-C3 e-reader PCB and printable enclosure prototype",
   "main": "index.circuit.tsx",
   "keywords": [
@@ -10,6 +10,7 @@
     "electronics"
   ],
   "scripts": {
+    "build:preview-assets": "bun scripts/copy-preview-assets.mjs",
     "dev": "tsci dev",
     "build": "tsci build index.circuit.tsx",
     "build:release": "tsci build index.circuit.tsx --autorouter-timeout 30m",

@@ -1,5 +1,8 @@
 import type { PushButtonProps } from "@tscircuit/props";
 
+import buttonSymbol from "./SKRPACE010.symbol.json";
+import type { AnyCircuitElement } from "circuit-json";
+
 const pinLabels = {
 	pin1: ["pin1"],
 	pin2: ["pin2"],
@@ -14,6 +17,7 @@ export const SKRPACE010 = (props: PushButtonProps<typeof pinLabels>) => {
 		<pushbutton
 			name={name}
 			pinLabels={pinLabels}
+			symbol={buttonSymbol as AnyCircuitElement[]}
 			supplierPartNumbers={{
 				jlcpcb: ["C139797"],
 			}}

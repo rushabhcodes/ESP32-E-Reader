@@ -1,6 +1,6 @@
 import type { ChipProps } from "@tscircuit/props"
 
-const pinLabels = {
+export const pinLabels = {
   pin1: ["TS"],
   pin2: ["BAT1"],
   pin3: ["BAT2"],

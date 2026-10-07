@@ -1,4 +1,6 @@
 import { Fragment } from "react";
+import { schematicGroups } from "./schematic-layout";
+import { functionalSymbolFor } from "./functional-schematic-symbols";
 import {
 	aliasForPin,
 	type ChipSpec,
@@ -10,7 +12,6 @@ import {
 	pinLabelsFor,
 	polarizedPinLabels,
 	resistors,
-	schematicHeights,
 	schematicPlacementFor,
 	supplierPartNumbersFor,
 	testpoints,
@@ -36,6 +37,7 @@ import { USBLC6_2SC6 } from "./imports/USBLC6_2SC6";
 const renderChip = (spec: ChipSpec) => {
 	const half = Math.ceil(spec.pins.length / 2);
 	const schematicPlacement = schematicPlacementFor(spec.name);
+	const symbol = functionalSymbolFor(spec.name);
 	const importedCommon = {
 		name: spec.name,
 		pcbX: spec.pcbX,
@@ -43,8 +45,8 @@ const renderChip = (spec: ChipSpec) => {
 		pcbRotation: spec.pcbRotation,
 		layer: spec.layer,
 		supplierPartNumbers: supplierPartNumbersFor(spec.name),
-		schHeight: schematicHeights[spec.name],
 		...schematicPlacement,
+		...(symbol ? { symbol } : {}),
 	};
 
 	if (spec.name === "J2")
@@ -78,16 +80,17 @@ const renderChip = (spec: ChipSpec) => {
 			/>
 		);
 	if (spec.name === "Q1")
-		return (
-			<FS8205A
-				key={spec.name}
-				{...importedCommon}
-			/>
-		);
+		return <FS8205A key={spec.name} {...importedCommon} />;
 	if (spec.name === "Q2")
 		return <SI1308EDL_T1_GE3 key={spec.name} {...importedCommon} />;
 	if (spec.name === "U1")
-		return <BQ24074RGTR key={spec.name} {...importedCommon} noConnect={["pin7", "pin14", "pin15"]} />;
+		return (
+			<BQ24074RGTR
+				key={spec.name}
+				{...importedCommon}
+				noConnect={["pin7", "pin14", "pin15"]}
+			/>
+		);
 	if (spec.name === "U2")
 		return (
 			<USBLC6_2SC6
@@ -108,11 +111,7 @@ const renderChip = (spec: ChipSpec) => {
 		);
 	if (spec.name === "U5")
 		return (
-			<TPS63021DSJR
-				key={spec.name}
-				{...importedCommon}
-				noConnect={["pin14"]}
-			/>
+			<TPS63021DSJR key={spec.name} {...importedCommon} noConnect={["pin14"]} />
 		);
 	if (spec.name === "S1" || spec.name === "S2")
 		return <EVQP7C01P key={spec.name} {...importedCommon} />;
@@ -149,7 +148,6 @@ const renderChip = (spec: ChipSpec) => {
 			leftSide: spec.pins.slice(0, half).map(aliasForPin),
 			rightSide: spec.pins.slice(half).map(aliasForPin),
 		},
-		schHeight: schematicHeights[spec.name],
 		...schematicPlacement,
 	};
 
@@ -162,7 +160,6 @@ const renderChip = (spec: ChipSpec) => {
 				pcbX={spec.pcbX - 1.57}
 				pcbY={spec.pcbY}
 				pcbRotation={spec.pcbRotation}
-				schWidth={1.385}
 			/>
 		);
 	if (spec.kind === "connector")
@@ -172,33 +169,22 @@ const renderChip = (spec: ChipSpec) => {
 	return <chip key={spec.name} {...common} />;
 };
 
-export const BatteryUsbSection = () => (
-	<schematicsection
-		name="battery_usb_section"
-		displayName="Battery, Protection, USB & Charging"
-	/>
-);
-
-export const McuPowerSection = () => (
-	<schematicsection
-		name="mcu_power_section"
-		displayName="3.3 V Rail & ESP32-C3"
-	/>
-);
-
-export const DisplayPowerSection = () => (
-	<schematicsection
-		name="display_power_section"
-		displayName="E-Paper Interface & Bias Rails"
-	/>
-);
-
-export const StorageSection = () => (
-	<schematicsection name="storage_section" displayName="Micro SD Storage" />
-);
-
-export const ControlsSection = () => (
-	<schematicsection name="controls_section" displayName="User Controls" />
+const SheetHeadings = ({ sheet }: { sheet: string }) => (
+	<Fragment>
+		{schematicGroups
+			.filter((group) => group.sheet === sheet)
+			.map((group) => (
+				<Fragment key={group.name}>
+					<schematictext
+						text={group.title}
+						schX={group.x}
+						schY={group.y}
+						fontSize={0.38}
+						anchor="center"
+					/>
+				</Fragment>
+			))}
+	</Fragment>
 );
 
 export const CircuitSections = () => (
@@ -207,34 +193,38 @@ export const CircuitSections = () => (
 			name="battery_usb"
 			displayName="Battery, Protection, USB & Charging"
 			sheetIndex={0}
-		/>
+		>
+			<SheetHeadings sheet="battery_usb" />
+		</schematicsheet>
 		<schematicsheet
 			name="mcu_power"
 			displayName="3.3 V Rail & ESP32-C3"
 			sheetIndex={1}
-			sheetSize="ANSI_B"
-		/>
+		>
+			<SheetHeadings sheet="mcu_power" />
+		</schematicsheet>
 		<schematicsheet
 			name="display_power"
 			displayName="E-Paper Interface & Bias Rails"
 			sheetIndex={2}
-			sheetSize="ANSI_B"
-		/>
+		>
+			<SheetHeadings sheet="display_power" />
+		</schematicsheet>
 		<schematicsheet
 			name="storage"
 			displayName="Micro SD Storage"
 			sheetIndex={3}
-		/>
-		<schematicsheet
-			name="controls"
-			displayName="User Controls"
-			sheetIndex={4}
-		/>
-		<BatteryUsbSection />
-		<McuPowerSection />
-		<DisplayPowerSection />
-		<StorageSection />
-		<ControlsSection />
+		>
+			<SheetHeadings sheet="storage" />
+		</schematicsheet>
+		<schematicsheet name="controls" displayName="User Controls" sheetIndex={4}>
+			<SheetHeadings sheet="controls" />
+		</schematicsheet>
+		{schematicGroups.map((group) => (
+			<Fragment key={group.name}>
+				<schematicsection name={group.name} displayName={group.title} />
+			</Fragment>
+		))}
 
 		{capacitors.map((spec) => (
 			<capacitor
@@ -247,7 +237,7 @@ export const CircuitSections = () => (
 				pcbY={spec.pcbY}
 				pcbRotation={spec.pcbRotation}
 				layer={spec.layer}
-				schOrientation="vertical"
+				schRotation={-90}
 				{...schematicPlacementFor(spec.name)}
 			/>
 		))}

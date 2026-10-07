@@ -163,9 +163,9 @@ function EReaderBoard() {
 			{/* Route the display D/C and reset signals as explicit point-to-point
 			    connections. The net-level autorouter split these two paths into
 			    disconnected copper segments beside J2's fine-pitch contacts. */}
-			<trace from={nets.EPD_DC[0]} to={nets.EPD_DC[1]} thickness="0.2mm" />
-			<trace from={nets.EPD_RST[0]} to={nets.EPD_RST[1]} thickness="0.2mm" />
-			<trace from={nets.EPD_RST[1]} to={nets.EPD_RST[2]} thickness="0.2mm" />
+			<trace from={nets.EPD_DC[0]} to={nets.EPD_DC[1]} thickness="0.2mm" schDisplayLabel="EPD_DC" />
+			<trace from={nets.EPD_RST[0]} to={nets.EPD_RST[1]} thickness="0.2mm" schDisplayLabel="EPD_RST" />
+			<trace from={nets.EPD_RST[1]} to={nets.EPD_RST[2]} thickness="0.2mm" schDisplayLabel="EPD_RST" />
 			{Object.entries(nets).filter(([name]) => !["EPD_DC", "EPD_RST"].includes(name)).map(([name, connections]) => (
 				<Fragment key={name}>
 					<net

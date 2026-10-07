@@ -1,3 +1,4 @@
+import { schematicGroups, schematicLayout } from "./schematic-layout";
 /** Static electrical, placement, and sourcing data for the Rev. B board. */
 
 export type SectionName =
@@ -1009,14 +1010,6 @@ export const testpoints = [
 	},
 ];
 
-export const sectionOrigins: Record<SectionName, { x: number; y: number }> = {
-	battery_usb: { x: -28, y: 20 },
-	mcu_power: { x: 0, y: 20 },
-	display_power: { x: 28, y: 20 },
-	storage: { x: -28, y: -7 },
-	controls: { x: 0, y: -7 },
-};
-
 export const schematicSpecs = [
 	...capacitors,
 	...resistors,
@@ -1027,60 +1020,18 @@ export const schematicSpecs = [
 	...testpoints,
 ];
 
-export const schematicPlacementByReference = (() => {
-	const sectionIndexes: Partial<Record<SectionName, number>> = {};
-
-	return new Map(
-		schematicSpecs.map(({ name, section }) => {
-			const index = sectionIndexes[section] ?? 0;
-			sectionIndexes[section] = index + 1;
-			const origin = sectionOrigins[section];
-
-			return [
-				name,
-				{
-					schX: origin.x + (index % 5) * 4.4,
-					schY: origin.y - Math.floor(index / 5) * 4.4,
-					schSectionName: `${section}_section`,
-					schSheetName: section,
-				},
-			] as const;
-		}),
-	);
-})();
-
-export const schematicPlacementOverrides: Record<
-	string,
-	{ schX?: number; schY?: number; schRotation?: number }
-> = {
-	J1: { schX: -14.91 },
-	Q1: { schX: -10.29 },
-	U1: { schX: -20.0, schY: 9.5 },
-	// Keep the reset capacitor and pull-up close to the ESP32's EN pin.
-	C1: { schX: -3, schY: 4.6 },
-	R4: { schX: -3, schY: 6.2, schRotation: 90 },
-	Q2: { schX: 41.828 },
-	R17: { schY: 1.6 },
-	R12: { schRotation: -90 },
-	R10: { schRotation: -90 },
-	R11: { schRotation: -90 },
-	R14: { schRotation: 90 },
-	D1: { schRotation: -90 },
-	R18: { schRotation: 90 },
-	R19: { schRotation: 90 },
-	R21: { schRotation: 90 },
-	R20: { schRotation: -90 },
-	R23: { schRotation: -90 },
-	R24: { schRotation: -90 },
-	R25: { schRotation: -90 },
-	R30: { schRotation: -90 },
-};
-
 export const schematicPlacementFor = (reference: string) => {
-	const placement = schematicPlacementByReference.get(reference);
-	if (!placement)
-		throw new Error(`Missing schematic placement for ${reference}`);
-	return { ...placement, ...schematicPlacementOverrides[reference] };
+	const placement = schematicLayout[reference];
+	const group = schematicGroups.find(({ refs }) =>
+		(refs as readonly string[]).includes(reference),
+	);
+	if (!placement || !group)
+		throw new Error(`Missing schematic placement or group for ${reference}`);
+	return {
+		...placement,
+		schSectionName: group.name,
+		schSheetName: group.sheet,
+	};
 };
 
 export const aliasForPin = (pin: string) =>
@@ -1375,11 +1326,3 @@ export const nets: Record<string, string[]> = {
 
 export const noConnectAliases = (spec: ChipSpec) =>
 	spec.noConnect?.map(aliasForPin);
-
-export const schematicHeights: Partial<Record<string, number>> = {
-	Q2: 0.4,
-	U1: 1.8,
-	U4: 2.8,
-	U5: 1.6,
-	SW7: 0.4,
-};

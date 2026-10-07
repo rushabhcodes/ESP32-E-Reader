@@ -232,6 +232,7 @@ and planes; a two-layer cost reduction would require a separate redesign.
 ├── index.circuit.tsx       # Board outline, planes, keepouts, and net routing
 ├── circuit-sections.tsx    # Functional schematic sections and components
 ├── design-data.ts          # Parts, placement, sourcing, nets, and trace widths
+├── schematic-layout.ts     # Explicit positions for all 94 parts on five sheets
 ├── imports/                # Imported component footprints and models
 ├── __snapshots__/          # PCB, schematic, and 3D reference renders
 ├── assets/enclosure/       # Printable STLs, assembly GLBs, guide, and renders
@@ -243,6 +244,14 @@ and planes; a two-layer cost reduction would require a separate redesign.
 Placement, board geometry, and electrical intent are transcribed from the Rev. B KiCad
 design; PCB routing is generated from the netlist by tscircuit's local
 autorouter.
+
+The schematic groups parts by function, with dedicated power, display,
+storage, and control sections. `functional-schematic-symbols.tsx` arranges
+chip pins for readable signal flow while retaining physical pin identities.
+Schematic-only updates reuse the verified copper from release 1.0.54 through
+`verified-pcb-routes.json`. The cache compares the complete routing geometry,
+connectivity, keepouts, widths, and rules; physical changes use the autorouter
+again. Check this guard with `bun scripts/check-routing-cache.mjs`.
 
 ## Getting started
 

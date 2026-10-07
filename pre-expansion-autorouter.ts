@@ -7,6 +7,7 @@ import {
 	type SimplifiedPcbTrace,
 	SOLVERS,
 } from "tscircuit";
+import { getVerifiedPcbRoutes } from "./verified-pcb-routes";
 
 type EventHandlers = {
 	complete: Array<(event: AutorouterCompleteEvent) => void>;
@@ -32,7 +33,10 @@ export class PreExpansionAutorouter implements GenericLocalAutorouter {
 	private timeoutId?: ReturnType<typeof setTimeout>;
 	private cycleCount = 0;
 
-	constructor(input: SimpleRouteJson) {
+	constructor(
+		input: SimpleRouteJson,
+		private readonly verifiedTraces?: SimplifiedPcbTrace[],
+	) {
 		this.input = input;
 		this.solver = new SOLVERS.AutoroutingPipelineSolver9_PreloadedTraceGraph(
 			input as ConstructorParameters<
@@ -64,6 +68,7 @@ export class PreExpansionAutorouter implements GenericLocalAutorouter {
 	}
 
 	solveSync(): SimplifiedPcbTrace[] {
+		if (this.verifiedTraces) return this.verifiedTraces;
 		this.solver.solveUntilPhase("powerTraceExpansionSolver");
 		if (this.solver.failed) {
 			throw new Error(this.solver.error || "Routing failed");
@@ -72,6 +77,7 @@ export class PreExpansionAutorouter implements GenericLocalAutorouter {
 	}
 
 	private getTraces(): SimplifiedPcbTrace[] {
+		if (this.verifiedTraces) return this.verifiedTraces;
 		return [
 			...this.solver.getUpdatedPreloadedTraces(),
 			...this.solver.getNewTracesBeforePowerExpansion(),
@@ -82,6 +88,13 @@ export class PreExpansionAutorouter implements GenericLocalAutorouter {
 		if (!this.isRouting) return;
 
 		try {
+			if (this.verifiedTraces) {
+				this.isRouting = false;
+				for (const handler of this.eventHandlers.complete) {
+					handler({ type: "complete", traces: this.verifiedTraces });
+				}
+				return;
+			}
 			const cycleStartedAt = Date.now();
 			const initialIterations = this.solver.iterations;
 
@@ -136,4 +149,4 @@ export class PreExpansionAutorouter implements GenericLocalAutorouter {
 }
 
 export const createPreExpansionAutorouter = async (input: SimpleRouteJson) =>
-	new PreExpansionAutorouter(input);
+	new PreExpansionAutorouter(input, getVerifiedPcbRoutes(input));

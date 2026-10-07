@@ -1,0 +1,142 @@
+[
+  {
+    "type": "schematic_component",
+    "schematic_component_id": "schematic_component_82",
+    "center": {
+      "x": 0,
+      "y": 0
+    },
+    "size": {
+      "width": 0.4499999999999993,
+      "height": 0.7000000000000002
+    },
+    "source_component_id": "source_component_82",
+    "is_box_with_pins": false
+  },
+  {
+    "type": "schematic_symbol",
+    "schematic_symbol_id": "schematic_symbol_7"
+  },
+  {
+    "type": "schematic_text",
+    "schematic_text_id": "schematic_text_134",
+    "schematic_symbol_id": "schematic_symbol_7",
+    "anchor": "bottom_right",
+    "text": "{REF}",
+    "font_size": 0.22,
+    "color": "#000000",
+    "position": {
+      "x": -0.1,
+      "y": 0.35
+    },
+    "rotation": 0
+  },
+  {
+    "type": "schematic_line",
+    "schematic_line_id": "schematic_line_124",
+    "schematic_component_id": "schematic_component_82",
+    "schematic_symbol_id": "schematic_symbol_7",
+    "x1": 0,
+    "y1": -0.3500000000000001,
+    "x2": 0,
+    "y2": -0.1499999999999999,
+    "stroke_width": 0.04,
+    "color": "rgba(132, 0, 0)",
+    "is_dashed": false
+  },
+  {
+    "type": "schematic_line",
+    "schematic_line_id": "schematic_line_125",
+    "schematic_component_id": "schematic_component_82",
+    "schematic_symbol_id": "schematic_symbol_7",
+    "x1": 0,
+    "y1": 0.1499999999999999,
+    "x2": 0,
+    "y2": 0.3500000000000001,
+    "stroke_width": 0.04,
+    "color": "rgba(132, 0, 0)",
+    "is_dashed": false
+  },
+  {
+    "type": "schematic_line",
+    "schematic_line_id": "schematic_line_126",
+    "schematic_component_id": "schematic_component_82",
+    "schematic_symbol_id": "schematic_symbol_7",
+    "x1": -0.25,
+    "y1": -0.1499999999999999,
+    "x2": -0.25,
+    "y2": 0.1499999999999999,
+    "stroke_width": 0.04,
+    "color": "rgba(132, 0, 0)",
+    "is_dashed": false
+  },
+  {
+    "type": "schematic_line",
+    "schematic_line_id": "schematic_line_127",
+    "schematic_component_id": "schematic_component_82",
+    "schematic_symbol_id": "schematic_symbol_7",
+    "x1": -0.25,
+    "y1": 0,
+    "x2": -0.4500000000000002,
+    "y2": 0,
+    "stroke_width": 0.04,
+    "color": "rgba(132, 0, 0)",
+    "is_dashed": false
+  },
+  {
+    "type": "schematic_port",
+    "schematic_port_id": "schematic_port_274",
+    "schematic_component_id": "schematic_component_82",
+    "center": {
+      "x": 0,
+      "y": -0.5499999999999998
+    },
+    "facing_direction": "down",
+    "distance_from_component_edge": 0.2,
+    "side_of_component": "bottom",
+    "pin_number": 1,
+    "true_ccw_index": 0
+  },
+  {
+    "type": "schematic_port",
+    "schematic_port_id": "schematic_port_275",
+    "schematic_component_id": "schematic_component_82",
+    "center": {
+      "x": -0.9000000000000004,
+      "y": -0.2999999999999998
+    },
+    "facing_direction": "left",
+    "distance_from_component_edge": 0.2,
+    "side_of_component": "left",
+    "pin_number": 2,
+    "true_ccw_index": 1
+  },
+  {
+    "type": "schematic_port",
+    "schematic_port_id": "schematic_port_276",
+    "schematic_component_id": "schematic_component_82",
+    "center": {
+      "x": -0.9000000000000004,
+      "y": 0.2999999999999998
+    },
+    "facing_direction": "left",
+    "distance_from_component_edge": 0.2,
+    "side_of_component": "left",
+    "pin_number": 3,
+    "true_ccw_index": 2
+  },
+  {
+    "type": "schematic_port",
+    "schematic_port_id": "schematic_port_277",
+    "schematic_component_id": "schematic_component_82",
+    "center": {
+      "x": 0,
+      "y": 0.5499999999999998
+    },
+    "facing_direction": "up",
+    "distance_from_component_edge": 0.2,
+    "side_of_component": "top",
+    "pin_number": 4,
+    "true_ccw_index": 3
+  }
+]

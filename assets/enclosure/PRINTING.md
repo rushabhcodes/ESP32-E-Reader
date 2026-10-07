@@ -26,16 +26,20 @@ Y = −49.0 to +60.5, Z = −6.5 to +14.6. Corner radius is 5.0.
 | Visible screen window | 52.8 × 87.2 | center Y 10.5 | 0.48 each side and 0.4 each end beyond 51.84 × 86.4 active area |
 | Front wall | 2.4 deep | Z −6.5…−4.1 | screen lip 1.7 deep after rebate |
 | Upper board fasteners | 2 × M2.5 screw paths | X ±27, Y 44.75 | 2.7 PCB holes; 2.0 printed pilot, test screw/material fit |
+| Lower board fasteners | 2 × M2.5 screw paths | X ±28, Y −40.0 | 2.7 PCB holes; 5.6 boss diameter; boss Z −3.65…−0.8; 2.0 pilot to Z −3.45 |
+| PCB screws / keepouts | 4 × M2.5 × 4 mm | head ≤5.0 diameter, ≤2.5 high; PCB upper face Z +0.8 | tip Z −3.2; lower pilot gives 0.25 tip clearance; 3.2 radius copper keepout on all four layers |
 | Lower board support | 65.0 × 1.2 ledge | Y −46.3; top Z −0.8 | avoids button body Y −44.1…−40.9 |
 | BT1 side-entry battery header | 6.0 × 7.7 in model | X 19.05…25.05, Y −36.275…−28.575, Z up to 5.85 | rotated 180° so keyed mating face points −Y into the local partition cutout; [JST PH drawing](https://www.jst-mfg.com/product/pdf/eng/ePH.pdf) |
 | Rigid partition slab | 63.0 × 80.0 × 1.4 | center Y −5.0; Z 4.6…6.0 | rests on side ledges; locally opened around BT1 |
+| Lower screw access | 3.2 radius notches in partition ledges | centered on lower PCB screws; through ledge Z 3.2…4.6 | clears a 5 mm driver before the partition is installed; lower mounts sit clear of the cover posts; case walls remain intact |
 | BT1 and lead opening | 8.0 × 15.0 | center X 22, Y −34 | cutout X 18…26, Y −41.5…−26.5, through slab and right guide |
 | Chosen cell: SparkFun PRT-13855 | **49.2 × 68.8 × 5.6**, 2000 mAh | center X −6.2, Y −5; Z 6.0…11.6 | [SparkFun published nominal size](https://www.sparkfun.com/lithium-ion-battery-2ah.html); protected JST-PH pack |
 | Battery guide pocket | about 51.1 × 71.5 inner span | X −31.0…20.15; Y −40.6…30.6 | cell X −30.8…18.4, Y −39.4…29.4; right guide opens at BT1 |
 | Cell-to-cover clearance | 1.5 above nominal cell | cell top 11.6, cover underside 13.1 | shared by foam, cable/label thickness and cell variation; no guaranteed swelling limit |
 | Rear cover | 68.0 × 109.5 × 1.5 | Z 13.1…14.6 | locating tongue 63.4 × 104.9, 0.3 lateral gap in case |
-| Rear-cover screws | 4 × M2.5 | lower X ±30, Y −45; upper X ±22, Y +56 | 2.7 cover clearances; 2.0 blind case pilots, 7.0 boss diameter; partition has lower-boss reliefs |
+| Rear-cover screws | 4 × M2.5 | lower X ±30, Y −46; upper X ±22, Y +56 | 2.7 cover clearances; 2.0 blind case pilots, 7.0 boss diameter; partition has lower-boss reliefs |
 | Four front caps | 9.6 × 4.0 visible each | X −21, −7, +7, +21; Y −42.5 | openings 10.8 × 5.2, 0.6 nominal gap per edge |
+| Outer cap flange reliefs | 3.2 radius at lower PCB screw points | only caps at X ±21; flange Z −4.06…−3.65 | 0.4 radial boss clearance; 0.2 nominal stroke leaves 0.2 between cap body and boss underside |
 | USB-C J1 body | 8.94 wide × 7.35 long × 3.31 high | footprint center X 26.41, Y 36.26 | [GCT USB4105 drawing](https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/5492/USB4105.pdf); local manufacturer OBJ checked against case |
 | USB-C side opening | 11.0 Y × 7.0 Z | +X edge; Y 30.8…41.8 | 1.03 nominal side clearance about 8.94 connector width; inspect real part |
 | MicroSD side opening | 16.0 Y × 7.0 Z | −X edge; Y −26.5…−10.5 | J4 CAD Y −25.42…−11.57 |
@@ -70,9 +74,14 @@ only a measured discharge test can establish usable runtime.
    Verify the FPC tail orientation and bend first. Route the centered tail
    through the PCB slot at X = 0 mm to J2 at X = 0 mm. Inspect the actual
    panel contact face and pin 1 before inserting the tail.
-3. Install the four caps from behind, then the PCB on its edge ledges. Use two
-   suitable M2.5 screws at the upper mounting holes after measuring pilot-hole
-   fit on a printed sample. Do not drive screws into the display.
+3. Install the four caps from behind, with the relieved outer flanges facing
+   their adjacent lower bosses, then put the PCB on its edge ledges. Secure
+   all four PCB mounting holes using M2.5 × 4 mm screws with heads no larger
+   than 5 mm diameter and 2.5 mm high. Measure pilot-hole and screw fit on a
+   printed sample; the nominal 2.0 mm pilots require a suitable self-tapping
+   screw or a tapped pilot for machine screws. A 4 mm shaft ends at Z −3.2,
+   0.25 above the lower pilot bottom. Check full button travel before fitting
+   the battery partition. Do not use longer PCB screws or drive into the display.
 4. Orient the pack so its lead exits toward the lower-right partition cutout. Plug
    its JST-PH housing into BT1 from the −Y side before seating the partition.
    On this PCB, BT1 pin 1 (`BATT_P`) is at approximately X 21.05 and pin 2

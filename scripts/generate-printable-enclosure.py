@@ -15,6 +15,7 @@ import bmesh
 
 
 ROOT = Path(__file__).resolve().parents[1]
+PCB_MOUNTS = json.loads((ROOT / "assets/enclosure/pcb-mounts.json").read_text())
 OUT = ROOT / "assets" / "enclosure" / "stl"
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -27,7 +28,7 @@ PARTITION_LOW, PARTITION_HIGH = 4.6, 6.0
 CELL_W, CELL_H, CELL_T = 49.2, 68.8, 5.6
 CELL_X, CELL_Y = -6.2, -5.0
 CELL_BASE = PARTITION_HIGH
-LID_FASTENERS = ((-30.0, -45.0), (30.0, -45.0), (-22.0, 56.0), (22.0, 56.0))
+LID_FASTENERS = ((-30.0, -46.0), (30.0, -46.0), (-22.0, 56.0), (22.0, 56.0))
 
 
 def reset():
@@ -97,7 +98,16 @@ def export(obj, filename):
     # Triangulate and check that every edge has exactly two adjacent faces.
     bm = bmesh.new()
     bm.from_mesh(obj.data)
+    # Exact booleans can leave coincident vertices on an intersected ledge.
+    # Weld only numerical seams (0.00001 mm), then validate the actual mesh.
+    bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=1e-5)
+    bmesh.ops.dissolve_degenerate(bm, edges=list(bm.edges), dist=1e-7)
+    bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+    bm.to_mesh(obj.data)
+    obj.data.update()
     bad = sum(not edge.is_manifold for edge in bm.edges)
+    bad_edges = [[[round(c, 7) for c in v.co] for v in edge.verts]
+                 for edge in bm.edges if not edge.is_manifold]
     volume = bm.calc_volume(signed=True)
     unseen = set(bm.verts)
     islands = 0
@@ -116,6 +126,7 @@ def export(obj, filename):
     bounds = [[min(v[i] for v in coords), max(v[i] for v in coords)] for i in range(3)]
     report[filename] = {"nonmanifold_edges": bad, "connected_shells": islands, "signed_volume_mm3": round(volume, 3), "bounds_mm": [[round(q, 3) for q in pair] for pair in bounds]}
     if bad or volume <= 0 or islands != 1:
+        print("Non-manifold edge coordinates:", bad_edges)
         raise RuntimeError(f"{filename}: {bad} non-manifold edges, {islands} islands, volume {volume}")
     bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
@@ -146,25 +157,49 @@ cut(main, box("usb-port", (10, 11.0, 7.0), (34, 36.3, 1.8)))
 cut(main, box("sd-port", (10, 16.0, 7.0), (-34, -18.5, 1.8)))
 cut(main, box("switch-port", (10, 11.0, 7.0), (34, 14.1, 2.0)))
 # Partition rests on two rails above the tallest modeled component (BT1).
-add(main, box("partition-left-ledge", (4.2, 80.0, 1.4), (-30.35, -6.5, 3.9)))
+def add_partition_ledge(name, size, position):
+    ledge = box(name, size, position)
+    for mount in PCB_MOUNTS["mounts"]:
+        if mount["buttonFlangeRelief"]:
+            diameter = PCB_MOUNTS["copperKeepoutRadius"] * 2
+            cut(ledge, prism("pcb-screw-head-access", diameter,
+                             diameter, diameter / 2, 3.0, 4.8,
+                             x=mount["x"], y=mount["y"]))
+    add(main, ledge)
+
+
+add_partition_ledge("partition-left-ledge", (4.2, 80.0, 1.4), (-30.35, -6.5, 3.9))
 # The right ledges avoid SW7, whose model reaches Z 4.35.
 for y, length in ((-22.0, 31.0), (24.0, 10.0)):
-    add(main, box("partition-right-ledge", (4.2, length, 1.4), (30.35, y, 3.9)))
+    add_partition_ledge("partition-right-ledge", (4.2, length, 1.4), (30.35, y, 3.9))
 # PCB is supported only along its edges, clear of underside button bodies.
 for x in (-31.6, 31.6):
     add(main, box("pcb-edge-ledge", (1.4, 82.0, 0.8), (x, 3.0, -1.2)))
-# Two upper M2.5 board holes are above an integral bridge and blind pilot.
-# These nominal 2.0 mm pilots suit a prototype self-tapping screw only after
-# material-specific test. The lower board edge rests on a continuous ledge.
-for x in (-27.0, 27.0):
-    add(main, box("mount-bridge", (7.0, 5.6, 3.2), (x + (3.0 if x > 0 else -3.0), 44.75, -2.4)))
-    add(main, prism("mount-boss", 5.6, 5.6, 2.8, -4.0, -0.8, x=x, y=44.75))
-    cut(main, prism("mount-pilot", 2.0, 2.0, 1.0, -4.05, -0.75, x=x, y=44.75))
+# Four M2.5 mounting points share coordinates with the PCB source. Lower
+# bosses clear a depressed cap body; outer cap flanges receive local relief.
+# Nominal 2.0 mm pilots require a material-specific screw-fit test.
+for mount in PCB_MOUNTS["mounts"]:
+    x, y = mount["x"], mount["y"]
+    low, high = mount["bossBaseZ"], PCB_MOUNTS["supportZ"]
+    diameter = PCB_MOUNTS["bossDiameter"]
+    bridge = box("mount-bridge", (7.0, diameter, high - low),
+                 (30.0 if x > 0 else -30.0, y, (low + high) / 2))
+    boolean(bridge, prism("mount-bridge-case-boundary", CASE_W, CASE_H,
+                          CORNER_R, low - .1, high + .1, y=CASE_Y), "INTERSECT")
+    add(main, bridge)
+    add(main, prism("mount-boss", diameter, diameter, diameter / 2,
+                    low, high, x=x, y=y))
+    pilot = PCB_MOUNTS["pilotDiameter"]
+    cut(main, prism("mount-pilot", pilot, pilot, pilot / 2,
+                    mount["pilotBaseZ"], high + .05, x=x, y=y))
 add(main, box("pcb-lower-edge-ledge", (65.0, 1.2, 0.8), (0.0, -46.3, -1.2)))
 # Four lid screws live beyond the battery's Y span. Their bosses merge into
 # the end walls and do not pass through the PCB or the partition.
 for x, y in LID_FASTENERS:
-    add(main, prism("lid-screw-boss", 7.0, 7.0, 3.5, 6.6, BACK_INNER_Z, x=x, y=y))
+    boss = prism("lid-screw-boss", 7.0, 7.0, 3.5, 6.6, BACK_INNER_Z, x=x, y=y)
+    boolean(boss, prism("lid-boss-case-boundary", CASE_W, CASE_H,
+                        CORNER_R, 6.5, BACK_INNER_Z + .1, y=CASE_Y), "INTERSECT")
+    add(main, boss)
     cut(main, prism("lid-screw-pilot", 2.0, 2.0, 1.0, 9.1, BACK_INNER_Z + .1, x=x, y=y))
 export(main, "front-shell.stl")
 
@@ -178,8 +213,9 @@ for y in (-40.9, 30.9):
     add(partition, box("cell-end-guide", (50.2, 0.6, 1.4), (-6.2, y, 6.7)))
 # BT1 protrudes through this local cutout; its mating face points toward -Y.
 cut(partition, box("bt1-header-and-lead-clearance", (8.0, 15.0, 4.0), (22.0, -34.0, 5.5)))
-for x in (-30.0, 30.0):
-    cut(partition, prism("lower-lid-boss-relief", 8.0, 8.0, 4.0, 4.5, 8.1, x=x, y=-45.0))
+for x, y in LID_FASTENERS:
+    if y < 0:
+        cut(partition, prism("lower-lid-boss-relief", 8.0, 8.0, 4.0, 4.5, 8.1, x=x, y=y))
 export(partition, "battery-partition.stl")
 
 # Rear cover has a short locating tongue with 0.3 mm clearance per side and
@@ -198,7 +234,14 @@ export(cover, "rear-cover.stl")
 reset()
 for idx, x in enumerate((-21.0, -7.0, 7.0, 21.0), 1):
     cap = prism(f"key-{idx}", 9.6, 4.0, 1.7, -6.4, -4.05, x=x, y=-42.5)
-    add(cap, prism("retaining-flange", 11.6, 6.0, 2.2, -4.06, -3.65, x=x, y=-42.5))
+    flange = prism("retaining-flange", 11.6, 6.0, 2.2, -4.06, -3.65, x=x, y=-42.5)
+    for mount in PCB_MOUNTS["mounts"]:
+        if mount["buttonFlangeRelief"] and abs(x - mount["x"]) < 11.6 / 2 + PCB_MOUNTS["bossDiameter"] / 2 + .4:
+            diameter = PCB_MOUNTS["bossDiameter"] + .8
+            cut(flange, prism("mount-boss-flange-relief", diameter, diameter,
+                              diameter / 2, -4.2, -3.4,
+                              x=mount["x"], y=mount["y"]))
+    add(cap, flange)
     add(cap, prism("button-plunger", 2.2, 2.2, .6, -3.7, -3.45, x=x, y=-42.5))
     export(cap, f"button-{idx}.stl")
 
@@ -231,4 +274,5 @@ with ZipFile(OUT.parent / "esp32-reader-printable-stls.zip", "w", ZIP_DEFLATED, 
     for name in ("front-shell.stl", "battery-partition.stl", "rear-cover.stl", *(f"button-{i}.stl" for i in range(1, 5))):
         package.write(OUT / name, name)
     package.write(OUT.parent / "PRINTING.md", "PRINTING.md")
+    package.write(OUT.parent / "pcb-mounts.json", "pcb-mounts.json")
 print(json.dumps(report, indent=2))

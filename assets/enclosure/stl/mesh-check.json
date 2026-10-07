@@ -2,7 +2,7 @@
   "front-shell.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 18640.855,
+    "signed_volume_mm3": 18734.836,
     "bounds_mm": [
       [
         -34.0,
@@ -21,7 +21,7 @@
   "battery-partition.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 7006.582,
+    "signed_volume_mm3": 7022.313,
     "bounds_mm": [
       [
         -31.5,
@@ -40,7 +40,7 @@
   "rear-cover.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 11563.585,
+    "signed_volume_mm3": 11566.262,
     "bounds_mm": [
       [
         -34.0,
@@ -59,7 +59,7 @@
   "button-1.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 111.745,
+    "signed_volume_mm3": 110.015,
     "bounds_mm": [
       [
         -26.8,
@@ -116,7 +116,7 @@
   "button-4.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 111.745,
+    "signed_volume_mm3": 110.015,
     "bounds_mm": [
       [
         15.2,

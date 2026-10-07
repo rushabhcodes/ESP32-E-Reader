@@ -94,7 +94,7 @@ The flexible tail and its fold through the slot are not modeled.
 | Navigation switches | 4 × Alps Alpine SKRPACE010, bottom-side assembly |
 | Other controls | 2 × Panasonic EVQP7C01P (S1/S2); 1 × C&K JS102011SAQN (SW7) |
 | Printed parts | Front shell, battery partition, rear cover, and 4 separate button caps |
-| Assembly supplies | 2 suitable M2.5 PCB screws, 4 nominal M2.5 × 6 mm cover screws, display-safe perimeter adhesive, and thin nonconductive cell cushioning |
+| Assembly supplies | 4 M2.5 × 4 mm PCB screws (head ≤5 mm diameter, ≤2.5 mm high), 4 nominal M2.5 × 6 mm cover screws, display-safe perimeter adhesive, and thin nonconductive cell cushioning |
 
 The [source component list and LCSC/JLCPCB mappings](design-data.ts) and the
 [generated BOM](#fabrication-files) cover the remaining passives, charger,
@@ -167,6 +167,18 @@ its local GCT OBJ against the case. The screen FPC fold, antenna cable, real
 battery lead, and manufacturing tolerances remain unmodeled. The meshes
 are manifold, but the first physical print and fit measurements remain
 necessary before treating the case as a finished product.
+
+Four PCB screw points clamp both ends of the board to the shell: the upper
+pair at X ±27, Y 44.75 mm and the lower pair at X ±28, Y −40.0 mm. Each
+2.7 mm hole has a 3.2 mm copper keepout on every layer. The lower bosses
+clear the moving button bodies; the two outer cap flanges have local relief
+around those bosses. PCB holes and printed bosses share coordinates in
+`assets/enclosure/pcb-mounts.json`. Rear-cover screws are separate fasteners.
+After a routed build, run `bun scripts/check-pcb-mounts.mjs` to check the
+drills, board edges, pads, traces, vias, and copper pours. The enclosure
+clearance check also tests a 5 mm driver approach before the partition is fitted.
+
+![Four PCB screws securing the board to the shell; nominal screw envelopes](assets/enclosure/printable-pcb-mounts.png)
 
 ![Open-back view of the battery compartment](assets/enclosure/printable-open-back.png)
 
@@ -253,7 +265,8 @@ resistors below and names beside each key. The SKRPACE010 symbol explicitly
 maps its active contacts to physical pins 1 and 4. After building, run
 `bun scripts/check-controls-schematic.mjs` to verify the visible bus and
 resistor connections, including terminals missed by ordinary style checks.
-Schematic-only updates reuse the verified copper from release 1.0.54 through
+The design reuses the verified copper from release 1.0.54, rechecked with the
+four mounting holes in release 1.0.57, through
 `verified-pcb-routes.json`. The cache compares the complete routing geometry,
 connectivity, keepouts, widths, and rules; physical changes use the autorouter
 again. Check this guard with `bun scripts/check-routing-cache.mjs`.

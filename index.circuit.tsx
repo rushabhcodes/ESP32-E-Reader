@@ -17,14 +17,10 @@ import button4Url from "./assets/enclosure/button-4.glb";
 import displayPanelUrl from "./assets/enclosure/display-panel.glb";
 import frontShellUrl from "./assets/enclosure/front-shell.glb";
 import rearCoverUrl from "./assets/enclosure/rear-cover.glb";
+import pcbMounts from "./assets/enclosure/pcb-mounts.json";
 import { CircuitSections } from "./circuit-sections";
 import { nets, traceThicknessByNet } from "./design-data";
 import { createPreExpansionAutorouter } from "./pre-expansion-autorouter";
-
-const enclosureMountingHoles = [
-	{ name: "MOUNT_TL", x: -27, y: 44.75 },
-	{ name: "MOUNT_TR", x: 27, y: 44.75 },
-] as const;
 
 // The compact tactile switches fit inside the display-width lower section.
 const boardOutline = [
@@ -76,13 +72,13 @@ function EReaderBoard() {
 				allowViaInPad: false,
 			}}
 		>
-			{/* Upper M2.5 mounting holes; the lower edge seats in case rails. */}
-			{enclosureMountingHoles.map(({ name, x, y }) => (
+			{/* Four M2.5 screw points match the enclosure bosses and clamp both ends. */}
+			{pcbMounts.mounts.map(({ name, x, y }) => (
 				<Fragment key={name}>
-					<hole diameter="2.7mm" pcbX={x} pcbY={y} />
+					<hole diameter={pcbMounts.holeDiameter} pcbX={x} pcbY={y} />
 					<keepout
 						shape="circle"
-						radius="3.2mm"
+						radius={pcbMounts.copperKeepoutRadius}
 						pcbX={x}
 						pcbY={y}
 						layers={["top", "inner1", "inner2", "bottom"]}

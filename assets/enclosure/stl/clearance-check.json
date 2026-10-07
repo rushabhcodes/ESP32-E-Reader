@@ -1,5 +1,6 @@
 {
   "input_glb": "/tmp/esp-reader-current.glb",
+  "modeled_component_mesh_count": 88,
   "modeled_component_shell_intersections": [],
   "modeled_component_partition_intersections": [],
   "modeled_component_button_intersections": [],
@@ -13,6 +14,104 @@
     0.0,
     0.0,
     0.0
+  ],
+  "pressed_button_shell_solid_overlap_mm3": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "pcb_mount_supports": [
+    {
+      "name": "MOUNT_TL",
+      "pilot_floor_z": -4.8,
+      "support_heights_z": [
+        -0.8,
+        -0.8,
+        -0.8,
+        -0.8
+      ],
+      "passed": true
+    },
+    {
+      "name": "MOUNT_TR",
+      "pilot_floor_z": -4.8,
+      "support_heights_z": [
+        -0.8,
+        -0.8,
+        -0.8,
+        -0.8
+      ],
+      "passed": true
+    },
+    {
+      "name": "MOUNT_BL",
+      "pilot_floor_z": -3.45,
+      "support_heights_z": [
+        -0.8,
+        -0.8,
+        -0.8,
+        -0.8
+      ],
+      "passed": true
+    },
+    {
+      "name": "MOUNT_BR",
+      "pilot_floor_z": -3.45,
+      "support_heights_z": [
+        -0.8,
+        -0.8,
+        -0.8,
+        -0.8
+      ],
+      "passed": true
+    }
+  ],
+  "pcb_screw_clearance": [
+    {
+      "name": "MOUNT_TL",
+      "head_intersections": [],
+      "driver_access_intersections": [],
+      "shaft_pressed_cap_overlap_mm3": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "MOUNT_TR",
+      "head_intersections": [],
+      "driver_access_intersections": [],
+      "shaft_pressed_cap_overlap_mm3": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "MOUNT_BL",
+      "head_intersections": [],
+      "driver_access_intersections": [],
+      "shaft_pressed_cap_overlap_mm3": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "MOUNT_BR",
+      "head_intersections": [],
+      "driver_access_intersections": [],
+      "shaft_pressed_cap_overlap_mm3": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
   ],
   "battery_shell_surface_intersections": 0,
   "battery_cover_surface_intersections": 0,

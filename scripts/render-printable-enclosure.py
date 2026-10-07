@@ -4,12 +4,14 @@ Run after `tsci export dist/index/circuit.json --format glb --output /tmp/esp-re
 """
 
 from pathlib import Path
+import json
 import bpy
 from mathutils import Matrix, Vector
 
 ROOT = Path(__file__).resolve().parents[1]
 STL = ROOT / 'assets/enclosure/stl'
 OUT = ROOT / 'assets/enclosure'
+PCB_MOUNTS = json.loads((OUT / 'pcb-mounts.json').read_text())
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
 
@@ -32,16 +34,34 @@ before = set(bpy.data.objects)
 bpy.ops.import_scene.gltf(filepath='/tmp/esp-reader-current.glb')
 conversion = Matrix(((-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1)))
 board = []
+assembly_nodes = {'EPD1', 'battery_envelope', 'wifi_antenna_envelope',
+                  'front_shell', 'battery_partition', 'rear_cover',
+                  'button_1', 'button_2', 'button_3', 'button_4'}
 for obj in set(bpy.data.objects) - before:
     if obj.type != 'MESH':
+        continue
+    if obj.name in assembly_nodes:
+        obj.hide_render = True
         continue
     obj.matrix_world = conversion @ obj.matrix_world
     obj.color = (.62, .64, .67, 1)
     if obj.name in ('Box0', 'MeshWithTextures0'):
         obj.color = (.04, .25, .16, 1)
-    if obj.name == 'EPD1':
-        obj.hide_render = True
     board.append(obj)
+
+# Nominal fastener envelopes use the same specification as the clearance check.
+for mount in PCB_MOUNTS['mounts']:
+    for name, radius, low, high in (
+        ('head', PCB_MOUNTS['screwHeadDiameter'] / 2, .8, .8 + PCB_MOUNTS['screwHeadHeight']),
+        ('shaft', 1.25, .8 - PCB_MOUNTS['screwLength'], .8),
+    ):
+        bpy.ops.mesh.primitive_cylinder_add(
+            vertices=64, radius=radius, depth=high - low,
+            location=(mount['x'], mount['y'], (low + high) / 2))
+        obj = bpy.context.object
+        obj.name = mount['name'] + '-' + name
+        obj.color = (.68, .7, .73, 1)
+        board.append(obj)
 
 # Nominal panel envelope, including front visible area; FPC is unmodeled.
 bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 10.5, -4.2))
@@ -80,6 +100,15 @@ def render(name, pos, scale=145, target=(0, 5, 5)):
 
 
 cover.hide_render = True
+partition.hide_render = True
+cell.hide_render = True
+panel.hide_render = True
+active.hide_render = True
+render('printable-pcb-mounts.png', (0, 3, 220), 132, (0, 3, 0))
+partition.hide_render = False
+cell.hide_render = False
+panel.hide_render = False
+active.hide_render = False
 render('printable-front.png', (100, 130, -110))
 render('printable-open-back.png', (-100, -110, 120))
 render('printable-side.png', (190, -25, 35), 140)

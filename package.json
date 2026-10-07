@@ -1,6 +1,6 @@
 {
   "name": "@tsci/rushabhcodes.ESP32-E-Reader",
-  "version": "1.0.52",
+  "version": "1.0.54",
   "description": "ESP32-C3 e-reader PCB and printable enclosure prototype",
   "main": "index.circuit.tsx",
   "keywords": [

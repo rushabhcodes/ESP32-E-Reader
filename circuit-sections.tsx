@@ -305,6 +305,7 @@ export const CircuitSections = () => (
 
 		<led
 			name="D1"
+			supplierPartNumbers={supplierPartNumbersFor("D1")}
 			color="red"
 			pinLabels={polarizedPinLabels}
 			footprint="0805"

@@ -1,5 +1,9 @@
 import { Fragment } from "react";
-import { schematicGroups } from "./schematic-layout";
+import {
+	controlButtonCaptions,
+	schematicGroups,
+	schematicLayout,
+} from "./schematic-layout";
 import { functionalSymbolFor } from "./functional-schematic-symbols";
 import {
 	aliasForPin,
@@ -171,6 +175,18 @@ const renderChip = (spec: ChipSpec) => {
 
 const SheetHeadings = ({ sheet }: { sheet: string }) => (
 	<Fragment>
+		{sheet === "controls" &&
+			controlButtonCaptions.map(({ reference, text }) => (
+				<Fragment key={reference}>
+					<schematictext
+						text={text}
+						schX={schematicLayout[reference].schX + 0.65}
+						schY={schematicLayout[reference].schY}
+						anchor="left"
+						fontSize={0.24}
+					/>
+				</Fragment>
+			))}
 		{schematicGroups
 			.filter((group) => group.sheet === sheet)
 			.map((group) => (

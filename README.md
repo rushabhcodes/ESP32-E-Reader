@@ -248,6 +248,11 @@ autorouter.
 The schematic groups parts by function, with dedicated power, display,
 storage, and control sections. `functional-schematic-symbols.tsx` arranges
 chip pins for readable signal flow while retaining physical pin identities.
+The controls sheet shows the navigation buttons on one ADC bus with their
+resistors below and names beside each key. The SKRPACE010 symbol explicitly
+maps its active contacts to physical pins 1 and 4. After building, run
+`bun scripts/check-controls-schematic.mjs` to verify the visible bus and
+resistor connections, including terminals missed by ordinary style checks.
 Schematic-only updates reuse the verified copper from release 1.0.54 through
 `verified-pcb-routes.json`. The cache compares the complete routing geometry,
 connectivity, keepouts, widths, and rules; physical changes use the autorouter

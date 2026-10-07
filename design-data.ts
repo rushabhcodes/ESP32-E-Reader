@@ -1280,9 +1280,9 @@ export const nets: Record<string, string[]> = {
 		endpoint("SW6", "4"),
 		endpoint("U4", "17"),
 	],
-	BUTTON_BACK_DIV: [endpoint("R1", "1"), endpoint("SW2", "1")],
-	BUTTON_CONFIRM_DIV: [endpoint("R3", "1"), endpoint("SW3", "1")],
-	BUTTON_LEFT_DIV: [endpoint("R6", "1"), endpoint("SW4", "1")],
+	BACK: [endpoint("R1", "1"), endpoint("SW2", "1")],
+	CONFIRM: [endpoint("R3", "1"), endpoint("SW3", "1")],
+	LEFT: [endpoint("R6", "1"), endpoint("SW4", "1")],
 	BATT_MEASURE: [
 		endpoint("R12", "2"),
 		endpoint("R13", "1"),

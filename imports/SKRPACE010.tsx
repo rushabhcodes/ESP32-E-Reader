@@ -1,7 +1,6 @@
-import type { PushButtonProps } from "@tscircuit/props";
-
-import buttonSymbol from "./SKRPACE010.symbol.json";
+import type { ChipProps } from "@tscircuit/props";
 import type { AnyCircuitElement } from "circuit-json";
+import buttonSymbol from "./SKRPACE010.symbol.json";
 
 const pinLabels = {
 	pin1: ["pin1"],
@@ -10,13 +9,24 @@ const pinLabels = {
 	pin4: ["pin4"],
 } as const;
 
-export const SKRPACE010 = (props: PushButtonProps<typeof pinLabels>) => {
+// The built-in pushbutton assigns schematic terminals to pins 1 and 2.
+// This four-pad part uses pins 1 and 4. Keep ports on the component so the
+// supplier pads and schematic wires share their original physical identities.
+export const SKRPACE010 = (props: ChipProps<typeof pinLabels>) => {
 	const { name = "SW1", ...restProps } = props;
 
 	return (
-		<pushbutton
+		<chip
 			name={name}
 			pinLabels={pinLabels}
+			schPinArrangement={{
+				topSide: ["pin4"],
+				bottomSide: ["pin1"],
+				leftSide: ["pin3", "pin2"],
+			}}
+			// The standard 0.4 mm pin stems put the active terminals at y = ±0.55.
+			schWidth={1}
+			schHeight={0.3}
 			symbol={buttonSymbol as AnyCircuitElement[]}
 			supplierPartNumbers={{
 				jlcpcb: ["C139797"],

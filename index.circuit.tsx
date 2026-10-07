@@ -69,6 +69,8 @@ function EReaderBoard() {
 			minTraceToHoleEdgeClearance="0.2mm"
 			minBoardEdgeClearance="0.3mm"
 			minTraceToPadEdgeClearance="0.1mm"
+			// Keep nearby schematic branches wired instead of replacing them with labels.
+			schMaxTraceDistance={4}
 			autorouter={{
 				algorithmFn: createPreExpansionAutorouter,
 				allowViaInPad: false,

@@ -384,6 +384,11 @@ The generator updates the STL files, matching GLBs for the tscircuit
 assembly, mesh checks, and ZIP package. The [print guide](assets/enclosure/PRINTING.md)
 also gives the component-clearance and preview-render commands.
 
+After the release checks pass, commit the source and publish with
+`bun run push:release`, then push the commit to GitHub. This command runs
+`tsci push` from an archive of the committed files because direct `tsci push`
+does not honor `.gitignore` and can upload local check fixtures and caches.
+
 ## Fabrication files
 
 Generate the manufacturing archive with:

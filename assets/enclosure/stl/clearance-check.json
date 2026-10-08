@@ -24,7 +24,7 @@
   "pcb_mount_supports": [
     {
       "name": "MOUNT_TL",
-      "pilot_floor_z": -4.8,
+      "pilot_floor_z": -3.4,
       "support_heights_z": [
         -0.8,
         -0.8,
@@ -35,7 +35,7 @@
     },
     {
       "name": "MOUNT_TR",
-      "pilot_floor_z": -4.8,
+      "pilot_floor_z": -3.4,
       "support_heights_z": [
         -0.8,
         -0.8,
@@ -127,8 +127,8 @@
     "battery_on_partition": true,
     "cover_on_shell": true
   },
+  "display_fpc_check": "Separate nominal installed-mesh check: scripts/check-display-connection.py",
   "unmodeled": [
-    "display FPC",
     "antenna coax and plug",
     "battery lead and plug",
     "solder fillets",

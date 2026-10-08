@@ -1,4 +1,5 @@
 import { schematicGroups, schematicLayout } from "./schematic-layout";
+import displayConnection from "./assets/enclosure/display-connection.json";
 /** Static electrical, placement, and sourcing data for the Rev. B board. */
 
 export type SectionName =
@@ -758,7 +759,7 @@ export const chips: ChipSpec[] = [
 		section: "display_power",
 		// Centered ribbon placement requested for the actual display.
 		pcbX: 0,
-		pcbY: -29.53723375,
+		pcbY: displayConnection.connector.centerY - 0.03723375,
 		pcbRotation: 0,
 		layer: "top",
 	},

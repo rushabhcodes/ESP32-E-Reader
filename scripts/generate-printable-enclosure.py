@@ -8,6 +8,7 @@ See assets/enclosure/PRINTING.md before fitting a real cell or powering a board.
 from math import cos, pi, sin
 from pathlib import Path
 import json
+import sys
 from zipfile import ZipFile, ZIP_DEFLATED
 
 import bpy
@@ -15,6 +16,9 @@ import bmesh
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from importlib import import_module
+display_flex = import_module("display-flex")
 PCB_MOUNTS = json.loads((ROOT / "assets/enclosure/pcb-mounts.json").read_text())
 OUT = ROOT / "assets" / "enclosure" / "stl"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -146,7 +150,6 @@ main = prism("front-shell", CASE_W, CASE_H, CORNER_R, FRONT_Z, FRONT_BACK_Z, y=C
 cut(main, prism("visible-screen-window", 52.8, 87.2, 1.8, FRONT_Z - .1, FRONT_BACK_Z + .1, y=10.5))
 # A rear pocket retains the 56.24 x 96.62 display perimeter. 0.28 mm side
 # clearance and 0.29 mm end clearance are deliberate prototype allowances.
-cut(main, prism("panel-rebate", 56.8, 97.2, 1.3, -4.8, FRONT_BACK_Z + .1, y=10.5))
 for x in (-21.0, -7.0, 7.0, 21.0):
     cut(main, prism("button-opening", 10.8, 5.2, 2.5, FRONT_Z - .1, FRONT_BACK_Z + .1, x=x, y=-42.5))
 frame = prism("shell-wall", CASE_W, CASE_H, CORNER_R, FRONT_BACK_Z - .05, BACK_INNER_Z, y=CASE_Y)
@@ -201,6 +204,10 @@ for x, y in LID_FASTENERS:
                         CORNER_R, 6.5, BACK_INNER_Z + .1, y=CASE_Y), "INTERSECT")
     add(main, boss)
     cut(main, prism("lid-screw-pilot", 2.0, 2.0, 1.0, 9.1, BACK_INNER_Z + .1, x=x, y=y))
+# Cut the panel pocket after joining the complete shell. This clears the
+# glass from both the front floor and the frame's rear edge without passing
+# intermediate coplanar seams through subsequent mounting-boss booleans.
+cut(main, prism("panel-rebate", 56.8, 97.2, 1.3, -4.8, -3.6, y=10.5))
 export(main, "front-shell.stl")
 
 # Rigid insulator: 1.4 mm slab, a 49.2 x 68.8 mm cell pocket, and a wire
@@ -261,13 +268,23 @@ export(antenna, "antenna-envelope-DO-NOT-PRINT.stl")
 # the same generator so legacy visual-case scripts cannot overwrite the new
 # enclosure files by accident.
 reset()
-panel = prism("Waveshare-3.97inch-e-Paper-G-outline", 56.24, 96.62, 1.0, -4.65, -3.75, x=0.0, y=40.0)
-active = prism("480x800-active-area", 51.84, 86.4, .3, -4.71, -4.65, x=0.0, y=40.0)
+display = display_flex.SPEC["panel"]
+panel = prism("ER-EPD3.97-1RY-nominal-outline", display["width"], display["height"], 1.0, display["frontZ"], display["backZ"], y=display["centerY"])
+active = prism("480x800-active-area", 51.84, 86.4, .3, -4.71, -4.65, y=display["centerY"])
+panel.data.materials.append(display_flex.material("EPD-black-perimeter", (.075, .075, .08)))
+active.data.materials.append(display_flex.material("EPD-paper", (.86, .85, .77)))
+flex_objects, length = display_flex.create_flex()
+# Assembly.screen is anchored at J2's PCB surface, not at the PCB origin.
+# Subtract both Y and Z to keep the panel in its measured enclosure rebate.
+connector = display_flex.SPEC["connector"]
 bpy.ops.object.select_all(action="DESELECT")
-for obj in (panel, active):
+for obj in (panel, active, *flex_objects):
+    obj.location.y -= connector["centerY"]
+    obj.location.z -= connector["boardSurfaceZ"]
     obj.select_set(True)
 bpy.context.view_layer.objects.active = panel
 bpy.ops.export_scene.gltf(filepath=str(OUT.parent / "display-panel.glb"), export_format="GLB", export_yup=False, use_selection=True)
+print(f"Nominal installed display flex length: {length:.6f} mm")
 
 (OUT / "mesh-check.json").write_text(json.dumps(report, indent=2) + "\n")
 with ZipFile(OUT.parent / "esp32-reader-printable-stls.zip", "w", ZIP_DEFLATED, compresslevel=9) as package:
@@ -275,4 +292,5 @@ with ZipFile(OUT.parent / "esp32-reader-printable-stls.zip", "w", ZIP_DEFLATED, 
         package.write(OUT / name, name)
     package.write(OUT.parent / "PRINTING.md", "PRINTING.md")
     package.write(OUT.parent / "pcb-mounts.json", "pcb-mounts.json")
+    package.write(OUT.parent / "display-connection.json", "display-connection.json")
 print(json.dumps(report, indent=2))

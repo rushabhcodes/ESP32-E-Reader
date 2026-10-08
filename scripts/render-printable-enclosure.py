@@ -5,6 +5,7 @@ Run after `tsci export dist/index/circuit.json --format glb --output /tmp/esp-re
 
 from pathlib import Path
 import json
+from math import pi
 import bpy
 from mathutils import Matrix, Vector
 
@@ -63,17 +64,22 @@ for mount in PCB_MOUNTS['mounts']:
         obj.color = (.68, .7, .73, 1)
         board.append(obj)
 
-# Nominal panel envelope, including front visible area; FPC is unmodeled.
-bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 10.5, -4.2))
-panel = bpy.context.object
-panel.dimensions = (56.24, 96.62, .9)
-bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-panel.color = (.1, .1, .11, 1)
-bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 10.5, -4.66))
-active = bpy.context.object
-active.dimensions = (51.84, 86.4, .05)
-bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-active.color = (.86, .85, .77, 1)
+# Use the same panel and installed flex shown by assembly.screen.
+connection = json.loads((OUT / 'display-connection.json').read_text())
+before = set(bpy.data.objects)
+bpy.ops.import_scene.gltf(filepath=str(OUT / 'display-panel.glb'))
+display_objects = []
+for obj in set(bpy.data.objects) - before:
+    if obj.type != 'MESH':
+        continue
+    # Our local GLB is deliberately Z-up for tscircuit. Blender's importer
+    # assumes glTF Y-up, so undo its X-axis conversion before placing it.
+    obj.matrix_world = Matrix.Translation(Vector((0, connection['connector']['centerY'], connection['connector']['boardSurfaceZ']))) @ Matrix.Rotation(-pi / 2, 4, 'X') @ obj.matrix_world
+    obj.color = tuple(obj.data.materials[0].diffuse_color)
+    display_objects.append(obj)
+panel = next(obj for obj in display_objects if 'nominal-outline' in obj.name)
+active = next(obj for obj in display_objects if 'active-area' in obj.name)
+flex_objects = [obj for obj in display_objects if obj not in (panel, active)]
 
 scene = bpy.context.scene
 scene.render.engine = 'BLENDER_WORKBENCH'
@@ -104,14 +110,28 @@ partition.hide_render = True
 cell.hide_render = True
 panel.hide_render = True
 active.hide_render = True
+for obj in flex_objects:
+    obj.hide_render = True
 render('printable-pcb-mounts.png', (0, 3, 220), 132, (0, 3, 0))
 partition.hide_render = False
 cell.hide_render = False
 panel.hide_render = False
 active.hide_render = False
+for obj in flex_objects:
+    obj.hide_render = False
 render('printable-front.png', (100, 130, -110))
 render('printable-open-back.png', (-100, -110, 120))
 render('printable-side.png', (190, -25, 35), 140)
+
+# Installed connection close-up with the shell removed so the locking socket
+# and the flex crossing through the actual PCB slot remain visible.
+shell.hide_render = True
+partition.hide_render = True
+cell.hide_render = True
+render('display-ribbon-connection.png', (35, -83, 30), 44, (0, -34, 0))
+shell.hide_render = False
+partition.hide_render = False
+cell.hide_render = False
 
 # Local view of the changed battery connector and the lifted cable notch.
 shell.hide_render = True

@@ -1,0 +1,19 @@
+{
+  "nominal_installed_length_mm": 11.315786,
+  "nominal_tail_length_mm": 11.27,
+  "bend_radius_mm": 0.6,
+  "modeled_contacts": 24,
+  "contact_face": "bottom (-Z)",
+  "slot_center_y_mm": -38.41,
+  "connector_center_y_mm": -32.34,
+  "solid_overlaps_mm3": {
+    "ER-EPD3.97-1RY-nominal-outline": {},
+    "EPD-flex-polyimide-nominal": {},
+    "EPD-flex-tip-stiffener-nominal": {}
+  },
+  "connector_insulation_overlaps_mm3": {
+    "EPD-flex-polyimide-nominal": 0.0,
+    "EPD-flex-tip-stiffener-nominal": 0.0
+  },
+  "basis": "Nominal installed flex under the user-selected 24-pin 0.5 mm supplier-listing specification; not OEM flex CAD. Width, contact face, stiffener and 0.6 mm installation bends need a physical sample. The conflicting 0.8 mm/19.6 mm PDF tip is not used."
+}

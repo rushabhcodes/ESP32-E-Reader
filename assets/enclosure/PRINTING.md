@@ -19,13 +19,14 @@ Y = −49.0 to +60.5, Z = −6.5 to +14.6. Corner radius is 5.0.
 | Item | Nominal body / opening | Position or Z span | Source / allowance |
 | --- | ---: | --- | --- |
 | PCB | 62.5 × 95.08 × 1.6 | X ±31.25; Y −47.0…48.08; Z ±0.8 | tsci `pcb_board`; 0.75 side gap to 64.0 inner case |
-| Display panel | 56.24 × 96.62 × 0.9 | center X 0, Y 10.5; Z −4.65…−3.75 | [EastRising panel listing](https://www.buydisplay.com/3-97-inch-quad-color-e-paper-screen-e-ink-display-480x800); FPC omitted |
-| Display FPC slot | 26 × 2 | center X 0, Y −36.2 | 1 mm-radius ends; J2 centered at X 0; verify actual panel pinout and fold |
+| Display panel | 56.24 × 96.62 × 0.9 | center X 0, Y 10.5; Z −4.65…−3.75 | [EastRising panel listing](https://www.buydisplay.com/3-97-inch-quad-color-e-paper-screen-e-ink-display-480x800); nominal installed flex included |
+| Display FPC slot | 26 × 2 | center X 0, Y −38.41 | 1 mm-radius ends; J2 at X 0, Y −32.34 |
+| Display ribbon | 12.5 wide; 0.1 flexible body, 0.3 reinforced tip | nominal 11.316 mm path with 0.6 mm-radius bends | 24-pin 0.5 mm listing basis; actual flex construction and bend limits need a sample |
 | External Wi-Fi antenna film | 5.9 × 4.1 × 0.24 | center X 25, Y 44; Z 12.86…13.10 | [Taoglas FXP75.07.0045B](https://www.taoglas.com/product/atom-fxp75-2-4ghz-flex-super-micro-pcb-antenna/), 45 mm cable not modeled |
 | Display rebate | 56.8 × 97.2 | Z −4.8…−4.1 | 0.28 each side, 0.29 each end; 0.15 front gap for perimeter adhesive |
 | Visible screen window | 52.8 × 87.2 | center Y 10.5 | 0.48 each side and 0.4 each end beyond 51.84 × 86.4 active area |
 | Front wall | 2.4 deep | Z −6.5…−4.1 | screen lip 1.7 deep after rebate |
-| Upper board fasteners | 2 × M2.5 screw paths | X ±27, Y 44.75 | 2.7 PCB holes; 2.0 printed pilot, test screw/material fit |
+| Upper board fasteners | 2 × M2.5 screw paths | X ±27, Y 44.75 | 2.7 PCB holes; boss Z −3.55…−0.8, 0.2 clear of nominal glass; 2.0 pilot to Z −3.4 |
 | Lower board fasteners | 2 × M2.5 screw paths | X ±28, Y −40.0 | 2.7 PCB holes; 5.6 boss diameter; boss Z −3.65…−0.8; 2.0 pilot to Z −3.45 |
 | PCB screws / keepouts | 4 × M2.5 × 4 mm | head ≤5.0 diameter, ≤2.5 high; PCB upper face Z +0.8 | tip Z −3.2; lower pilot gives 0.25 tip clearance; 3.2 radius copper keepout on all four layers |
 | Lower board support | 65.0 × 1.2 ledge | Y −46.3; top Z −0.8 | avoids button body Y −44.1…−40.9 |
@@ -73,14 +74,21 @@ only a measured discharge test can establish usable runtime.
    gap and seat the display from the rear without pressing on the active area.
    Verify the FPC tail orientation and bend first. Route the centered tail
    through the PCB slot at X = 0 mm to J2 at X = 0 mm. Inspect the actual
-   panel contact face and pin 1 before inserting the tail.
+   panel contact face and pin 1 before inserting the tail. Open J2's flip latch,
+   insert the reinforced tip toward +Y with contacts facing the PCB, and close
+   the latch. The orange ribbon/blue stiffener model is nominal installation
+   geometry under the supplier listing's 0.5 mm pitch assumption. It is not a
+   manufacturer flex model; the PDF's conflicting 0.8 mm tip is not reproduced.
+   Check the delivered cable width, contact face, 0.3 mm tip thickness and
+   permitted bend radius before using this fold.
 3. Install the four caps from behind, with the relieved outer flanges facing
    their adjacent lower bosses, then put the PCB on its edge ledges. Secure
    all four PCB mounting holes using M2.5 × 4 mm screws with heads no larger
    than 5 mm diameter and 2.5 mm high. Measure pilot-hole and screw fit on a
    printed sample; the nominal 2.0 mm pilots require a suitable self-tapping
    screw or a tapped pilot for machine screws. A 4 mm shaft ends at Z −3.2,
-   0.25 above the lower pilot bottom. Check full button travel before fitting
+   0.25 above the lower pilot bottom and 0.2 above the upper pilot bottom.
+   Check full button travel before fitting
    the battery partition. Do not use longer PCB screws or drive into the display.
 4. Orient the pack so its lead exits toward the lower-right partition cutout. Plug
    its JST-PH housing into BT1 from the −Y side before seating the partition.
@@ -106,8 +114,11 @@ width, length and Z limits. [component-envelopes.csv](component-envelopes.csv)
 contains the raw model boxes. **These are nominal CAD bounds, not certified
 manufacturer maximum dimensions.** J1 (USB-C) uses the local manufacturer OBJ
 for the inventory and clearance check; JP1 and six test pads have no
-body mesh in the exported assembly; the FPC tail, antenna coax/plug, battery lead/connector,
+body mesh in the exported assembly; the antenna coax/plug, battery lead/connector,
 solder fillets, adhesive, and possible battery swelling are also unmodeled.
+The installed FPC is checked as nominal CAD against the emitted PCB cutout,
+connector cavity, component meshes and printed parts with
+`scripts/check-display-connection.py`. Sample fit remains necessary.
 
 The selected cell is longer than the former 2500 mAh pack but 1.7 mm thinner.
 SparkFun's page lists nominal size only; measure the delivered pack including
@@ -138,8 +149,12 @@ button travel, display attachment, airtightness, RF performance, or print
 shrinkage. **Print and measure a prototype before relying on these parts as a
 finished enclosure.**
 
-Regenerate using `blender --background --python scripts/generate-printable-enclosure.py`.
-Build the circuit and export a 3D GLB before regenerating the component table:
-`blender --background --python scripts/export-component-envelopes.py -- /tmp/esp-reader-current.glb`
+Regenerate using `blender --background --python-exit-code 1 --python scripts/generate-printable-enclosure.py`.
+Build the circuit, then export all local CAD with
+`bun run export:assembly /tmp/esp-reader-current.glb` before regenerating the component table:
+`blender --background --python-exit-code 1 --python scripts/export-component-envelopes.py -- /tmp/esp-reader-current.glb`
 then `python scripts/build-enclosure-inventory.py`. Recheck fit with
-`blender --background --python scripts/check-enclosure-clearance.py -- /tmp/esp-reader-current.glb`.
+`blender --background --python-exit-code 1 --python scripts/check-enclosure-clearance.py -- /tmp/esp-reader-current.glb`.
+
+Check the nominal display/ribbon assembly against the PCB slot and socket:
+`blender --background --python-exit-code 1 --python scripts/check-display-connection.py -- /tmp/esp-reader-current.glb`.

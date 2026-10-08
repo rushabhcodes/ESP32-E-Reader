@@ -15,6 +15,7 @@ import button2Url from "./assets/enclosure/button-2.glb";
 import button3Url from "./assets/enclosure/button-3.glb";
 import button4Url from "./assets/enclosure/button-4.glb";
 import displayPanelUrl from "./assets/enclosure/display-panel.glb";
+import displayConnection from "./assets/enclosure/display-connection.json";
 import frontShellUrl from "./assets/enclosure/front-shell.glb";
 import rearCoverUrl from "./assets/enclosure/rear-cover.glb";
 import pcbMounts from "./assets/enclosure/pcb-mounts.json";
@@ -100,7 +101,7 @@ function EReaderBoard() {
 				shape="circle"
 				radius="0.65mm"
 				pcbX={4.72}
-				pcbY={-28.19}
+				pcbY={displayConnection.connector.centerY + 1.31}
 				layers={["inner1", "inner2", "bottom"]}
 			/>
 
@@ -111,7 +112,7 @@ function EReaderBoard() {
 				width="13mm"
 				height="1.8mm"
 				pcbX={0}
-				pcbY={-27.68723375}
+				pcbY={displayConnection.connector.centerY + 1.81276625}
 				layers={["inner1", "inner2", "bottom"]}
 			/>
 			{/* Keep layer-transition pads clear of the C28 pin-2 edge. */}
@@ -218,7 +219,7 @@ function EReaderBoard() {
 				shape="polygon"
 				points={displayFpcSlot}
 				pcbX={0}
-				pcbY={-36.2}
+				pcbY={displayConnection.slot.centerY}
 			/>
 
 			<silkscreentext text="BATT" pcbX={25} pcbY={-25} fontSize="1mm" />

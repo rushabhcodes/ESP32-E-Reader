@@ -1,6 +1,6 @@
 {
   "name": "@tsci/rushabhcodes.ESP32-E-Reader",
-  "version": "1.0.57",
+  "version": "1.0.58",
   "description": "ESP32-C3 e-reader PCB and printable enclosure prototype",
   "main": "index.circuit.tsx",
   "keywords": [
@@ -16,6 +16,7 @@
     "build:release": "tsci build index.circuit.tsx --autorouter-timeout 30m",
     "build:pcb": "tsci build index.circuit.tsx --pcb-png",
     "export:gerbers": "tsci export dist/index/circuit.json --format gerbers --output ../esp32-e-reader-gerbers.zip && python3 scripts/check-assembly-export.py dist/esp32-e-reader-gerbers.zip",
+    "export:assembly": "bun scripts/export-assembly-preview.mjs",
     "snapshot:update": "tsci snapshot index.circuit.tsx --update --3d",
     "typecheck": "tsc --noEmit"
   },

@@ -1,0 +1,7 @@
+{
+  "panel": { "name": "ER-EPD3.97-1RY", "width": 56.24, "height": 96.62, "centerY": 10.5, "frontZ": -4.65, "backZ": -3.75 },
+  "connector": { "name": "J2", "centerY": -32.34, "boardSurfaceZ": 0.8, "modelOriginY": 1.38898035, "tipModelY": 1.3 },
+  "slot": { "centerY": -38.41, "width": 26, "height": 2 },
+  "flex": { "width": 12.5, "thickness": 0.1, "rootZ": -3.7, "entryZ": 1.55, "bendRadius": 0.6, "stiffenerLength": 4.5, "stiffenerThickness": 0.19, "contactLength": 3.5, "contactWidth": 0.35, "contactPitch": 0.5, "contacts": 24, "nominalTailLength": 11.27, "tailLengthTolerance": 0.3 },
+  "basis": "Nominal installed flex under the user-selected 24-pin 0.5 mm supplier-listing specification; not OEM flex CAD. Width, contact face, stiffener and 0.6 mm installation bends need a physical sample. The conflicting 0.8 mm/19.6 mm PDF tip is not used."
+}

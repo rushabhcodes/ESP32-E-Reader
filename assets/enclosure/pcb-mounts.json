@@ -14,16 +14,16 @@
 			"name": "MOUNT_TL",
 			"x": -27.0,
 			"y": 44.75,
-			"bossBaseZ": -4.0,
-			"pilotBaseZ": -4.05,
+			"bossBaseZ": -3.55,
+			"pilotBaseZ": -3.4,
 			"buttonFlangeRelief": false
 		},
 		{
 			"name": "MOUNT_TR",
 			"x": 27.0,
 			"y": 44.75,
-			"bossBaseZ": -4.0,
-			"pilotBaseZ": -4.05,
+			"bossBaseZ": -3.55,
+			"pilotBaseZ": -3.4,
 			"buttonFlangeRelief": false
 		},
 		{

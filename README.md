@@ -46,16 +46,29 @@ The PDF pin assignments match J2's existing functions. Pins 6 (TSCL) and
 7 (TSDA) are connected to GND to give the unused sensor inputs defined low
 levels, as required by page 7. Pin 8 is also low for four-wire SPI.
 
-J2 and the 26 × 2 mm rounded ribbon slot are centered at X = 0 mm. The PDF's
-horizontal dimensions confirm a centered ribbon: 56.24 − 18.32 − 19.6/2 =
-28.12 mm from the left edge, exactly half the panel width. The drawing gives
-11.27 ± 0.30 mm of ribbon extension below the glass; the actual fold through
-the slot and insertion length must be verified with a sample. J2 is at
-Y = −29.5 mm and the slot at Y = −36.2 mm. The slot ends have 1 mm radius.
+The display uses the same connection style as the
+[Linux Game Boy Advance reference](https://tscircuit.com/ShiboSoftwareDev/linux-gameboy-advance#3d):
+a folded flat ribbon entering a horizontal, bottom-contact ZIF socket.
+The reader uses the [24-pin Hirose FH12](https://www.hirose.com/en/product/p/CL0586-0521-0-55)
+for its e-paper pinout. Open the flip latch, insert the tail straight with its
+exposed contacts facing the PCB, then close the latch.
 
-The 3D assembly includes an `assembly.screen` element attached to J2. Its
-model shows the matching 56.24 × 96.62 mm panel outline and active area on the front of the PCB.
-The flexible tail and its fold through the slot are not modeled.
+J2 and the 26 × 2 mm rounded ribbon slot share X = 0 mm. J2 is now at
+Y = −32.34 mm and the slot at Y = −38.41 mm, shortening the path from the
+lower panel edge. The installed model has two 0.6 mm-radius quarter bends
+and an approximately 11.316 mm centerline, within the drawing's
+11.27 ± 0.30 mm extension below the glass. It passes through the slot and
+shows 24 bottom-facing contacts and a nominal 0.3 mm reinforced insertion tip.
+The panel remains 56.24 × 96.62 × 0.9 mm at Y = 10.5 mm, Z −4.65…−3.75 mm;
+the model now subtracts J2's 0.8 mm anchor height to align with the case rebate.
+
+The [connection dimensions](assets/enclosure/display-connection.json) and
+[installed ribbon preview](assets/enclosure/display-ribbon-connection.png)
+describe nominal installation geometry, not OEM flex CAD. Its 12.5 mm tip
+width follows the user-selected 24-pin, 0.5 mm listing specification; it does
+not reproduce the conflicting PDF's 19.6 mm, 0.8 mm tip. The delivered tail's
+width, contact face, reinforcement and allowable bend radius need a physical
+sample. Do not force a mismatched ribbon into the socket.
 
 > [!IMPORTANT]
 > Do not select a panel based only on the “4.2-inch” description or the 24-pin
@@ -100,7 +113,7 @@ The [source component list and LCSC/JLCPCB mappings](design-data.ts) and the
 [generated BOM](#fabrication-files) cover the remaining passives, charger,
 protection devices, ESD device, and e-paper bias circuit. The USB-C body is
 checked against the printable case using the local GCT manufacturer OBJ;
-the display FPC fold, antenna cable, and mating plug remain unmodeled. Confirm the delivered display tail, battery plug polarity,
+the antenna cable and mating plug remain unmodeled. The display fold is nominal CAD. Confirm the delivered display tail, battery plug polarity,
 antenna cable path, and screw fit before assembly.
 
 The four navigation buttons share one ESP32 ADC input through a resistor
@@ -162,9 +175,12 @@ The [printable STL files and full dimension table](assets/enclosure/PRINTING.md)
 include the shell, partition, rear cover, and four independent front caps.
 The [component inventory](assets/enclosure/component-inventory.csv) lists
 PCB references with footprint size and available 3D model envelopes.
-The 3D assembly export omits the J1 USB-C body, but the clearance script checks
-its local GCT OBJ against the case. The screen FPC fold, antenna cable, real
-battery lead, and manufacturing tolerances remain unmodeled. The meshes
+`bun run export:assembly` resolves the local enclosure, display and GCT USB-C
+models and writes `dist/index/assembly.glb` without substituting fallback
+cubes for local assets. The clearance script also checks J1's local GCT OBJ.
+The screen FPC has a nominal installed
+model; the antenna cable, real battery lead, and manufacturing tolerances
+remain unmodeled. The meshes
 are manifold, but the first physical print and fit measurements remain
 necessary before treating the case as a finished product.
 
@@ -328,14 +344,13 @@ bun run snapshot:update
 ```
 
 The current cloud-style build completes with 228 routed traces, zero DRC
-errors, and no Gerber-derived shorts across all four layers. Its 157 vias are
+errors, and no Gerber-derived shorts across all four layers. Its 178 vias are
 all 0.30/0.60 mm ordinary through vias. Netlist, schematic placement, PCB
 placement, and TypeScript checks pass. Schematic style analysis reports no
 issues across all five sheets. Buried-layer keepouts prevent through vias from
 overlapping the USB-C contacts, U3 contacts, and C19/C20 ground pads.
 
-The source grounds J2 pins 6 and 7. **The current fabrication ZIP predates the
-sensor-pin fix and must be rebuilt and rechecked before ordering.** The export guard
+The source and regenerated fabrication export ground J2 pins 6 and 7. The export guard
 rejects artifacts without both sensor pins grounded. Connector pitch follows
 the supplier listing at the user's direction. Physical screen-tail, battery
 lead, button travel and printed-fit checks remain necessary.
@@ -351,7 +366,7 @@ it is a fit gauge.
 To regenerate the meshes from source, install Blender and run:
 
 ```sh
-blender --background --python scripts/generate-printable-enclosure.py
+blender --background --python-exit-code 1 --python scripts/generate-printable-enclosure.py
 ```
 
 The generator updates the STL files, matching GLBs for the tscircuit

@@ -3,8 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
-const modelExtensions = new Set([".glb", ".obj", ".step"]);
-let copiedModels = 0;
+const previewExtensions = new Set([".glb", ".obj", ".step", ".png"]);
+let copiedAssets = 0;
 
 async function copyModels(relativeDirectory) {
 	const entries = await readdir(path.join(projectRoot, relativeDirectory), {
@@ -15,16 +15,16 @@ async function copyModels(relativeDirectory) {
 		const relativePath = path.join(relativeDirectory, entry.name);
 		if (entry.isDirectory()) {
 			await copyModels(relativePath);
-		} else if (entry.isFile() && modelExtensions.has(path.extname(entry.name))) {
-			// Circuit JSON retains these paths; the hosted viewer needs them too.
+		} else if (entry.isFile() && previewExtensions.has(path.extname(entry.name))) {
+			// Circuit JSON and README retain these paths; hosted views need them.
 			const destination = path.join(projectRoot, "dist", relativePath);
 			await mkdir(path.dirname(destination), { recursive: true });
 			await copyFile(path.join(projectRoot, relativePath), destination);
-			copiedModels += 1;
+			copiedAssets += 1;
 		}
 	}
 }
 
 await copyModels("assets");
 await copyModels("imports");
-console.log(`Copied ${copiedModels} local 3D model assets to dist.`);
+console.log(`Copied ${copiedAssets} local preview assets to dist.`);

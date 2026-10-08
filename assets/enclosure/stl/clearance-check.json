@@ -128,6 +128,7 @@
     "cover_on_shell": true
   },
   "display_fpc_check": "Separate nominal installed-mesh check: scripts/check-display-connection.py",
+  "display_retainer_check": "Separate retention/pad/fastener geometry check: scripts/check-display-retainer.py",
   "unmodeled": [
     "antenna coax and plug",
     "battery lead and plug",

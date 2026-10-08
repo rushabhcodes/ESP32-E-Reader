@@ -107,7 +107,7 @@ sample. Do not force a mismatched ribbon into the socket.
 | Navigation switches | 4 × Alps Alpine SKRPACE010, bottom-side assembly |
 | Other controls | 2 × Panasonic EVQP7C01P (S1/S2); 1 × C&K JS102011SAQN (SW7) |
 | Printed parts | Front shell, battery partition, rear cover, and 4 separate button caps |
-| Assembly supplies | 4 M2.5 × 4 mm PCB screws (head ≤5 mm diameter, ≤2.5 mm high), 4 nominal M2.5 × 6 mm cover screws, display-safe perimeter adhesive, and thin nonconductive cell cushioning |
+| Assembly supplies | 4 M2.5 × 4 mm PCB screws (head ≤5 mm diameter, ≤2.5 mm high), 4 nominal M2.5 × 6 mm cover screws, 6 M1.6 × 4 mm countersunk frame screws (3 mm head, 90°), display-compatible border pads, and thin nonconductive cell cushioning |
 
 The [source component list and LCSC/JLCPCB mappings](design-data.ts) and the
 [generated BOM](#fabrication-files) cover the remaining passives, charger,
@@ -171,8 +171,19 @@ table](assets/enclosure/PRINTING.md) describes the printed parts.
 
 ![BT1 facing the partition cable opening](assets/enclosure/printable-battery-connector.png)
 
+The display is mechanically retained by four removable perimeter-frame sections
+and six independent M1.6 countersunk screws. Hard stops set the frame height;
+soft pads cushion both faces of the display border. The 1.4 mm frame clears
+the PCB underside by 1.05 mm and has open center notches for the ribbon.
+Its separate sections can be installed around the fixed PCB posts and ledges.
+Pad softness, printed fit and physical retention still need a sample test.
+The [mounting dimensions](assets/enclosure/display-retainer.json) and
+[assembly instructions](assets/enclosure/PRINTING.md) specify the pads and screws.
+
+![Display seated under four removable frame sections, with the PCB removed](assets/enclosure/display-retainer-installed.png)
+
 The [printable STL files and full dimension table](assets/enclosure/PRINTING.md)
-include the shell, partition, rear cover, and four independent front caps.
+include the shell, partition, rear cover, four retaining-frame sections, and four independent front caps.
 The [component inventory](assets/enclosure/component-inventory.csv) lists
 PCB references with footprint size and available 3D model envelopes.
 `bun run export:assembly` resolves the local enclosure, display and GCT USB-C
@@ -358,7 +369,7 @@ lead, button travel and printed-fit checks remain necessary.
 ## Printable enclosure
 
 The [print package](assets/enclosure/esp32-reader-printable-stls.zip)
-contains the seven printable parts and the dimensioned guide. The separate
+contains the eleven printable parts and the dimensioned guide. The separate
 [STLs](assets/enclosure/stl/) and [print instructions](assets/enclosure/PRINTING.md)
 are also available. Do **not** print the `battery-envelope-DO-NOT-PRINT` file;
 it is a fit gauge.

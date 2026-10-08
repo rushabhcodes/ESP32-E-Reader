@@ -1,11 +1,13 @@
 # Rev. B enclosure: dimensioned print prototype
 
 All dimensions below are in **millimetres**. STL files are already in mm scale.
-The [print package](esp32-reader-printable-stls.zip) contains all seven case
+The [print package](esp32-reader-printable-stls.zip) contains all eleven case
 pieces and this guide.
 Use [front-shell.stl](stl/front-shell.stl),
 [battery-partition.stl](stl/battery-partition.stl),
-[rear-cover.stl](stl/rear-cover.stl), and four individual `button-N.stl` files.
+[rear-cover.stl](stl/rear-cover.stl), four individual `button-N.stl` files,
+and four `display-retainer-{lower,upper}-{left,right}.stl` sections.
+The cushioning and retainer-fastener GLBs represent assembly supplies; do not print them.
 `battery-envelope-DO-NOT-PRINT.stl` and `antenna-envelope-DO-NOT-PRINT.stl` are fit gauges for CAD inspection, not case parts.
 The editable source of truth is the parameterized [Blender generator](../../scripts/generate-printable-enclosure.py).
 
@@ -23,7 +25,10 @@ Y = −49.0 to +60.5, Z = −6.5 to +14.6. Corner radius is 5.0.
 | Display FPC slot | 26 × 2 | center X 0, Y −38.41 | 1 mm-radius ends; J2 at X 0, Y −32.34 |
 | Display ribbon | 12.5 wide; 0.1 flexible body, 0.3 reinforced tip | nominal 11.316 mm path with 0.6 mm-radius bends | 24-pin 0.5 mm listing basis; actual flex construction and bend limits need a sample |
 | External Wi-Fi antenna film | 5.9 × 4.1 × 0.24 | center X 25, Y 44; Z 12.86…13.10 | [Taoglas FXP75.07.0045B](https://www.taoglas.com/product/atom-fxp75-2-4ghz-flex-super-micro-pcb-antenna/), 45 mm cable not modeled |
-| Display rebate | 56.8 × 97.2 | Z −4.8…−4.1 | 0.28 each side, 0.29 each end; 0.15 front gap for perimeter adhesive |
+| Display rebate | 56.8 × 97.2 | Z −4.8…−3.6 | 0.28 each side, 0.29 each end; 0.15 front gap for soft border pads |
+| Display retaining frame | four 1.4-thick sections; combined 63.6 × 95 envelope | center Y 10.5; Z −3.25…−1.85 | 15-wide center openings; side gaps Y 41…48.5 clear PCB posts; 1.05 clearance to PCB underside |
+| Display border cushioning | 10 front and 10 rear strips: six 1.4 × 10 and four 10 × 1.4 on each face | front Z −4.8…−4.65; rear Z −3.75…−3.25 | rear 0.6 free thickness, nominal 0.5 installed; all strips outside active area |
+| Frame screws / hard stops | 6 × M1.6 × 4 countersunk; head ≤3 diameter, 90° | X ±30.1; Y −25, +25, +52; stop top Z −3.25 | 1.8 clearance, 3.2 countersink mouth; 1.25 tap pilots to Z −6.05; screw tip Z −5.85 |
 | Visible screen window | 52.8 × 87.2 | center Y 10.5 | 0.48 each side and 0.4 each end beyond 51.84 × 86.4 active area |
 | Front wall | 2.4 deep | Z −6.5…−4.1 | screen lip 1.7 deep after rebate |
 | Upper board fasteners | 2 × M2.5 screw paths | X ±27, Y 44.75 | 2.7 PCB holes; boss Z −3.55…−0.8, 0.2 clear of nominal glass; 2.0 pilot to Z −3.4 |
@@ -66,12 +71,35 @@ only a measured discharge test can establish usable runtime.
 
 ## Assembly and printing
 
-1. Print the shell with its front face on the bed, the cover flat, the partition
-   flat, and the caps front-face down. Keep slicer scale at 100%. The booleans
+1. Print the shell with its front face on the bed, the cover and partition flat,
+   the caps front-face down, and all four frame sections pad-side down
+   (countersinks facing up). Keep slicer scale at 100%. The booleans
    are modeled as solid, connected, manifold meshes; no supports have been
    validated for a specific printer or material.
-2. Put thin, display-compatible perimeter adhesive in the 0.15 deep rebate
-   gap and seat the display from the rear without pressing on the active area.
+   Tap the six nominal 1.25 mm retainer pilots for M1.6 × 0.35 machine screws,
+   check screw fit, and clear debris before fitting the glass.
+2. Place ten thin, display-compatible nonconductive front pads in the rebate,
+   at the border coordinates in [display-retainer.json](display-retainer.json).
+   Their installed thickness is 0.15 mm. Seat the display from the rear without
+   pressing on the active area. Adhesive may locate pads on the case; the frame
+   provides retention without bonding the glass to the shell.
+3. Attach the ten rear border pads to the undersides of the frame sections.
+   Nominal 0.6 mm free thickness compresses to 0.5 mm when the sections reach
+   their hard stops. Use soft, display-compatible nonconductive material and
+   measure its actual compression; stiff tape or oversized pads can stress glass.
+   Insert each lower section 3.8 mm toward the center and 0.15 mm above its
+   installed height, slide it outward below the PCB ledges, then lower it onto
+   its stops. For each upper section, enter 10 mm toward the center and 8 mm
+   toward the buttons, lower to 0.15 mm above its installed height, slide 8 mm
+   toward the top, then 10 mm outward and lower onto its stop. This clears the
+   lid posts and PCB posts. Reverse these moves for removal. The shell has
+   local 3.6 mm service notches through the ledges for the lower screw drivers.
+   Fit six [M1.6 × 4 countersunk screws with 3 mm heads and 90° cones](https://www.accu.co.uk/api/product-datasheet?id=474255).
+   Countersunk screw length includes the head. Seat them gently against the
+   fixed stops; do not force a section that rocks or needs excess pad compression.
+   Screw heads sit flush at Z −1.85 and tips end at −5.85, 0.2 above pilot floors.
+   This frame clears the PCB underside by 1.05 mm. Its center openings leave
+   the ribbon free and let the sections lift out after removing the PCB.
    Verify the FPC tail orientation and bend first. Route the centered tail
    through the PCB slot at X = 0 mm to J2 at X = 0 mm. Inspect the actual
    panel contact face and pin 1 before inserting the tail. Open J2's flip latch,
@@ -81,7 +109,7 @@ only a measured discharge test can establish usable runtime.
    manufacturer flex model; the PDF's conflicting 0.8 mm tip is not reproduced.
    Check the delivered cable width, contact face, 0.3 mm tip thickness and
    permitted bend radius before using this fold.
-3. Install the four caps from behind, with the relieved outer flanges facing
+4. Install the four caps from behind, with the relieved outer flanges facing
    their adjacent lower bosses, then put the PCB on its edge ledges. Secure
    all four PCB mounting holes using M2.5 × 4 mm screws with heads no larger
    than 5 mm diameter and 2.5 mm high. Measure pilot-hole and screw fit on a
@@ -90,14 +118,14 @@ only a measured discharge test can establish usable runtime.
    0.25 above the lower pilot bottom and 0.2 above the upper pilot bottom.
    Check full button travel before fitting
    the battery partition. Do not use longer PCB screws or drive into the display.
-4. Orient the pack so its lead exits toward the lower-right partition cutout. Plug
+5. Orient the pack so its lead exits toward the lower-right partition cutout. Plug
    its JST-PH housing into BT1 from the −Y side before seating the partition.
    On this PCB, BT1 pin 1 (`BATT_P`) is at approximately X 21.05 and pin 2
    (`BATT_N_RAW`) at X 23.05; verify polarity at the actual plug. Pass only the
    flexible lead through the opening. Seat the partition on the side
    ledges with the cell guides facing the rear. Keep the lead clear of hard
    edges; add insulation and strain relief suitable for the chosen cable.
-5. Place the cell inside the guides without bending or compressing its pouch.
+6. Place the cell inside the guides without bending or compressing its pouch.
    Place thin, nonconductive cushioning as appropriate for the *measured* pack.
    Attach the Taoglas FXP75 antenna film to the inside rear cover near X = 25,
    Y = 44 mm. With the cover held near the open case, route its 45 mm coax to
@@ -119,6 +147,10 @@ solder fillets, adhesive, and possible battery swelling are also unmodeled.
 The installed FPC is checked as nominal CAD against the emitted PCB cutout,
 connector cavity, component meshes and printed parts with
 `scripts/check-display-connection.py`. Sample fit remains necessary.
+The frame, installed pads and fastener envelopes are modeled separately.
+`scripts/check-display-retainer.py` checks hard-stop seating, pad contact and
+active-area exclusion, flush-head clearance, driver access before PCB insertion,
+and the section installation paths through the fixed enclosure ledges.
 
 The selected cell is longer than the former 2500 mAh pack but 1.7 mm thinner.
 SparkFun's page lists nominal size only; measure the delivered pack including
@@ -158,3 +190,6 @@ then `python scripts/build-enclosure-inventory.py`. Recheck fit with
 
 Check the nominal display/ribbon assembly against the PCB slot and socket:
 `blender --background --python-exit-code 1 --python scripts/check-display-connection.py -- /tmp/esp-reader-current.glb`.
+
+Check the retaining frame and supplies:
+`blender --background --python-exit-code 1 --python scripts/check-display-retainer.py -- /tmp/esp-reader-current.glb`.

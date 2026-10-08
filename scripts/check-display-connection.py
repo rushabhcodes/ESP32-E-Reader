@@ -108,7 +108,7 @@ modifier.object = cutter
 bpy.ops.object.modifier_apply(modifier=modifier.name)
 bpy.data.objects.remove(cutter, do_unlink=True)
 obstacles = [pcb]
-for name in ["front-shell", "battery-partition", "rear-cover", "battery-envelope-DO-NOT-PRINT", *[f"button-{i}" for i in range(1, 5)]]:
+for name in ["front-shell", *[f"display-retainer-{end}-{side}" for end in ("lower", "upper") for side in ("left", "right")], "battery-partition", "rear-cover", "battery-envelope-DO-NOT-PRINT", *[f"button-{i}" for i in range(1, 5)]]:
     bpy.ops.wm.stl_import(filepath=str(ROOT / "assets/enclosure/stl" / (name + ".stl")))
     obj = bpy.context.object
     obj.name = name

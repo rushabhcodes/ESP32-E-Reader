@@ -17,6 +17,12 @@ import button4Url from "./assets/enclosure/button-4.glb";
 import displayPanelUrl from "./assets/enclosure/display-panel.glb";
 import displayConnection from "./assets/enclosure/display-connection.json";
 import frontShellUrl from "./assets/enclosure/front-shell.glb";
+import displayRetainerLowerLeftUrl from "./assets/enclosure/display-retainer-lower-left.glb";
+import displayRetainerLowerRightUrl from "./assets/enclosure/display-retainer-lower-right.glb";
+import displayRetainerUpperLeftUrl from "./assets/enclosure/display-retainer-upper-left.glb";
+import displayRetainerUpperRightUrl from "./assets/enclosure/display-retainer-upper-right.glb";
+import displayCushioningUrl from "./assets/enclosure/display-cushioning.glb";
+import displayRetainerFastenersUrl from "./assets/enclosure/display-retainer-fasteners.glb";
 import rearCoverUrl from "./assets/enclosure/rear-cover.glb";
 import pcbMounts from "./assets/enclosure/pcb-mounts.json";
 import { CircuitSections } from "./circuit-sections";
@@ -285,6 +291,26 @@ export default function ESP32EReader() {
 			<assembly.cadassembly
 				name="front_shell"
 				cadModel={{ glbUrl: frontShellUrl, modelUnitToMmScale: 1 }}
+			/>
+			{[
+				["display_retainer_lower_left", displayRetainerLowerLeftUrl],
+				["display_retainer_lower_right", displayRetainerLowerRightUrl],
+				["display_retainer_upper_left", displayRetainerUpperLeftUrl],
+				["display_retainer_upper_right", displayRetainerUpperRightUrl],
+			].map(([name, url]) => (
+				<assembly.cadassembly
+					key={name}
+					name={name}
+					cadModel={{ glbUrl: url, modelUnitToMmScale: 1 }}
+				/>
+			))}
+			<assembly.cadassembly
+				name="display_cushioning"
+				cadModel={{ glbUrl: displayCushioningUrl, modelUnitToMmScale: 1 }}
+			/>
+			<assembly.cadassembly
+				name="display_retainer_fasteners"
+				cadModel={{ glbUrl: displayRetainerFastenersUrl, modelUnitToMmScale: 1 }}
 			/>
 			{[button1Url, button2Url, button3Url, button4Url].map((url, i) => (
 				<assembly.cadassembly

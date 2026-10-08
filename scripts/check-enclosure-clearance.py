@@ -138,6 +138,9 @@ component_objects = []
 # nodes can contain fallback cubes when a preview asset cannot be fetched.
 assembly_nodes = {'EPD1', 'battery_envelope', 'wifi_antenna_envelope',
                   'front_shell', 'battery_partition', 'rear_cover',
+                  'display_retainer_lower_left', 'display_retainer_lower_right',
+                  'display_retainer_upper_left', 'display_retainer_upper_right',
+                  'display_cushioning', 'display_retainer_fasteners',
                   'button_1', 'button_2', 'button_3', 'button_4'}
 for obj in set(bpy.data.objects) - before:
     if obj.type != 'MESH' or obj.name in {'Box0', 'MeshWithTextures0', *assembly_nodes}:
@@ -220,6 +223,7 @@ report = {
         'cover_on_shell': bool(cover_tree.overlap(shell_tree)),
     },
     'display_fpc_check': 'Separate nominal installed-mesh check: scripts/check-display-connection.py',
+    'display_retainer_check': 'Separate retention/pad/fastener geometry check: scripts/check-display-retainer.py',
     'unmodeled': ['antenna coax and plug',
                   'battery lead and plug',
                   'solder fillets', 'battery dimensional tolerance or swelling',

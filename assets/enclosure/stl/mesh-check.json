@@ -2,7 +2,7 @@
   "front-shell.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 18683.775,
+    "signed_volume_mm3": 18639.868,
     "bounds_mm": [
       [
         -34.0,
@@ -15,6 +15,82 @@
       [
         -6.5,
         13.1
+      ]
+    ]
+  },
+  "display-retainer-lower-left.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 677.925,
+    "bounds_mm": [
+      [
+        -31.8,
+        -7.5
+      ],
+      [
+        -37.0,
+        41.0
+      ],
+      [
+        -3.25,
+        -1.85
+      ]
+    ]
+  },
+  "display-retainer-upper-left.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 165.364,
+    "bounds_mm": [
+      [
+        -31.8,
+        -7.5
+      ],
+      [
+        48.5,
+        58.0
+      ],
+      [
+        -3.25,
+        -1.85
+      ]
+    ]
+  },
+  "display-retainer-lower-right.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 677.925,
+    "bounds_mm": [
+      [
+        7.5,
+        31.8
+      ],
+      [
+        -37.0,
+        41.0
+      ],
+      [
+        -3.25,
+        -1.85
+      ]
+    ]
+  },
+  "display-retainer-upper-right.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 165.364,
+    "bounds_mm": [
+      [
+        7.5,
+        31.8
+      ],
+      [
+        48.5,
+        58.0
+      ],
+      [
+        -3.25,
+        -1.85
       ]
     ]
   },

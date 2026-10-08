@@ -20,6 +20,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from importlib import import_module
 display_flex = import_module("display-flex")
 PCB_MOUNTS = json.loads((ROOT / "assets/enclosure/pcb-mounts.json").read_text())
+RETAINER = json.loads((ROOT / "assets/enclosure/display-retainer.json").read_text())
 OUT = ROOT / "assets" / "enclosure" / "stl"
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -95,6 +96,26 @@ def add(target, other):
     boolean(target, other, "UNION")
 
 
+def cone(name, bottom_diameter, top_diameter, low, high, x, y):
+    bpy.ops.mesh.primitive_cone_add(
+        vertices=64, radius1=bottom_diameter / 2,
+        radius2=top_diameter / 2, depth=high - low,
+        location=(x, y, (low + high) / 2))
+    obj = bpy.context.object
+    obj.name = name
+    return obj
+
+
+def export_glb(objects, filename):
+    bpy.ops.object.select_all(action="DESELECT")
+    for obj in objects:
+        obj.select_set(True)
+    bpy.context.view_layer.objects.active = objects[0]
+    bpy.ops.export_scene.gltf(filepath=str(OUT.parent / filename),
+                              export_format="GLB", export_yup=False,
+                              use_selection=True)
+
+
 report = {}
 
 
@@ -136,7 +157,7 @@ def export(obj, filename):
     obj.select_set(True)
     bpy.context.view_layer.objects.active = obj
     bpy.ops.wm.stl_export(filepath=str(OUT / filename), export_selected_objects=True, apply_modifiers=True)
-    if filename in {"front-shell.stl", "battery-partition.stl", "rear-cover.stl", "battery-envelope-DO-NOT-PRINT.stl", "antenna-envelope-DO-NOT-PRINT.stl"} or filename.startswith("button-"):
+    if filename in {"front-shell.stl", "battery-partition.stl", "rear-cover.stl", "battery-envelope-DO-NOT-PRINT.stl", "antenna-envelope-DO-NOT-PRINT.stl"} or filename.startswith(("button-", "display-retainer-")):
         bpy.ops.export_scene.gltf(
             filepath=str(OUT.parent / filename.replace(".stl", ".glb")),
             export_format="GLB", export_yup=False, use_selection=True,
@@ -208,7 +229,94 @@ for x, y in LID_FASTENERS:
 # glass from both the front floor and the frame's rear edge without passing
 # intermediate coplanar seams through subsequent mounting-boss booleans.
 cut(main, prism("panel-rebate", 56.8, 97.2, 1.3, -4.8, -3.6, y=10.5))
+# Independent hard stops set pad compression without loading the glass with
+# screw torque. These small bosses sit entirely outside the panel pocket.
+frame_spec, screws = RETAINER["frame"], RETAINER["fasteners"]
+for mount in screws["positions"]:
+    x, y = mount["x"], mount["y"]
+    diameter = screws["bossDiameter"]
+    add(main, prism("display-retainer-stop", diameter, diameter, diameter / 2,
+                    screws["bossBaseZ"], frame_spec["frontZ"], x=x, y=y))
+    pilot = screws["pilotDiameter"]
+    cut(main, prism("display-retainer-tap-pilot", pilot, pilot, pilot / 2,
+                    screws["pilotFloorZ"], frame_spec["frontZ"] + .05, x=x, y=y))
+    # Frame screws are reached before PCB insertion. Local notches in the
+    # fixed PCB/partition ledges leave a straight driver path from the rear.
+    if y < 40:
+        diameter = screws["driverDiameter"] + .4
+        cut(main, prism("retainer-driver-service-notch", diameter, diameter,
+                        diameter / 2, -1.7, 5.0, x=x, y=y))
 export(main, "front-shell.stl")
+
+# Four frame sections pass the fixed shell ledges during installation. The
+# center openings release the FPC, and the side gaps clear the upper PCB posts.
+reset()
+retainer = prism("display-retainer", frame_spec["width"], frame_spec["height"],
+                 frame_spec["cornerRadius"], frame_spec["frontZ"],
+                 frame_spec["backZ"], y=frame_spec["centerY"])
+cut(retainer, prism("unloaded-active-area", frame_spec["windowWidth"],
+                    frame_spec["windowHeight"], 1.8,
+                    frame_spec["frontZ"] - .1, frame_spec["backZ"] + .1,
+                    y=frame_spec["centerY"]))
+cut(retainer, box("center-service-openings", (frame_spec["ribbonNotchWidth"], 110, 3),
+                  (0, 10.5, -2.5)))
+cut(retainer, box("PCB-post-and-installation-clearance", (70,
+                  frame_spec["upperSectionBottomY"] - frame_spec["lowerSectionTopY"], 3),
+                  (0, (frame_spec["upperSectionBottomY"] + frame_spec["lowerSectionTopY"]) / 2, -2.5)))
+for mount in screws["positions"]:
+    x, y = mount["x"], mount["y"]
+    diameter = screws["clearanceDiameter"]
+    cut(retainer, prism("retainer-screw-clearance", diameter, diameter, diameter / 2,
+                        frame_spec["frontZ"] - .1, frame_spec["backZ"] + .1, x=x, y=y))
+    depth = (screws["countersinkDiameter"] - diameter) / 2
+    cut(retainer, cone("90-degree-countersink", diameter,
+                       screws["countersinkDiameter"] + .2,
+                       frame_spec["backZ"] - depth,
+                       frame_spec["backZ"] + .1, x, y))
+retainer.data.materials.append(display_flex.material("retainer-blue", (.14, .32, .42)))
+retainer_names = []
+for side, x in (("left", -25), ("right", 25)):
+    for end, y, height in (("lower", -10, 102), ("upper", 75, 53)):
+        part = retainer.copy()
+        part.data = retainer.data.copy()
+        bpy.context.collection.objects.link(part)
+        name = f"display-retainer-{end}-{side}"
+        part.name = name
+        boolean(part, box("section-selection", (50, height, 3), (x, y, -2.5)), "INTERSECT")
+        retainer_names.append(name + ".stl")
+        export(part, name + ".stl")
+        bpy.data.objects.remove(part, do_unlink=True)
+bpy.data.objects.remove(retainer, do_unlink=True)
+
+# Pads and screws are purchased/cut assembly supplies, never printed parts.
+# Show their installed dimensions in CAD; pad compression is not simulated.
+reset()
+pad_objects = []
+panel_spec = display_flex.SPEC["panel"]
+for idx, pad in enumerate(RETAINER["cushioning"]["pads"], 1):
+    for face, low, high in (
+        ("front", panel_spec["frontZ"] - RETAINER["cushioning"]["frontInstalledThickness"], panel_spec["frontZ"]),
+        ("rear", panel_spec["backZ"], frame_spec["frontZ"]),
+    ):
+        obj = box(f"display-{face}-pad-{idx}",
+                  (pad["width"], pad["height"], high - low),
+                  (pad["x"], pad["y"], (low + high) / 2))
+        obj.data.materials.append(display_flex.material("display-soft-pad", (.32, .34, .36)))
+        pad_objects.append(obj)
+export_glb(pad_objects, "display-cushioning.glb")
+reset()
+fastener_objects = []
+for idx, mount in enumerate(screws["positions"], 1):
+    top = frame_spec["backZ"]
+    head_bottom = top - (screws["headDiameter"] - 1.6) / 2
+    obj = cone(f"display-retainer-screw-{idx}", 1.6, screws["headDiameter"],
+               head_bottom, top, mount["x"], mount["y"])
+    add(obj, prism("M1.6-nominal-thread-envelope", 1.6, 1.6, .8,
+                    top - screws["length"], head_bottom + .01,
+                    x=mount["x"], y=mount["y"]))
+    obj.data.materials.append(display_flex.material("retainer-fastener", (.65, .67, .69)))
+    fastener_objects.append(obj)
+export_glb(fastener_objects, "display-retainer-fasteners.glb")
 
 # Rigid insulator: 1.4 mm slab, a 49.2 x 68.8 mm cell pocket, and a wire
 # opening beside BT1. The cell is offset left of BT1 to avoid stacking them.
@@ -288,9 +396,10 @@ print(f"Nominal installed display flex length: {length:.6f} mm")
 
 (OUT / "mesh-check.json").write_text(json.dumps(report, indent=2) + "\n")
 with ZipFile(OUT.parent / "esp32-reader-printable-stls.zip", "w", ZIP_DEFLATED, compresslevel=9) as package:
-    for name in ("front-shell.stl", "battery-partition.stl", "rear-cover.stl", *(f"button-{i}.stl" for i in range(1, 5))):
+    for name in ("front-shell.stl", *retainer_names, "battery-partition.stl", "rear-cover.stl", *(f"button-{i}.stl" for i in range(1, 5))):
         package.write(OUT / name, name)
     package.write(OUT.parent / "PRINTING.md", "PRINTING.md")
     package.write(OUT.parent / "pcb-mounts.json", "pcb-mounts.json")
     package.write(OUT.parent / "display-connection.json", "display-connection.json")
+    package.write(OUT.parent / "display-retainer.json", "display-retainer.json")
 print(json.dumps(report, indent=2))

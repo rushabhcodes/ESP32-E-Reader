@@ -25,6 +25,8 @@ def read_stl(filename, color):
 
 
 shell = read_stl('front-shell.stl', (.09, .105, .12))
+retainers = [read_stl(f'display-retainer-{end}-{side}.stl', (.14, .32, .42))
+             for end in ('lower', 'upper') for side in ('left', 'right')]
 partition = read_stl('battery-partition.stl', (.26, .28, .31))
 cover = read_stl('rear-cover.stl', (.11, .12, .14))
 cell = read_stl('battery-envelope-DO-NOT-PRINT.stl', (.32, .54, .75))
@@ -37,6 +39,9 @@ conversion = Matrix(((-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1)))
 board = []
 assembly_nodes = {'EPD1', 'battery_envelope', 'wifi_antenna_envelope',
                   'front_shell', 'battery_partition', 'rear_cover',
+                  'display_retainer_lower_left', 'display_retainer_lower_right',
+                  'display_retainer_upper_left', 'display_retainer_upper_right',
+                  'display_cushioning', 'display_retainer_fasteners',
                   'button_1', 'button_2', 'button_3', 'button_4'}
 for obj in set(bpy.data.objects) - before:
     if obj.type != 'MESH':
@@ -80,6 +85,17 @@ for obj in set(bpy.data.objects) - before:
 panel = next(obj for obj in display_objects if 'nominal-outline' in obj.name)
 active = next(obj for obj in display_objects if 'active-area' in obj.name)
 flex_objects = [obj for obj in display_objects if obj not in (panel, active)]
+
+retention_supplies = []
+for filename in ('display-cushioning.glb', 'display-retainer-fasteners.glb'):
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=str(OUT / filename))
+    for obj in set(bpy.data.objects) - before:
+        if obj.type != 'MESH':
+            continue
+        obj.matrix_world = Matrix.Rotation(-pi / 2, 4, 'X') @ obj.matrix_world
+        obj.color = tuple(obj.data.materials[0].diffuse_color) if obj.data.materials else (.65, .67, .69, 1)
+        retention_supplies.append(obj)
 
 scene = bpy.context.scene
 scene.render.engine = 'BLENDER_WORKBENCH'
@@ -130,6 +146,14 @@ partition.hide_render = True
 cell.hide_render = True
 render('display-ribbon-connection.png', (35, -83, 30), 44, (0, -34, 0))
 shell.hide_render = False
+
+# Show the display mount with the PCB lifted out: all four frame sections,
+# flush fasteners, and the central ribbon opening remain visible.
+for obj in board:
+    obj.hide_render = True
+render('display-retainer-installed.png', (95, -115, 140), 137, (0, 8, -3))
+for obj in board:
+    obj.hide_render = False
 partition.hide_render = False
 cell.hide_render = False
 
@@ -147,6 +171,12 @@ panel.hide_render = False
 active.hide_render = False
 
 # Exploded illustration preserves X/Y positions and shifts Z only.
+for obj in display_objects:
+    obj.location.z += 8
+for obj in retainers:
+    obj.location.z += 16
+for obj in retention_supplies:
+    obj.location.z += 12 if 'pad' in obj.name else 16
 for obj in board:
     obj.location.z += 24
 partition.location.z += 35

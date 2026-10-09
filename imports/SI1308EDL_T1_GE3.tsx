@@ -1,5 +1,4 @@
 import localC469327obj from "../assets/components/C469327.obj";
-import localC469327step from "../assets/components/C469327.step";
 import type { ChipProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -264,8 +263,6 @@ export const SI1308EDL_T1_GE3 = (props: ChipProps<typeof pinLabels>) => {
 			cadModel={{
 				objUrl:
 					localC469327obj,
-				stepUrl:
-					localC469327step,
 				pcbRotationOffset: 90,
 				modelOriginPosition: { x: 0, y: 0.000012699999999199463, z: -0.075 },
 			}}

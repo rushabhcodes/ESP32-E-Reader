@@ -1,5 +1,4 @@
 import localC82046obj from "../assets/components/C82046.obj";
-import localC82046step from "../assets/components/C82046.step";
 import type { DiodeProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -22,8 +21,6 @@ export const MBR0530T1G = (props: DiodeProps) => {
 			cadModel={{
 				objUrl:
 					localC82046obj,
-				stepUrl:
-					localC82046step,
 				pcbRotationOffset: 0,
 				modelOriginPosition: { x: 0, y: 0.000012699999999199463, z: -0.6 },
 			}}

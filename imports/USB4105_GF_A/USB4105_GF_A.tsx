@@ -1,5 +1,4 @@
 import objPath from "./USB4105_GF_A.obj";
-import stepPath from "./USB4105_GF_A.step";
 import type { ConnectorProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -247,7 +246,6 @@ export const USB4105_GF_A = (props: ConnectorProps) => {
 			}
 			cadModel={{
 				objUrl: objPath,
-				stepUrl: stepPath,
 				pcbRotationOffset: 0,
 				modelOriginPosition: {
 					x: 0,

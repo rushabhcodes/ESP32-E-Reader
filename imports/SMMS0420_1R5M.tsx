@@ -1,5 +1,4 @@
 import localC133190obj from "../assets/components/C133190.obj";
-import localC133190step from "../assets/components/C133190.step";
 import type { InductorProps } from "@tscircuit/props"
 
 export const SMMS0420_1R5M = (props: Omit<InductorProps, "inductance">) => {
@@ -22,7 +21,6 @@ export const SMMS0420_1R5M = (props: Omit<InductorProps, "inductance">) => {
       </footprint>}
       cadModel={{
         objUrl: localC133190obj,
-        stepUrl: localC133190step,
         pcbRotationOffset: 0,
         modelOriginPosition: { x: 0.00012699999979304266, y: 0, z: -0.1 },
       }}

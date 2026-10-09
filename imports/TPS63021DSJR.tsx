@@ -1,5 +1,4 @@
 import localC202140obj from "../assets/components/C202140.obj";
-import localC202140step from "../assets/components/C202140.step";
 import type { ChipProps } from "@tscircuit/props"
 
 export const pinLabels = {
@@ -65,7 +64,6 @@ export const TPS63021DSJR = (props: ChipProps<typeof pinLabels>) => {
       </footprint>}
       cadModel={{
         objUrl: localC202140obj,
-        stepUrl: localC202140step,
         pcbRotationOffset: 90,
         modelOriginPosition: { x: -0.000025399999913133797, y: 0, z: 0 },
       }}

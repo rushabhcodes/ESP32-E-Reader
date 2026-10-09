@@ -1,5 +1,4 @@
 import localC2927799obj from "../assets/components/C2927799.obj";
-import localC2927799step from "../assets/components/C2927799.step";
 import type { ChipProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -30,8 +29,6 @@ export const DW01A = (props: ChipProps<typeof pinLabels>) => {
 			cadModel={{
 				objUrl:
 					localC2927799obj,
-				stepUrl:
-					localC2927799step,
 				pcbRotationOffset: 90,
 				modelOriginPosition: {
 					x: -0.000012700000070253736,

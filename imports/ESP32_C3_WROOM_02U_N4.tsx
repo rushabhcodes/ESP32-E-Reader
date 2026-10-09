@@ -1,5 +1,4 @@
 import localC2926676obj from "../assets/components/C2926676.obj";
-import localC2926676step from "../assets/components/C2926676.step";
 import type { ChipProps } from "@tscircuit/props"
 
 export const pinLabels = {
@@ -110,7 +109,6 @@ export const ESP32_C3_WROOM_02U_N4 = (props: ChipProps<typeof pinLabels>) => {
       </footprint>}
       cadModel={{
         objUrl: localC2926676obj,
-        stepUrl: localC2926676step,
         pcbRotationOffset: 90,
         modelOriginPosition: { x: 0.000012700000070253736, y: 0, z: -0.01 },
       }}

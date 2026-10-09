@@ -1,5 +1,4 @@
 import localC54313obj from "../assets/components/C54313.obj";
-import localC54313step from "../assets/components/C54313.step";
 import type { ChipProps } from "@tscircuit/props"
 
 export const pinLabels = {
@@ -71,7 +70,6 @@ export const BQ24074RGTR = (props: ChipProps<typeof pinLabels>) => {
       </footprint>}
       cadModel={{
         objUrl: localC54313obj,
-        stepUrl: localC54313step,
         pcbRotationOffset: 0,
         modelOriginPosition: { x: 0, y: 0.000012699999999199463, z: 0 },
       }}

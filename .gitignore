@@ -32,3 +32,6 @@ __pycache__/
 
 # tscircuit cache
 .tscircuit/
+
+# Generated registry authentication stays local.
+.npmrc

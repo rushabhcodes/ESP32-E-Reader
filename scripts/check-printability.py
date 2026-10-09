@@ -11,7 +11,7 @@ ASSETS=ROOT/'assets/enclosure';OUT=ROOT/'checks/printability';OUT.mkdir(parents=
 EXE=sys.argv[1] if len(sys.argv)>1 else shutil.which('prusa-slicer')
 if not EXE:raise RuntimeError('PrusaSlicer CLI is required for toolpath validation')
 version=subprocess.run([EXE,'--help'],capture_output=True,text=True,check=True).stdout.splitlines()[0]
-parts=sorted((ASSETS/'print').glob('*.stl'));assert len(parts)==5
+parts=sorted((ASSETS/'print').glob('*.stl'));assert len(parts)==2
 
 def slice_part(source):
     name=source.stem;gcode=OUT/(name+'.gcode')

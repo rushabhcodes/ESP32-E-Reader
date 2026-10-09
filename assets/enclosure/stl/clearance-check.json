@@ -1,187 +1,141 @@
 {
-  "input_glb": "/tmp/esp-reader-current.glb",
-  "modeled_component_mesh_count": 88,
-  "modeled_component_shell_intersections": [],
-  "modeled_component_partition_intersections": [],
-  "modeled_component_button_intersections": [],
-  "usb_c_body_intersections": {
-    "shell": false,
-    "partition": false,
-    "cover": false
-  },
-  "button_shell_solid_overlap_mm3": [
-    0.0,
-    0.0,
-    0.0,
-    0.0
+  "revision": "D",
+  "printed_parts": 2,
+  "outside_mm": [
+    68,
+    111,
+    18.0
   ],
-  "pressed_button_shell_solid_overlap_mm3": [
-    0.0,
-    0.0,
-    0.0,
-    0.0
-  ],
-  "independent_button_strip_strokes": [
-    {
-      "key_x": -21,
-      "travel_mm": 0.2,
-      "rigid_case_overlap_mm3": {
-        "main-body": 2e-06,
-        "front-bezel": 2.1e-05,
-        "battery-partition": 0.0
-      }
-    },
-    {
-      "key_x": -7,
-      "travel_mm": 0.2,
-      "rigid_case_overlap_mm3": {
-        "main-body": 2e-06,
-        "front-bezel": 2.1e-05,
-        "battery-partition": 0.0
-      }
-    },
-    {
-      "key_x": 7,
-      "travel_mm": 0.2,
-      "rigid_case_overlap_mm3": {
-        "main-body": 2e-06,
-        "front-bezel": 2.1e-05,
-        "battery-partition": 0.0
-      }
-    },
-    {
-      "key_x": 21,
-      "travel_mm": 0.2,
-      "rigid_case_overlap_mm3": {
-        "main-body": 2e-06,
-        "front-bezel": 2.1e-05,
-        "battery-partition": 0.0
-      }
-    }
-  ],
-  "button_strip_clamp_z": {
-    "bezel_seat": -4.05,
-    "body_clamp": -3.25,
-    "strip_front": -4.05,
-    "strip_back": -3.25
-  },
-  "pcb_mount_supports": [
+  "native_cad_models": 96,
+  "missing_native_models": [],
+  "pcb_meshes": 88,
+  "component_case_collisions": 0,
+  "pcb_mounts": [
     {
       "name": "MOUNT_TL",
-      "pilot_floor_z": null,
-      "support_heights_z": [
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8
+      "seat_samples_z": [
+        0.8,
+        0.8,
+        0.8,
+        0.8
       ],
-      "passed": true
+      "pilot_floor_z": 11.0,
+      "screw_tip_clearance_mm": 7.8
     },
     {
       "name": "MOUNT_TR",
-      "pilot_floor_z": null,
-      "support_heights_z": [
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8
+      "seat_samples_z": [
+        0.8,
+        0.8,
+        0.8,
+        0.8
       ],
-      "passed": true
+      "pilot_floor_z": 11.0,
+      "screw_tip_clearance_mm": 7.8
     },
     {
       "name": "MOUNT_BL",
-      "pilot_floor_z": null,
-      "support_heights_z": [
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8
+      "seat_samples_z": [
+        0.8,
+        0.8,
+        0.8,
+        0.8
       ],
-      "passed": true
+      "pilot_floor_z": 11.0,
+      "screw_tip_clearance_mm": 7.8
     },
     {
       "name": "MOUNT_BR",
-      "pilot_floor_z": null,
-      "support_heights_z": [
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8
+      "seat_samples_z": [
+        0.8,
+        0.8,
+        0.8,
+        0.8
       ],
-      "passed": true
+      "pilot_floor_z": 11.0,
+      "screw_tip_clearance_mm": 7.8
     }
   ],
-  "pcb_screw_clearance": [
+  "key_strokes": [
     {
-      "name": "MOUNT_TL",
-      "head_intersections": [],
-      "driver_access_intersections": [],
-      "shaft_pressed_cap_overlap_mm3": [
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ]
+      "switch": "SW6",
+      "key_travel_mm": 0.25,
+      "rest_actuator_gap_mm": 0.04,
+      "switch_compression_at_full_stroke_mm": 0.21,
+      "other_part_collisions": 0
     },
     {
-      "name": "MOUNT_TR",
-      "head_intersections": [],
-      "driver_access_intersections": [],
-      "shaft_pressed_cap_overlap_mm3": [
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ]
+      "switch": "SW3",
+      "key_travel_mm": 0.25,
+      "rest_actuator_gap_mm": 0.04,
+      "switch_compression_at_full_stroke_mm": 0.21,
+      "other_part_collisions": 0
     },
     {
-      "name": "MOUNT_BL",
-      "head_intersections": [],
-      "driver_access_intersections": [],
-      "shaft_pressed_cap_overlap_mm3": [
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ]
+      "switch": "SW2",
+      "key_travel_mm": 0.25,
+      "rest_actuator_gap_mm": 0.04,
+      "switch_compression_at_full_stroke_mm": 0.21,
+      "other_part_collisions": 0
     },
     {
-      "name": "MOUNT_BR",
-      "head_intersections": [],
-      "driver_access_intersections": [],
-      "shaft_pressed_cap_overlap_mm3": [
-        0.0,
-        0.0,
-        0.0,
-        0.0
-      ]
+      "switch": "SW4",
+      "key_travel_mm": 0.25,
+      "rest_actuator_gap_mm": 0.04,
+      "switch_compression_at_full_stroke_mm": 0.21,
+      "other_part_collisions": 0
     }
   ],
-  "battery_shell_surface_intersections": 0,
-  "battery_cover_surface_intersections": 0,
-  "solid_overlap_mm3": {
-    "body_bezel": 0.0,
-    "body_button_strip": 0.0,
-    "bezel_button_strip": 2.1e-05,
-    "shell_partition": 0.0,
-    "shell_cover": 0.0,
-    "shell_battery": 0.0,
-    "partition_battery": 0.0,
-    "cover_battery": 0.0
-  },
-  "solid_overlap_tolerance_mm3": 0.0001,
-  "expected_part_contacts": {
-    "tray_on_pcb_mount_borders": "Checked by scripts/check-enclosure-assembly.py",
-    "battery_on_partition": true,
-    "cover_on_shell": true
-  },
-  "display_fpc_check": "Separate nominal installed-mesh check: scripts/check-display-connection.py",
-  "display_retainer_check": "Separate retention/pad/fastener geometry check: scripts/check-display-retainer.py",
-  "unmodeled": [
-    "antenna coax and plug",
-    "battery lead and plug",
-    "solder fillets",
-    "battery dimensional tolerance or swelling",
-    "printer material shrinkage"
-  ]
+  "screen_front_pad_seats": 10,
+  "screen_rear_clip_seats": 6,
+  "upper_screen_supports": 2,
+  "installation_paths": [
+    {
+      "assembly": "screen with clips manually released",
+      "axis": 2,
+      "start_offset_mm": 12,
+      "samples": 25,
+      "step_mm": 0.5,
+      "max_overlap_mm3": 3.3e-05
+    },
+    {
+      "assembly": "PCB straight into removed rear cover",
+      "axis": 2,
+      "start_offset_mm": -24,
+      "samples": 49,
+      "step_mm": 0.5,
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "battery straight into removed rear cover",
+      "axis": 2,
+      "start_offset_mm": -24,
+      "samples": 49,
+      "step_mm": 0.5,
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "loaded rear cover to front chassis",
+      "axis": 2,
+      "start_offset_mm": 24,
+      "samples": 49,
+      "step_mm": 0.5,
+      "max_overlap_mm3": 0
+    }
+  ],
+  "cad_transparency": [
+    {
+      "part": "front-chassis",
+      "alpha": 0.3799999952316284,
+      "alphaMode": "BLEND"
+    },
+    {
+      "part": "rear-cover",
+      "alpha": 0.2199999988079071,
+      "alphaMode": "BLEND"
+    }
+  ],
+  "native_assembly_transparency_verified": true,
+  "volume_epsilon_mm3": 0.0001,
+  "scope": "Nominal geometry, sampled insertion and flexure deformation only. Fit, force, fatigue, optical clarity and adhesive retention need physical testing."
 }

@@ -1,5 +1,4 @@
 import localC139797obj from "../assets/components/C139797.obj";
-import localC139797step from "../assets/components/C139797.step";
 import type { ChipProps } from "@tscircuit/props";
 import type { AnyCircuitElement } from "circuit-json";
 import buttonSymbol from "./SKRPACE010.symbol.json";
@@ -38,8 +37,6 @@ export const SKRPACE010 = (props: ChipProps<typeof pinLabels>) => {
 			cadModel={{
 				objUrl:
 					localC139797obj,
-				stepUrl:
-					localC139797step,
 				pcbRotationOffset: 0,
 				modelOriginPosition: {
 					x: 0.000012700000070253736,

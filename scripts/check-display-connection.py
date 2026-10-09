@@ -1,7 +1,7 @@
 """Check the installed display GLB against routed PCB/component and case CAD.
 
 Run after export: blender --background --python-exit-code 1 --python
-scripts/check-display-connection.py -- /tmp/esp-reader-current.glb
+scripts/check-display-connection.py -- dist/index/assembly.glb
 This checks nominal meshes; the delivered flex construction remains unverified.
 """
 
@@ -108,7 +108,7 @@ modifier.object = cutter
 bpy.ops.object.modifier_apply(modifier=modifier.name)
 bpy.data.objects.remove(cutter, do_unlink=True)
 obstacles = [pcb]
-for name in ["front-bezel", "main-body", "battery-partition", "rear-cover", "button-strip", "battery-envelope-DO-NOT-PRINT"]:
+for name in ["front-chassis", "rear-cover", "battery-envelope-DO-NOT-PRINT"]:
     bpy.ops.wm.stl_import(filepath=str(ROOT / "assets/enclosure/stl" / (name + ".stl")))
     obj = bpy.context.object
     obj.name = name

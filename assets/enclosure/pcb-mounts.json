@@ -3,45 +3,46 @@
   "copperKeepoutRadius": 3.2,
   "bossDiameter": 5.6,
   "pilotDiameter": 2.0,
-  "supportZ": -0.8,
+  "supportZ": 0.8,
   "screwLength": 4,
   "screwHeadDiameter": 5.0,
   "screwHeadHeight": 2.5,
   "driverDiameter": 5.0,
-  "buttonTravel": 0.2,
+  "buttonTravel": 0.25,
   "mounts": [
     {
       "name": "MOUNT_TL",
       "x": -27.0,
       "y": 44.75,
-      "bossBaseZ": -3.25,
-      "pilotBaseZ": -3.35,
+      "bossBaseZ": 0.8,
+      "pilotBaseZ": 0.7,
       "buttonFlangeRelief": false
     },
     {
       "name": "MOUNT_TR",
       "x": 27.0,
       "y": 44.75,
-      "bossBaseZ": -3.25,
-      "pilotBaseZ": -3.35,
+      "bossBaseZ": 0.8,
+      "pilotBaseZ": 0.7,
       "buttonFlangeRelief": false
     },
     {
       "name": "MOUNT_BL",
       "x": -28.0,
       "y": -40.0,
-      "bossBaseZ": -3.25,
-      "pilotBaseZ": -3.35,
+      "bossBaseZ": 0.8,
+      "pilotBaseZ": 0.7,
       "buttonFlangeRelief": true
     },
     {
       "name": "MOUNT_BR",
       "x": 28.0,
       "y": -40.0,
-      "bossBaseZ": -3.25,
-      "pilotBaseZ": -3.35,
+      "bossBaseZ": 0.8,
+      "pilotBaseZ": 0.7,
       "buttonFlangeRelief": true
     }
   ],
-  "pilotThrough": true
+  "pilotNote": "Prepare 2 mm pilots from Z 0.8 to 3.35 before fitting electronics; M2.5 x 4 screw tip ends at Z 3.2.",
+  "screwInsertion": "From the display-facing PCB underside into rear-cover cantilever bosses"
 }

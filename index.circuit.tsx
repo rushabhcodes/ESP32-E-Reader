@@ -9,14 +9,12 @@ import { Fragment } from "react";
 import { assembly } from "tscircuit";
 import batteryEnvelopeUrl from "./assets/enclosure/battery-envelope-DO-NOT-PRINT.glb";
 import antennaEnvelopeUrl from "./assets/enclosure/antenna-envelope-DO-NOT-PRINT.glb";
-import partitionUrl from "./assets/enclosure/battery-partition.glb";
-import buttonStripUrl from "./assets/enclosure/button-strip.glb";
+import batteryLinerUrl from "./assets/enclosure/battery-liner-DO-NOT-PRINT.glb";
+import batteryAdhesiveUrl from "./assets/enclosure/battery-adhesive-DO-NOT-PRINT.glb";
 import displayPanelUrl from "./assets/enclosure/display-panel.glb";
 import displayConnection from "./assets/enclosure/display-connection.json";
-import frontBezelUrl from "./assets/enclosure/front-bezel.glb";
-import mainBodyUrl from "./assets/enclosure/main-body.glb";
+import frontChassisUrl from "./assets/enclosure/front-chassis.glb";
 import displayCushioningUrl from "./assets/enclosure/display-cushioning.glb";
-import displayRetainerFastenersUrl from "./assets/enclosure/display-retainer-fasteners.glb";
 import pcbCoverFastenersUrl from "./assets/enclosure/pcb-cover-fasteners.glb";
 import rearCoverUrl from "./assets/enclosure/rear-cover.glb";
 import pcbMounts from "./assets/enclosure/pcb-mounts.json";
@@ -284,28 +282,20 @@ export default function ESP32EReader() {
 				cadModel={{ glbUrl: antennaEnvelopeUrl, modelUnitToMmScale: 1 }}
 			/>
 			<assembly.cadassembly
-				name="front_bezel"
-				cadModel={{ glbUrl: frontBezelUrl, modelUnitToMmScale: 1 }}
-			/>
-			<assembly.cadassembly
-				name="main_body"
-				cadModel={{ glbUrl: mainBodyUrl, modelUnitToMmScale: 1 }}
+				name="front_chassis"
+				cadModel={{ glbUrl: frontChassisUrl, modelUnitToMmScale: 1 }}
 			/>
 			<assembly.cadassembly
 				name="display_cushioning"
 				cadModel={{ glbUrl: displayCushioningUrl, modelUnitToMmScale: 1 }}
 			/>
 			<assembly.cadassembly
-				name="display_retainer_fasteners"
-				cadModel={{ glbUrl: displayRetainerFastenersUrl, modelUnitToMmScale: 1 }}
+				name="battery_liner"
+				cadModel={{ glbUrl: batteryLinerUrl, modelUnitToMmScale: 1 }}
 			/>
 			<assembly.cadassembly
-				name="button_strip"
-				cadModel={{ glbUrl: buttonStripUrl, modelUnitToMmScale: 1 }}
-			/>
-			<assembly.cadassembly
-				name="battery_partition"
-				cadModel={{ glbUrl: partitionUrl, modelUnitToMmScale: 1 }}
+				name="battery_adhesive"
+				cadModel={{ glbUrl: batteryAdhesiveUrl, modelUnitToMmScale: 1 }}
 			/>
 			<assembly.cadassembly
 				name="pcb_cover_fasteners"

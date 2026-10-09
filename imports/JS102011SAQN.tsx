@@ -1,5 +1,4 @@
 import localC221660obj from "../assets/components/C221660.obj";
-import localC221660step from "../assets/components/C221660.step";
 import type { SwitchProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -23,8 +22,6 @@ export const JS102011SAQN = (props: SwitchProps) => {
 			cadModel={{
 				objUrl:
 					localC221660obj,
-				stepUrl:
-					localC221660step,
 				pcbRotationOffset: 0,
 				modelOriginPosition: {
 					x: 0,

@@ -1,55 +1,40 @@
 {
-  "native_cad_models": 98,
+  "revision": "D",
+  "native_cad_models": 96,
   "missing_native_models": [],
-  "pcb_meshes": 88,
   "installation_paths": [
     {
-      "assembly": "PCB",
-      "direction": "straight -Z from open rear",
-      "samples": 49,
+      "assembly": "screen with clips manually released",
+      "axis": 2,
+      "start_offset_mm": 12,
+      "samples": 25,
       "step_mm": 0.5,
-      "max_solid_overlap_mm3": 0
+      "max_overlap_mm3": 3.3e-05
     },
     {
-      "assembly": "battery-tray",
-      "direction": "straight -Z from open rear",
+      "assembly": "PCB straight into removed rear cover",
+      "axis": 2,
+      "start_offset_mm": -24,
       "samples": 49,
       "step_mm": 0.5,
-      "max_solid_overlap_mm3": 0
+      "max_overlap_mm3": 0
     },
     {
-      "assembly": "rear-cover",
-      "direction": "straight -Z from open rear",
+      "assembly": "battery straight into removed rear cover",
+      "axis": 2,
+      "start_offset_mm": -24,
       "samples": 49,
       "step_mm": 0.5,
-      "max_solid_overlap_mm3": 0
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "loaded rear cover to front chassis",
+      "axis": 2,
+      "start_offset_mm": 24,
+      "samples": 49,
+      "step_mm": 0.5,
+      "max_overlap_mm3": 0
     }
   ],
-  "tray_seats": [
-    {
-      "mount": "MOUNT_TL",
-      "foot_base_z": 0.8,
-      "fr4_samples_supported": 4,
-      "samples": 4
-    },
-    {
-      "mount": "MOUNT_TR",
-      "foot_base_z": 0.8,
-      "fr4_samples_supported": 4,
-      "samples": 4
-    },
-    {
-      "mount": "MOUNT_BL",
-      "foot_base_z": 0.8,
-      "fr4_samples_supported": 4,
-      "samples": 4
-    },
-    {
-      "mount": "MOUNT_BR",
-      "foot_base_z": 0.8,
-      "fr4_samples_supported": 4,
-      "samples": 4
-    }
-  ],
-  "scope": "Sampled rigid nominal geometry. Physical tolerances, cable handling, thread fit, pad force and fatigue remain unverified."
+  "scope": "Nominal geometry, sampled insertion and flexure deformation only. Fit, force, fatigue, optical clarity and adhesive retention need physical testing."
 }

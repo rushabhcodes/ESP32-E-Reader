@@ -1,4 +1,4 @@
-"""Write five bed-oriented STLs, a geometry-only 220 mm 3MF, and a print ZIP.
+"""Write two bed-oriented STLs, a geometry-only 220 mm 3MF, and a print ZIP.
 
 Binary STL input stays in assembly coordinates. No printer-specific G-code is
 shipped; select a printer/PETG profile after importing the 3MF.
@@ -10,18 +10,17 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'assets/enclosure'
-PARTS = [('front-bezel', False, 38, 61), ('main-body', False, 111, 61),
-         ('rear-cover', True, 184, 61), ('battery-partition', True, 38, 167),
-         ('button-strip', False, 112, 145)]
+PARTS = [('front-chassis', False, 65, 110), ('rear-cover', True, 150, 110)]
 NS = 'http://schemas.microsoft.com/3dmanufacturing/core/2015/02'
 ET.register_namespace('', NS)
 def tag(name): return '{'+NS+'}'+name
 model = ET.Element(tag('model'), unit='millimeter', **{'xml:lang':'en-US'})
-ET.SubElement(model, tag('metadata'), name='Title').text = 'ESP32 Reader Rev. C: five parts, 220 x 220 mm plate'
+ET.SubElement(model, tag('metadata'), name='Title').text = 'ESP32 Reader Rev. D: two parts, 220 x 220 mm plate'
 ET.SubElement(model, tag('metadata'), name='Description').text = 'Geometry only. Select your printer and PETG preset. See PRINTING.md for supports and pilot-hole preparation.'
 resources = ET.SubElement(model, tag('resources'))
 build = ET.SubElement(model, tag('build'))
 (ASSETS/'print').mkdir(exist_ok=True)
+for old in (ASSETS/'print').glob('*.stl'):old.unlink()
 for object_id, (name, flip, x, y) in enumerate(PARTS, 1):
     data = (ASSETS/'stl'/f'{name}.stl').read_bytes()
     count = struct.unpack_from('<I',data,80)[0]
@@ -65,6 +64,6 @@ with ZipFile(ASSETS/'reader-print-plate.3mf','w',ZIP_DEFLATED) as package:
 with ZipFile(ASSETS/'esp32-reader-printable-stls.zip','w',ZIP_DEFLATED,compresslevel=9) as package:
     for name, *_ in PARTS:
         package.write(ASSETS/'print'/f'{name}.stl',f'{name}.stl')
-    for name in ('reader-print-plate.3mf','PRINTING.md','fdm-reference.ini','pcb-mounts.json','display-connection.json','display-retainer.json'):
+    for name in ('reader-print-plate.3mf','PRINTING.md','fdm-reference.ini','pcb-mounts.json','display-connection.json','enclosure-design.json'):
         package.write(ASSETS/name,name)
-print('Packaged five bed-oriented parts and a geometry-only 220 x 220 mm plate')
+print('Packaged two bed-oriented parts and a geometry-only 220 x 220 mm plate')

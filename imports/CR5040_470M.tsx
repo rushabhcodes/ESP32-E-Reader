@@ -1,5 +1,4 @@
 import localC520357obj from "../assets/components/C520357.obj";
-import localC520357step from "../assets/components/C520357.step";
 import type { InductorProps } from "@tscircuit/props";
 
 export const CR5040_470M = (props: Omit<InductorProps, "inductance">) => {
@@ -65,8 +64,6 @@ export const CR5040_470M = (props: Omit<InductorProps, "inductance">) => {
 			cadModel={{
 				objUrl:
 					localC520357obj,
-				stepUrl:
-					localC520357step,
 				pcbRotationOffset: 90,
 				modelOriginPosition: { x: 0, y: 0, z: -0.01 },
 			}}

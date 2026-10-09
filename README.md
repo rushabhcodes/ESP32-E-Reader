@@ -10,7 +10,7 @@ workflow.
 
 | Specification | Current design |
 | --- | --- |
-| Enclosure outside | 68.0 × 111.0 × **21.1 mm**; prototype CAD, not a measured print |
+| Enclosure outside | 68.0 × 111.0 × **18.0 mm**; prototype CAD, not a measured print |
 | PCB | 62.5 × 95.08 × 1.6 mm; four copper layers |
 | Display | EastRising ER-EPD3.97-1RY, raw display only; 480 × 800, four colors, no frontlight |
 | Processor | ESP32-C3-WROOM-02U-N4; 4 MB flash, Wi-Fi, Bluetooth LE, external antenna |
@@ -26,7 +26,7 @@ final printed fit have not been measured on an assembled device.
 
 ![Front of the dimensioned e-reader print prototype](assets/enclosure/printable-front.png)
 
-![Exploded view of the screen, PCB, partition, battery and rear cover](assets/enclosure/printable-exploded.png)
+![Exploded view of the screen, PCB, battery and rear cover](assets/enclosure/printable-exploded.png)
 
 ## Display
 
@@ -106,8 +106,8 @@ sample. Do not force a mismatched ribbon into the socket.
 | Battery | Protected 3.7 V nominal single-cell pack; modeled PRT-13855, 2000 mAh, 49.2 × 68.8 × 5.6 mm |
 | Navigation switches | 4 × Alps Alpine SKRPACE010, bottom-side assembly |
 | Other controls | 2 × Panasonic EVQP7C01P (S1/S2); 1 × C&K JS102011SAQN (SW7) |
-| Printed parts | Five: front bezel, main body with integral display retainer, battery tray, rear cover with guides, and connected button strip |
-| Assembly supplies | 4 M2.5 × 4 mm PCB screws (head ≤5 mm diameter, ≤2.5 mm high), 2 M2.5 × 6 mm countersunk upper cover screws (head ≤5 mm, 90°), 2 M1.6 × 4 mm lower cover screws, 6 M1.6 × 4 mm countersunk bezel screws (3 mm head, 90°), display-compatible border pads, and thin nonconductive cell cushioning |
+| Printed parts | Two: front chassis with integral keys and screen clips; transparent rear cover with PCB supports and battery guides |
+| Assembly supplies | 4 M2.5 × 4 mm PCB screws (head ≤5 mm diameter, ≤2.5 mm high), 4 M1.6 × 10 mm countersunk cover screws (head ≤3 mm, 90°), display-border pads, 0.2 mm insulating battery liner and two 0.5 mm nonconductive adhesive strips |
 
 The [source component list and LCSC/JLCPCB mappings](design-data.ts) and the
 [generated BOM](#fabrication-files) cover the remaining passives, charger,
@@ -128,106 +128,81 @@ BOM](https://github.com/IS7V4N/ESP32_E-Reader). Each switch is 4.2 × 3.2 ×
 [manufacturer](https://tech.alpsalpine.com/e/products/category/tact-switch/sub/02/series/skrp/).
 They sit on 14 mm centers within the 62.5 mm board width. Moving the row 4 mm
 closer to the display removes 5 mm from the lower PCB edge while keeping about
-2 mm between the panel outline and the button openings. Four slim case caps
-joined by independent PETG leaf arms form one printable strip and reproduce
-the reference reader's recessed front-button appearance. This requires
-bottom-side assembly. Printable caps
-include a rear retention flange and nominal 0.14 mm clearance to the switch
-body, but actuation and print fit need a physical prototype. Check the actual
+2 mm between the panel outline and the button openings. Four slim key caps and independent PETG leaf arms are integral to the front
+chassis. This requires bottom-side switch assembly. Each key has a nominal
+0.04 mm rest gap and 0.25 mm total stroke, giving about 0.21 mm switch
+compression. Force, return and print fit need a physical prototype. Check the actual
 display ribbon width and fold radius against the 26 mm FPC slot before ordering
 the PCB.
 
 ## Dimensioned enclosure print prototype
 
-The slim case has a **68.0 × 111.0 × 21.1 mm** outside envelope. From front
-through back it contains the display, 62.5 × 95.08 mm PCB, a 1.4 mm rigid
-partition, a protected 2000 mAh LiPo compartment, and a removable rear cover.
-The case separates the battery from the component side of the board. The
-selected [SparkFun PRT-13855 pack](https://www.sparkfun.com/lithium-ion-battery-2ah.html)
-has published **49.2 × 68.8 × 5.6 mm nominal dimensions**. It sits left of BT1
-in an extended guide pocket, with 1.5 mm nominal clearance to the rear cover.
-The partition has a local opening for BT1 and its lead. BT1's side-entry
-mating face points toward the opening, so the plug enters from the bottom of
-the PCB before the partition is seated. The thinner front section moves the
-display 1.5 mm closer to the PCB; check its short FPC fold on a real sample.
-Verify BT1 polarity against the actual battery plug before connection.
-SparkFun's store currently restricts international shipment of this pack;
-equivalent 2000 mAh packs must be checked for the complete protected-pack
-envelope, lead, plug, and polarity before substitution.
+The redesigned Rev. D enclosure uses **two printed parts** in a
+**68.0 × 111.0 × 18.0 mm** envelope. The front chassis combines the screen
+ledge, six releasable padded border clips and four independently moving keys.
+The transparent rear cover combines the PCB cantilever supports, battery guides,
+screw sleeves and two extra supports for the upper screen border.
+
+The PCB fastens to the rear cover from its display-facing underside. The
+front chassis therefore has a clear path for screen installation. Four M1.6
+cover screws sit outside the glass outline, and four M2.5 screws retain the PCB.
+There are eight screws in total. The selected protected
+[SparkFun PRT-13855 pack](https://www.sparkfun.com/lithium-ion-battery-2ah.html)
+has **49.2 × 68.8 × 5.6 mm nominal dimensions**. It bonds to the inside rear
+cover with two nonconductive foam adhesive strips; a thin insulating liner
+covers its PCB-facing surface. No separate battery tray needs printing.
 
 | Thickness contribution | mm |
 | --- | ---: |
-| Front outer face to PCB center | 6.5 |
-| PCB center to battery base, including partition | 6.0 |
+| Front outer face to PCB center | 5.8 |
+| PCB center to battery base | 4.9 |
 | Nominal battery thickness | 5.6 |
-| Nominal battery-to-cover clearance | 1.5 |
-| Rear cover | 1.5 |
-| **Modeled outside thickness** | **21.1** |
+| Battery mounting adhesive | 0.5 |
+| Rear cover | 1.2 |
+| **Modeled outside thickness** | **18.0** |
 
-The pack gives 2000 mAh in a 5.6 mm nominal thickness. A 1200 mAh, 5 mm
-pack would save 0.6 mm in this stack but reduce rated capacity by 40%.
-Actual runtime has not been measured; the buck-boost output and low-battery
-shutdown threshold still need load testing. The [full coordinate and tolerance
-table](assets/enclosure/PRINTING.md) describes the printed parts.
+The actual CAD materials use alpha blending: 0.38 opacity for the front,
+0.22 for the rear. This lets you see the components inside. Clear PETG FDM
+prints are normally translucent; the CAD appearance does not predict glass-like
+clarity. The design assumes a 0.4 mm nozzle and PETG flexures. Physical fit,
+clip force, key fatigue, battery retention and cable routing need a prototype.
 
-![BT1 facing the partition cable opening](assets/enclosure/printable-battery-connector.png)
+![Display held on padded border ledges and integral side clips](assets/enclosure/display-retainer-installed.png)
 
-The main body now includes the display retaining frame. Six M1.6 countersunk
-screws join it to a removable front bezel, with hard stops and soft pads on
-both faces of the display border. The 1.4 mm retainer clears the PCB underside
-by 1.05 mm. The body and bezel separate straight apart for screen service.
-The rear cover uses two small lower screws and two upper screws; its guides
-locate the cell. Its port roofs lift away to clear USB-C and MicroSD during
-board insertion. The lower lip grows 1.5 mm to keep the lower cover posts
-outside the unchanged PCB. A removable tray rests around the four PCB screw heads, leaving
-an unobstructed board insertion path. Four small button caps are joined by
-independent PETG leaf arms into one printed strip. Button force and printed
-fit still need a physical prototype.
+The [print ZIP](assets/enclosure/esp32-reader-printable-stls.zip) contains exactly
+**two bed-oriented STLs**, the [220 × 220 mm 3MF plate](assets/enclosure/reader-print-plate.3mf),
+and the [print and assembly guide](assets/enclosure/PRINTING.md). Both parts
+print flat, outside face on the bed. Use removable supports under the spring
+leaves and projecting features, including supports that start on the model.
+The open battery pocket leaves them accessible for removal.
 
-![Display held by the integral main-body retainer](assets/enclosure/display-retainer-installed.png)
+The [component inventory](assets/enclosure/component-inventory.csv) records
+PCB references, footprint sizes and model envelopes. `bun run export:assembly`
+resolves the local CAD and writes `dist/index/assembly.glb`; missing OBJ/GLB
+fetches fail the export. Supplier OBJ models are bundled for browser rendering.
+The [supplier STEP archive](assets/components/supplier-step-models.zip) preserves
+original source models without loading large STEP duplicates in the preview.
+Source URLs and hashes remain in `assets/components/sources.json`.
 
-The [print ZIP](assets/enclosure/esp32-reader-printable-stls.zip) contains
-**five printed parts**, reduced from eleven. The
-[220 × 220 mm 3MF plate](assets/enclosure/reader-print-plate.3mf) and
-[bed-oriented STLs](assets/enclosure/print/) are ready to import at 100% scale.
-Select your printer/PETG preset and follow the
-[print and assembly instructions](assets/enclosure/PRINTING.md).
+Four PCB mounting holes retain their original coordinates: the upper pair at
+X ±27, Y 44.75 mm and the lower pair at X ±28, Y −40 mm. Each 2.7 mm hole has
+a 3.2 mm copper keepout on every layer. The board seats at Z +0.8 on rear-cover
+bosses and the M2.5 × 4 mm screws enter from the underside. PCB geometry,
+component placement, electrical connections and routed copper remain unchanged.
+Run `bun scripts/check-pcb-mounts.mjs` after the routed build to check drills,
+board edges and copper. The enclosure check verifies screwdriver access with
+the front chassis removed.
 
-The [component inventory](assets/enclosure/component-inventory.csv) lists
-PCB references with footprint size and available 3D model envelopes.
-`bun run export:assembly` resolves the local enclosure, display and GCT USB-C
-models and writes `dist/index/assembly.glb` without substituting fallback
-cubes for local assets. The clearance script also checks J1's local GCT OBJ. All sixteen imported
-component OBJ/STEP models are bundled locally, with source URLs and checksums
-in `assets/components/sources.json`, to avoid external model-server dependencies.
-The screen FPC has a nominal installed
-model; the antenna cable, real battery lead, and manufacturing tolerances
-remain unmodeled. The meshes
-are manifold, but the first physical print and fit measurements remain
-necessary before treating the case as a finished product.
+![PCB mounting points in the two-part enclosure](assets/enclosure/printable-pcb-mounts.png)
 
-Four PCB screw points clamp both ends of the board to the shell: the upper
-pair at X ±27, Y 44.75 mm and the lower pair at X ±28, Y −40.0 mm. Each
-2.7 mm hole has a 3.2 mm copper keepout on every layer. The lower bosses
-clear the moving button bodies; the two outer cap flanges have local relief
-around those bosses. PCB holes and printed bosses share coordinates in
-`assets/enclosure/pcb-mounts.json`. Rear-cover screws are separate fasteners.
-After a routed build, run `bun scripts/check-pcb-mounts.mjs` to check the
-drills, board edges, pads, traces, vias, and copper pours. The enclosure
-clearance check also tests a 5 mm driver approach before the partition is fitted.
+![Electronics with the rear cover removed](assets/enclosure/printable-open-back.png)
 
-![Four PCB screws securing the board to the shell; nominal screw envelopes](assets/enclosure/printable-pcb-mounts.png)
+![Transparent side view of the 18 mm enclosure](assets/enclosure/printable-side.png)
 
-![Open-back view of the battery compartment](assets/enclosure/printable-open-back.png)
-
-![Side view of the slim enclosure](assets/enclosure/printable-side.png)
-
-The outer silhouette follows the [Xteink X3 product](https://www.xteink.com/products/xteink-x3)
-and the original [Rev. B KiCad project](https://github.com/IS7V4N/ESP32_E-Reader),
-whose enclosure source mesh is unpublished. The front navigation switches
-remain low-profile tactile buttons, and motion controls remain a later
-hardware revision. The power-switch side slot is open for access, but a
-coupled thumb slider is not included in the printable set.
+The front navigation switches remain the low-profile SKRPACE010 parts. The
+power switch is accessible through a side slot; a coupled thumb slider is not
+included. Display flex, battery plug polarity, actual lead lengths and antenna
+coax routing still require sample verification before assembly.
 
 ## Board construction
 
@@ -379,15 +354,15 @@ lead, button travel and printed-fit checks remain necessary.
 
 ## Printable enclosure
 
-![Five parts arranged for printing on a 220 mm bed](assets/enclosure/reader-print-plate.png)
+![Two parts arranged for printing on a 220 mm bed](assets/enclosure/reader-print-plate.png)
 
 The [print package](assets/enclosure/esp32-reader-printable-stls.zip)
-contains five bed-oriented STLs, a geometry-only
+contains two bed-oriented STLs, a geometry-only
 [3MF plate](assets/enclosure/reader-print-plate.3mf), and the
 [print instructions](assets/enclosure/PRINTING.md). The separate
 [STLs](assets/enclosure/print/) are also available. Files marked `DO-NOT-PRINT`
-are inspection gauges. The connected button strip needs PETG and removable
-supports beneath its raised rail/arms. Choose your actual printer and filament
+are inspection gauges. The integral keys and screen clips require PETG and removable
+supports beneath their projecting leaves. Choose your actual printer and filament
 preset before slicing; no printer-specific G-code is supplied.
 
 To regenerate the meshes from source, install Blender and run:
@@ -402,7 +377,8 @@ also gives the component-clearance and preview-render commands.
 
 After the release checks pass, commit the source and publish with
 `bun run push:release`, then push the commit to GitHub. This command runs
-`tsci push` from an archive of the committed files because direct `tsci push`
+`tsci push --compress` from the committed runtime files, with original STEP
+models in their ZIP archive, because direct `tsci push`
 does not honor `.gitignore` and can upload local check fixtures and caches.
 
 ## Fabrication files

@@ -24,8 +24,9 @@ for (const item of manifest) {
 // These files must be directly downloadable from the hosted release as well.
 for (const filename of ["reader-print-plate.3mf", "esp32-reader-printable-stls.zip", "PRINTING.md", "fdm-reference.ini"])
 	paths.add("assets/enclosure/" + filename);
-for (const filename of ["front-bezel", "main-body", "battery-partition", "rear-cover", "button-strip"])
+for (const filename of ["front-chassis", "rear-cover"])
 	paths.add(`assets/enclosure/print/${filename}.stl`);
+paths.add("assets/components/supplier-step-models.zip");
 const results = [];
 const todo = [...paths];
 async function worker() {

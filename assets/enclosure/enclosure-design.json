@@ -1,0 +1,96 @@
+{
+  "revision": "D",
+  "printedParts": [
+    "front-chassis",
+    "rear-cover"
+  ],
+  "outsideMm": [
+    68,
+    111,
+    18.0
+  ],
+  "frontZ": -5.8,
+  "seamZ": 5.4,
+  "rearInnerZ": 11.0,
+  "rearOuterZ": 12.2,
+  "battery": {
+    "centerX": -6.2,
+    "centerY": -2.0,
+    "baseZ": 4.9,
+    "sizeMm": [
+      49.2,
+      68.8,
+      5.6
+    ],
+    "linerThickness": 0.2,
+    "linerZ": [
+      4.7,
+      4.9
+    ],
+    "mountAdhesiveThickness": 0.5,
+    "loadingDirection": "straight +Z from the open front of the removed cover"
+  },
+  "screen": {
+    "rebateFloorZ": -4.8,
+    "frontPadThickness": 0.15,
+    "clipFaceZ": -3.4,
+    "rearPadThickness": 0.35,
+    "clipSides": [
+      -1,
+      1
+    ],
+    "clipTipY": [
+      -27.0,
+      3.0,
+      27.0
+    ],
+    "beamLength": 14.0,
+    "beamWidth": 0.8,
+    "beamZ": [
+      -3.4,
+      -2.2
+    ],
+    "releaseDeflectionMm": 1.0,
+    "topSupportX": [
+      -12.0,
+      12.0
+    ]
+  },
+  "coverScrews": {
+    "upper": {
+      "thread": "M1.6",
+      "length": 10,
+      "positions": [
+        [
+          -30.6,
+          54.0
+        ],
+        [
+          30.6,
+          54.0
+        ]
+      ],
+      "pilotFloorZ": 1.7
+    },
+    "lower": {
+      "thread": "M1.6",
+      "length": 10,
+      "positions": [
+        [
+          -21.0,
+          -48.9
+        ],
+        [
+          21.0,
+          -48.9
+        ]
+      ],
+      "pilotFloorZ": 1.7
+    }
+  },
+  "cadAlpha": {
+    "front": 0.38,
+    "rear": 0.22
+  },
+  "scope": "Nominal CAD and toolpaths. Clear PETG is translucent; CAD transparency does not predict optical clarity. Physical fit, flexure force/fatigue and battery lead routing need prototype testing."
+}

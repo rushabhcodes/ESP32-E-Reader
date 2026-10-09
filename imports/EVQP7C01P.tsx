@@ -1,5 +1,4 @@
 import localC388883obj from "../assets/components/C388883.obj";
-import localC388883step from "../assets/components/C388883.step";
 import type { PushButtonProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -141,8 +140,6 @@ export const EVQP7C01P = (props: PushButtonProps<typeof pinLabels>) => {
 			cadModel={{
 				objUrl:
 					localC388883obj,
-				stepUrl:
-					localC388883step,
 				pcbRotationOffset: 0,
 				modelOriginPosition: {
 					x: -0.006997699999942597,

@@ -1,5 +1,4 @@
 import localC7519obj from "../assets/components/C7519.obj";
-import localC7519step from "../assets/components/C7519.step";
 import type { ChipProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -242,8 +241,6 @@ export const USBLC6_2SC6 = (props: ChipProps<typeof pinLabels>) => {
 			cadModel={{
 				objUrl:
 					localC7519obj,
-				stepUrl:
-					localC7519step,
 				pcbRotationOffset: 90,
 				modelOriginPosition: {
 					x: -0.000012700000070253736,

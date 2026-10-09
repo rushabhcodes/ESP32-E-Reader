@@ -1,5 +1,4 @@
 import localC173752obj from "../assets/components/C173752.obj";
-import localC173752step from "../assets/components/C173752.step";
 import type { ChipProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -136,8 +135,6 @@ export const S2B_PH_K_S_LF__SN_ = (props: ChipProps<typeof pinLabels>) => {
 			cadModel={{
 				objUrl:
 					localC173752obj,
-				stepUrl:
-					localC173752step,
 				pcbRotationOffset: 180,
 				modelOriginPosition: {
 					x: 0.9750000500000624,

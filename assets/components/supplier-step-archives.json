@@ -1,8 +1,8 @@
 [
   {
     "path": "assets/components/supplier-step-models-1.zip",
-    "bytes": 1496503,
-    "sha256": "96ecec4c0d51eab067c117c6303d11d8075e3aae67728c21e8810693498786fb",
+    "bytes": 1616763,
+    "sha256": "e9545823a9d150a0fc7a21948f59ec736a356f0689fe4fd0e9158b0b05d32f5c",
     "step_files": [
       "assets/components/C114218.step",
       "assets/components/C133190.step",
@@ -12,8 +12,8 @@
   },
   {
     "path": "assets/components/supplier-step-models-2.zip",
-    "bytes": 1550686,
-    "sha256": "9f3e234d287bc17f9a6ff8369b1453bdcc167c79758b98b04a7611c825120b89",
+    "bytes": 1669501,
+    "sha256": "4ae6906b7f7bb2eb1c5210f826facb517a11d88afbfa3dc01f0aebde01ea13b8",
     "step_files": [
       "assets/components/C202112.step",
       "assets/components/C202140.step",
@@ -22,8 +22,8 @@
   },
   {
     "path": "assets/components/supplier-step-models-3.zip",
-    "bytes": 1987832,
-    "sha256": "050a9c000cd1a60e8f05ec66f79f6855e15c7e3d1dccc6c181e9ed5a1c7c9f3b",
+    "bytes": 2134326,
+    "sha256": "2e5efa2ae9dfc36315c7e5bbb220005f0c0861ce41640b72c0e4f72a2ce42bf5",
     "step_files": [
       "assets/components/C2830320.step",
       "assets/components/C2926676.step",
@@ -33,8 +33,8 @@
   },
   {
     "path": "assets/components/supplier-step-models-4.zip",
-    "bytes": 2021905,
-    "sha256": "992a1c4a92116bd79e0117039d46b8c65a55927025e15b653fa30e69e38633d4",
+    "bytes": 2162964,
+    "sha256": "a9428fd00fd568bb2e4ed0f4534f4c68d65a9493ddfc8b665a0a29f512ea221b",
     "step_files": [
       "assets/components/C469327.step",
       "assets/components/C520357.step",
@@ -45,8 +45,8 @@
   },
   {
     "path": "assets/components/supplier-step-models-5.zip",
-    "bytes": 466301,
-    "sha256": "dcdde521419e9642fc416295fe437daed0374cc08c5280950ae633b6253120c8",
+    "bytes": 507721,
+    "sha256": "3523bbc5ea61ff194a562277528f6d6bbc68c89a77a11b5f8e727abb1f5a0364",
     "step_files": [
       "imports/USB4105_GF_A/USB4105_GF_A.step"
     ]

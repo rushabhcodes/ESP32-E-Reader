@@ -24,18 +24,18 @@
       "layer_change_events": 96,
       "filament_g": 21.04,
       "support_filament_g": 1.474,
-      "reference_time": "2h 37m 26s",
+      "reference_time": "2h 37m 23s",
       "warnings": [],
       "exit_code": 0
     }
   ],
   "plate": {
     "source": "assets/enclosure/reader-print-plate.3mf",
-    "source_sha256": "8ebb81081fb031a7105c0dc13de9040f456fe4888cc48fa17884cec62ea9bea7",
+    "source_sha256": "531b318eefe32bb10f5a25081e5fc65840792a7da4ca8b4163e83f9d57bc16e8",
     "layer_change_events": 98,
     "filament_g": 34.72,
     "support_filament_g": 1.607,
-    "reference_time": "4h 9m 25s",
+    "reference_time": "4h 9m 28s",
     "warnings": [],
     "exit_code": 0
   },

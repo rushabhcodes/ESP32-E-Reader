@@ -4,7 +4,8 @@ Binary STL input stays in assembly coordinates. No printer-specific G-code is
 shipped; select a printer/PETG profile after importing the 3MF.
 """
 from pathlib import Path
-from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
+import json
+import subprocess
 import struct
 import xml.etree.ElementTree as ET
 
@@ -54,16 +55,7 @@ for object_id, (name, flip, x, y) in enumerate(PARTS, 1):
     assert x+low[0]+offset[0]>=0 and x+high[0]+offset[0]<=220
     assert y+low[1]+offset[1]>=0 and y+high[1]+offset[1]<=220
     ET.SubElement(build,tag('item'),objectid=str(object_id),transform=f'1 0 0 0 1 0 0 0 1 {x} {y} 0')
-with ZipFile(ASSETS/'reader-print-plate.3mf','w',ZIP_DEFLATED) as package:
-    def write_model_file(name, content):
-        info=ZipInfo(name, date_time=(1980,1,1,0,0,0));info.compress_type=ZIP_DEFLATED
-        package.writestr(info,content)
-    write_model_file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/></Types>')
-    write_model_file('_rels/.rels','<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Target="/3D/3dmodel.model" Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/></Relationships>')
-    write_model_file('3D/3dmodel.model',ET.tostring(model,encoding='utf-8',xml_declaration=True))
-with ZipFile(ASSETS/'esp32-reader-printable-stls.zip','w',ZIP_DEFLATED,compresslevel=9) as package:
-    for name, *_ in PARTS:
-        package.write(ASSETS/'print'/f'{name}.stl',f'{name}.stl')
-    for name in ('reader-print-plate.3mf','PRINTING.md','fdm-reference.ini','pcb-mounts.json','display-connection.json','enclosure-design.json'):
-        package.write(ASSETS/name,name)
+# Track the text model so Git-linked builds can restore omitted 3MF/ZIP files.
+(ASSETS/'print-plate-model.json').write_text(json.dumps({'xml':ET.tostring(model,encoding='utf-8',xml_declaration=True).decode('utf-8')})+'\n')
+subprocess.run(['bun',str(ROOT/'scripts/prepare-preview-archives.mjs'),'--print'],cwd=ROOT,check=True)
 print('Packaged two bed-oriented parts and a geometry-only 220 x 220 mm plate')

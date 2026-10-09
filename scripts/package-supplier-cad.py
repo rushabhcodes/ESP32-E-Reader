@@ -2,7 +2,7 @@
 from pathlib import Path
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 from io import BytesIO
-import hashlib,json
+import hashlib,json,subprocess
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'assets/components'
 LIMIT=2*1024*1024
 sources=[*sorted(OUT.glob('*.step')),ROOT/'imports/USB4105_GF_A/USB4105_GF_A.step']
@@ -27,4 +27,5 @@ for i,group in enumerate(groups,1):
     records.append({'path':'assets/components/'+name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'step_files':[p.relative_to(ROOT).as_posix() for p in group]})
 (OUT/'supplier-step-archives.json').write_text(json.dumps(records,indent=2)+'\n')
 (OUT/'supplier-step-models.zip').unlink(missing_ok=True)
-print('Packaged',len(sources),'original STEP models in',len(records),'standard ZIPs, each below 2 MiB')
+subprocess.run(['bun',str(ROOT/'scripts/prepare-preview-archives.mjs'),'--supplier'],cwd=ROOT,check=True)
+print('Packaged',len(sources),'original STEP models in',len(records),'standard ZIPs within registry request limits')

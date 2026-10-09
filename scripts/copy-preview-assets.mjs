@@ -1,8 +1,10 @@
+import { preparePreviewArchives } from "./prepare-preview-archives.mjs";
 import { copyFile, mkdir, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
+await preparePreviewArchives();
 const files = [
   "assets/components/sources.json", "assets/components/supplier-step-archives.json",
   "imports/USB4105_GF_A/USB4105_GF_A.obj",

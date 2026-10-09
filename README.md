@@ -180,7 +180,7 @@ The [component inventory](assets/enclosure/component-inventory.csv) records
 PCB references, footprint sizes and model envelopes. `bun run export:assembly`
 resolves the local CAD and writes `dist/index/assembly.glb`; missing OBJ/GLB
 fetches fail the export. Supplier OBJ models are bundled for browser rendering.
-The [supplier STEP archive](assets/components/supplier-step-models.zip) preserves
+The supplier STEP archives ([1](assets/components/supplier-step-models-1.zip), [2](assets/components/supplier-step-models-2.zip), [3](assets/components/supplier-step-models-3.zip), [4](assets/components/supplier-step-models-4.zip), [5](assets/components/supplier-step-models-5.zip)) preserve
 original source models without loading large STEP duplicates in the preview.
 Source URLs and hashes remain in `assets/components/sources.json`.
 
@@ -377,8 +377,8 @@ also gives the component-clearance and preview-render commands.
 
 After the release checks pass, commit the source and publish with
 `bun run push:release`, then push the commit to GitHub. This command runs
-`tsci push --compress` from the committed runtime files, with original STEP
-models in their ZIP archive, because direct `tsci push`
+`tsci push` from the committed runtime files, with original STEP
+models in their small ZIP archives, because direct `tsci push`
 does not honor `.gitignore` and can upload local check fixtures and caches.
 
 ## Fabrication files

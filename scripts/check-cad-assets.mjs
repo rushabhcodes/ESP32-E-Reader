@@ -26,7 +26,12 @@ for (const filename of ["reader-print-plate.3mf", "esp32-reader-printable-stls.z
 	paths.add("assets/enclosure/" + filename);
 for (const filename of ["front-chassis", "rear-cover"])
 	paths.add(`assets/enclosure/print/${filename}.stl`);
-paths.add("assets/components/supplier-step-models.zip");
+const archives = JSON.parse(await readFile(path.join(root, "assets/components/supplier-step-archives.json"), "utf8"));
+paths.add("assets/components/supplier-step-archives.json");
+for (const archive of archives) {
+	assert.equal(digest(await readFile(path.join(root, archive.path))), archive.sha256);
+	paths.add(archive.path);
+}
 const results = [];
 const todo = [...paths];
 async function worker() {

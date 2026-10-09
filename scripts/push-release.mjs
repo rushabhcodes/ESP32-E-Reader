@@ -20,7 +20,7 @@ async function post(route, body, token) {
 }
 
 // tsci ignores dotfiles, but does not honor .gitignore. Start with committed
-// files. Preserve original STEP models in Git and the downloadable ZIP while
+// files. Preserve original STEP models in Git and the downloadable ZIPs while
 // omitting individual STEP copies from the browser's build source.
 const temporary = await mkdtemp(path.join(tmpdir(), "reader-release-"));
 try {
@@ -32,9 +32,13 @@ try {
   for (const file of committed.filter((file) => file.toLowerCase().endsWith(".step")))
     await rm(path.join(project, file));
   const files = committed.filter((file) => !file.split("/").some((part) => part.startsWith(".")) && !file.toLowerCase().endsWith(".step") && !file.startsWith("dist/") && !file.startsWith("node_modules/"));
+  for (const file of files) {
+    if ((await readFile(path.join(project, file))).length > 3 * 1024 * 1024)
+      throw new Error(`Source exceeds the safe registry request size: ${file}. Split downloadable archives before publishing.`);
+  }
   const pkg = JSON.parse(await readFile(path.join(project, "package.json"), "utf8"));
   const expected = pkg.version;
-  const child = spawn(process.execPath, [path.join(root, "node_modules/.bin/tsci"), "push", "index.circuit.tsx", "--compress"], { cwd: project, stdio: "inherit" });
+  const child = spawn(process.execPath, [path.join(root, "node_modules/.bin/tsci"), "push", "index.circuit.tsx"], { cwd: project, stdio: "inherit" });
   const code = await new Promise((resolve, reject) => { child.once("error", reject); child.once("exit", resolve); });
   const published = JSON.parse(await readFile(path.join(project, "package.json"), "utf8")).version;
   if (published !== expected) throw new Error(`Published ${published}; commit package.json to match the registry version.`);

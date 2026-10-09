@@ -1,14 +1,16 @@
-import { copyFile, mkdir, readdir } from "node:fs/promises";
+import { copyFile, mkdir, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const files = [
-  "assets/components/sources.json", "assets/components/supplier-step-models.zip",
+  "assets/components/sources.json", "assets/components/supplier-step-archives.json",
   "imports/USB4105_GF_A/USB4105_GF_A.obj",
 ];
 for (const name of await readdir(path.join(root, "assets/components")))
   if (name.endsWith(".obj")) files.push("assets/components/" + name);
+const archives = JSON.parse(await readFile(path.join(root, "assets/components/supplier-step-archives.json"), "utf8"));
+files.push(...archives.map((archive) => archive.path));
 const enclosure = [
   "front-chassis.glb", "rear-cover.glb", "display-panel.glb", "display-cushioning.glb",
   "pcb-cover-fasteners.glb", "battery-envelope-DO-NOT-PRINT.glb",

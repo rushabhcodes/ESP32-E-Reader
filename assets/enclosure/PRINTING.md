@@ -164,5 +164,5 @@ blender --background --python-exit-code 1 --python scripts/render-printable-encl
 Generated reports under `stl/` record mesh integrity, nominal clearances,
 independent key strokes, sampled screen/PCB/battery/cover assembly paths,
 CAD transparency and slicer output. The source still contains the original
-supplier STEP models; the hosted [STEP archive](../components/supplier-step-models.zip)
-preserves them without loading large STEP duplicates in the browser preview.
+supplier STEP models; the hosted STEP archives ([1](../components/supplier-step-models-1.zip), [2](../components/supplier-step-models-2.zip), [3](../components/supplier-step-models-3.zip), [4](../components/supplier-step-models-4.zip), [5](../components/supplier-step-models-5.zip))
+preserve them without loading large STEP duplicates in the browser preview.

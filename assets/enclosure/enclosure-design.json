@@ -1,22 +1,22 @@
 {
-  "revision": "D",
+  "revision": "E",
   "printedParts": [
     "front-chassis",
     "rear-cover"
   ],
   "outsideMm": [
-    68,
-    111,
-    18.0
+    68.0,
+    111.0,
+    16.8
   ],
   "frontZ": -5.8,
   "seamZ": 5.4,
-  "rearInnerZ": 11.0,
-  "rearOuterZ": 12.2,
+  "rearInnerZ": 9.8,
+  "rearOuterZ": 11.0,
   "battery": {
-    "centerX": -6.2,
-    "centerY": -2.0,
-    "baseZ": 4.9,
+    "centerX": -6.0,
+    "centerY": -8.5,
+    "baseZ": 3.7,
     "sizeMm": [
       49.2,
       68.8,
@@ -24,11 +24,15 @@
     ],
     "linerThickness": 0.2,
     "linerZ": [
-      4.7,
-      4.9
+      3.5,
+      3.7
     ],
     "mountAdhesiveThickness": 0.5,
-    "loadingDirection": "straight +Z from the open front of the removed cover"
+    "guideBaseZ": 3.3000000000000003,
+    "lowerStopY": -43.5,
+    "loadingOffsetY": 6.5,
+    "loadingStandOffZ": 0.1,
+    "loadingDirection": "insert +Z at Y -2, slide -Y 6.5 mm with 0.1 mm lid stand-off, then seat adhesive before fitting PCB"
   },
   "screen": {
     "rebateFloorZ": -4.8,
@@ -56,37 +60,33 @@
       12.0
     ]
   },
-  "coverScrews": {
-    "upper": {
-      "thread": "M1.6",
-      "length": 10,
-      "positions": [
-        [
-          -30.6,
-          54.0
-        ],
-        [
-          30.6,
-          54.0
-        ]
-      ],
-      "pilotFloorZ": 1.7
-    },
-    "lower": {
-      "thread": "M1.6",
-      "length": 10,
-      "positions": [
-        [
-          -21.0,
-          -48.9
-        ],
-        [
-          21.0,
-          -48.9
-        ]
-      ],
-      "pilotFloorZ": 1.7
-    }
+  "coverSnaps": {
+    "count": 4,
+    "sides": [
+      -1,
+      1
+    ],
+    "tipY": [
+      -5.0,
+      24.0
+    ],
+    "beamLength": 14.0,
+    "beamWidth": 0.8,
+    "beamZ": [
+      4.7,
+      8.3
+    ],
+    "hookOuterX": 33.6,
+    "retainingFaceX": 33.2,
+    "retainingWallThicknessMm": 0.8,
+    "hookEngagementMm": 0.4,
+    "releaseDeflectionMm": 0.6,
+    "windowZ": [
+      3.0,
+      4.5
+    ],
+    "printedClosureParts": 0,
+    "coverScrews": 0
   },
   "cadAlpha": {
     "front": 0.38,

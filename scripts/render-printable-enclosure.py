@@ -1,4 +1,4 @@
-"""Render Rev. D using the current native assembly and transparent source GLBs.
+"""Render the reader using the current native assembly and transparent source GLBs.
 
 Run after `bun run export:assembly`. Rendering preserves source CAD alpha;
 it illustrates a transparent CAD material, not the optical finish of FDM PETG.

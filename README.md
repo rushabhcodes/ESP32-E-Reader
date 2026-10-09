@@ -10,7 +10,7 @@ workflow.
 
 | Specification | Current design |
 | --- | --- |
-| Enclosure outside | 68.0 × 111.0 × **18.0 mm**; prototype CAD, not a measured print |
+| Enclosure outside | 68.0 × 111.0 × **16.8 mm**; prototype CAD, not a measured print |
 | PCB | 62.5 × 95.08 × 1.6 mm; four copper layers |
 | Display | EastRising ER-EPD3.97-1RY, raw display only; 480 × 800, four colors, no frontlight |
 | Processor | ESP32-C3-WROOM-02U-N4; 4 MB flash, Wi-Fi, Bluetooth LE, external antenna |
@@ -106,8 +106,8 @@ sample. Do not force a mismatched ribbon into the socket.
 | Battery | Protected 3.7 V nominal single-cell pack; modeled PRT-13855, 2000 mAh, 49.2 × 68.8 × 5.6 mm |
 | Navigation switches | 4 × Alps Alpine SKRPACE010, bottom-side assembly |
 | Other controls | 2 × Panasonic EVQP7C01P (S1/S2); 1 × C&K JS102011SAQN (SW7) |
-| Printed parts | Two: front chassis with integral keys and screen clips; transparent rear cover with PCB supports and battery guides |
-| Assembly supplies | 4 M2.5 × 4 mm PCB screws (head ≤5 mm diameter, ≤2.5 mm high), 4 M1.6 × 10 mm countersunk cover screws (head ≤3 mm, 90°), display-border pads, 0.2 mm insulating battery liner and two 0.5 mm nonconductive adhesive strips |
+| Printed parts | Two: front chassis with integral keys, screen clips and latch receivers; transparent snap-fit rear cover with PCB supports and battery guides |
+| Assembly supplies | 4 M2.5 × 4 mm internal PCB screws (head ≤5 mm diameter, ≤2.5 mm high), display-border pads, 0.2 mm insulating battery liner and two 0.5 mm nonconductive adhesive strips; zero cover screws |
 
 The [source component list and LCSC/JLCPCB mappings](design-data.ts) and the
 [generated BOM](#fabrication-files) cover the remaining passives, charger,
@@ -137,32 +137,46 @@ the PCB.
 
 ## Dimensioned enclosure print prototype
 
-The redesigned Rev. D enclosure uses **two printed parts** in a
-**68.0 × 111.0 × 18.0 mm** envelope. The front chassis combines the screen
+The redesigned Rev. E enclosure uses **two printed parts** in a
+**68.0 × 111.0 × 16.8 mm** envelope, 1.2 mm (6.7%) thinner than Rev. D.
+Moving the same battery toward the button end avoids stacking it over the
+ESP32 module. The front chassis combines the screen
 ledge, six releasable padded border clips and four independently moving keys.
 The transparent rear cover combines the PCB cantilever supports, battery guides,
-screw sleeves and two extra supports for the upper screen border.
+four integral snap leaves and two extra supports for the upper screen border.
 
 The PCB fastens to the rear cover from its display-facing underside. The
-front chassis therefore has a clear path for screen installation. Four M1.6
-cover screws sit outside the glass outline, and four M2.5 screws retain the PCB.
-There are eight screws in total. The selected protected
+front chassis therefore has a clear path for screen installation. Four side
+snap hooks engage matching receivers in the front chassis. Recessed side
+windows allow releasing them with a plastic pick. Four M2.5 screws retain
+the PCB; the cover uses no screws. The selected protected
 [SparkFun PRT-13855 pack](https://www.sparkfun.com/lithium-ion-battery-2ah.html)
 has **49.2 × 68.8 × 5.6 mm nominal dimensions**. It bonds to the inside rear
 cover with two nonconductive foam adhesive strips; a thin insulating liner
 covers its PCB-facing surface. No separate battery tray needs printing.
+The battery is now centered at X −6.0, Y −8.5 mm and lowered from Z 4.9 to
+Z 3.7. The rear wall remains 1.2 mm thick. The screen's padded ledge, six clips
+and two upper supports retain their original seating positions.
+Print both Rev. E shells as a pair. The battery loads through the open upper
+end of its guides and slides 6.5 mm toward the lower stop before fitting the PCB.
 
 | Thickness contribution | mm |
 | --- | ---: |
 | Front outer face to PCB center | 5.8 |
-| PCB center to battery base | 4.9 |
+| PCB center to battery base | 3.7 |
 | Nominal battery thickness | 5.6 |
 | Battery mounting adhesive | 0.5 |
 | Rear cover | 1.2 |
-| **Modeled outside thickness** | **18.0** |
+| **Modeled outside thickness** | **16.8** |
+
+The battery liner has 0.25 mm nominal clearance above the lower PCB mounting
+bosses and about 0.59 mm above L1. The shifted battery's liner clears the
+ESP32 module by 1.63 mm in Y. These are CAD measurements; actual pack thickness,
+swelling allowance, wires and printed tolerances need a prototype check.
 
 The actual CAD materials use alpha blending: 0.38 opacity for the front,
-0.22 for the rear. This lets you see the components inside. Clear PETG FDM
+0.22 for the rear. The hosted viewer and native export use 0.5 opacity through
+the explicit translucency flags. This lets you see the components inside. Clear PETG FDM
 prints are normally translucent; the CAD appearance does not predict glass-like
 clarity. The design assumes a 0.4 mm nozzle and PETG flexures. Physical fit,
 clip force, key fatigue, battery retention and cable routing need a prototype.
@@ -197,7 +211,7 @@ the front chassis removed.
 
 ![Electronics with the rear cover removed](assets/enclosure/printable-open-back.png)
 
-![Transparent side view of the 18 mm enclosure](assets/enclosure/printable-side.png)
+![Transparent side view of the 16.8 mm enclosure](assets/enclosure/printable-side.png)
 
 The front navigation switches remain the low-profile SKRPACE010 parts. The
 power switch is accessible through a side slot; a coupled thumb slider is not
@@ -361,7 +375,7 @@ contains two bed-oriented STLs, a geometry-only
 [3MF plate](assets/enclosure/reader-print-plate.3mf), and the
 [print instructions](assets/enclosure/PRINTING.md). The separate
 [STLs](assets/enclosure/print/) are also available. Files marked `DO-NOT-PRINT`
-are inspection gauges. The integral keys and screen clips require PETG and removable
+are inspection gauges. The integral keys, cover snaps and screen clips require PETG and removable
 supports beneath their projecting leaves. Choose your actual printer and filament
 preset before slicing; no printer-specific G-code is supplied.
 

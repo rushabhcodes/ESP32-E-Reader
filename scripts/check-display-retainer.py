@@ -1,4 +1,4 @@
-"""Compatibility entry point: Rev. D screen supports and clip insertion are checked together.
+"""Compatibility entry point: screen supports and clip insertion are checked together.
 
 Run: blender --background --python-exit-code 1 --python scripts/check-display-retainer.py -- dist/index/assembly.glb
 """

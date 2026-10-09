@@ -1,5 +1,5 @@
 {
-  "revision": "D",
+  "revision": "E",
   "native_cad_models": 96,
   "missing_native_models": [],
   "installation_paths": [
@@ -17,10 +17,10 @@
       "start_offset_mm": -24,
       "samples": 49,
       "step_mm": 0.5,
-      "max_overlap_mm3": 0
+      "max_overlap_mm3": 3e-06
     },
     {
-      "assembly": "battery straight into removed rear cover",
+      "assembly": "battery insertion clear of lower PCB bosses",
       "axis": 2,
       "start_offset_mm": -24,
       "samples": 49,
@@ -28,11 +28,35 @@
       "max_overlap_mm3": 0
     },
     {
-      "assembly": "loaded rear cover to front chassis",
+      "assembly": "battery slide to lower stop before fitting PCB",
+      "axis": 1,
+      "start_offset_mm": 6.5,
+      "samples": 14,
+      "step_mm": 0.5,
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "battery seating against adhesive",
+      "axis": 2,
+      "start_offset_mm": -0.1,
+      "samples": 3,
+      "step_mm": 0.05,
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "loaded rear cover snaps into front chassis",
       "axis": 2,
       "start_offset_mm": 24,
-      "samples": 49,
+      "samples": 69,
       "step_mm": 0.5,
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "cover opening with four tabs held released",
+      "axis": 2,
+      "start_offset_mm": 3,
+      "samples": 38,
+      "step_mm": 0.2,
       "max_overlap_mm3": 0
     }
   ],

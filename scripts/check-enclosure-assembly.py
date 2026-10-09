@@ -1,4 +1,4 @@
-"""Compatibility entry point: Rev. D assembly paths are checked together.
+"""Compatibility entry point: enclosure assembly paths are checked together.
 
 Run: blender --background --python-exit-code 1 --python scripts/check-enclosure-assembly.py -- dist/index/assembly.glb
 """

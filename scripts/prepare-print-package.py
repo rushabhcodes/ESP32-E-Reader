@@ -16,7 +16,8 @@ NS = 'http://schemas.microsoft.com/3dmanufacturing/core/2015/02'
 ET.register_namespace('', NS)
 def tag(name): return '{'+NS+'}'+name
 model = ET.Element(tag('model'), unit='millimeter', **{'xml:lang':'en-US'})
-ET.SubElement(model, tag('metadata'), name='Title').text = 'ESP32 Reader Rev. D: two parts, 220 x 220 mm plate'
+design = json.loads((ASSETS/'enclosure-design.json').read_text())
+ET.SubElement(model, tag('metadata'), name='Title').text = f"ESP32 Reader Rev. {design['revision']}: two parts, 220 x 220 mm plate"
 ET.SubElement(model, tag('metadata'), name='Description').text = 'Geometry only. Select your printer and PETG preset. See PRINTING.md for supports and pilot-hole preparation.'
 resources = ET.SubElement(model, tag('resources'))
 build = ET.SubElement(model, tag('build'))

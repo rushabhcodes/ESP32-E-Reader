@@ -2,7 +2,7 @@
   "front-rigid-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 10169.36,
+    "signed_volume_mm3": 9793.789,
     "bounds_mm": [
       [
         -34.0,
@@ -192,7 +192,7 @@
   "front-chassis.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 10695.732,
+    "signed_volume_mm3": 10320.16,
     "bounds_mm": [
       [
         -34.0,
@@ -208,10 +208,10 @@
       ]
     ]
   },
-  "rear-cover.stl": {
+  "rear-rigid-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 15421.904,
+    "signed_volume_mm3": 13679.105,
     "bounds_mm": [
       [
         -34.0,
@@ -223,26 +223,45 @@
       ],
       [
         -3.4,
-        12.2
+        11.0
+      ]
+    ]
+  },
+  "rear-cover.stl": {
+    "nonmanifold_edges": 0,
+    "connected_shells": 1,
+    "signed_volume_mm3": 13866.689,
+    "bounds_mm": [
+      [
+        -34.0,
+        34.0
+      ],
+      [
+        -50.5,
+        60.5
+      ],
+      [
+        -3.4,
+        11.0
       ]
     ]
   },
   "battery-envelope-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 18946.299,
+    "signed_volume_mm3": 18946.3,
     "bounds_mm": [
       [
-        -30.8,
-        18.4
+        -30.6,
+        18.6
       ],
       [
-        -36.4,
-        32.4
+        -42.9,
+        25.9
       ],
       [
-        4.9,
-        10.5
+        3.7,
+        9.3
       ]
     ]
   },
@@ -260,8 +279,8 @@
         46.05
       ],
       [
-        10.76,
-        11.0
+        9.56,
+        9.8
       ]
     ]
   }

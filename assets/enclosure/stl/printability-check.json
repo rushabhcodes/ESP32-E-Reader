@@ -10,32 +10,32 @@
   "parts": [
     {
       "source": "assets/enclosure/print/front-chassis.stl",
-      "source_sha256": "47f70576936e7f800e7e45fbefaa28c903e014bfb02c8910f9b01a25b6a19506",
-      "layer_change_events": 58,
-      "filament_g": 13.69,
-      "support_filament_g": 0.133,
-      "reference_time": "1h 31m 46s",
+      "source_sha256": "e230bba51a6660d6f7d1697c7a4cd0159cc3ffccfdf7adcc2bbcfee3a7db7fe3",
+      "layer_change_events": 60,
+      "filament_g": 13.25,
+      "support_filament_g": 0.166,
+      "reference_time": "1h 22m 37s",
       "warnings": [],
       "exit_code": 0
     },
     {
       "source": "assets/enclosure/print/rear-cover.stl",
-      "source_sha256": "e59afbfc1f31371b041a0e53b460b01d443c6e87eabf19b1295ca3d5a7051a19",
-      "layer_change_events": 96,
-      "filament_g": 21.04,
-      "support_filament_g": 1.474,
-      "reference_time": "2h 37m 23s",
+      "source_sha256": "8bdb504b718d9e510f3bafa73c4ba6eaef986f8ddea4209b31483a1c3794c041",
+      "layer_change_events": 85,
+      "filament_g": 18.96,
+      "support_filament_g": 1.32,
+      "reference_time": "2h 26m 14s",
       "warnings": [],
       "exit_code": 0
     }
   ],
   "plate": {
     "source": "assets/enclosure/reader-print-plate.3mf",
-    "source_sha256": "531b318eefe32bb10f5a25081e5fc65840792a7da4ca8b4163e83f9d57bc16e8",
-    "layer_change_events": 98,
-    "filament_g": 34.72,
-    "support_filament_g": 1.607,
-    "reference_time": "4h 9m 28s",
+    "source_sha256": "fe860fffb362d17b403a84453bab8c4da5d02f66e639fcf7c1f2d6e39f6be100",
+    "layer_change_events": 89,
+    "filament_g": 32.19,
+    "support_filament_g": 1.486,
+    "reference_time": "3h 49m 16s",
     "warnings": [],
     "exit_code": 0
   },

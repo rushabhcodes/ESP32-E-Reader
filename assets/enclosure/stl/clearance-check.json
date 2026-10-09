@@ -1,11 +1,50 @@
 {
-  "revision": "D",
+  "revision": "E",
   "printed_parts": 2,
   "outside_mm": [
-    68,
-    111,
-    18.0
+    68.0,
+    111.0,
+    16.8
   ],
+  "measured_mesh_thickness_mm": 16.8,
+  "battery_clearances": {
+    "highest_underlying_component": "L1",
+    "insulation_to_component_mm": 0.59,
+    "insulation_to_pcb_boss_mm": 0.25,
+    "battery_liner_to_esp32_xy_mm": 1.63,
+    "scope": "Nominal CAD clearances; actual pack thickness, swelling, wires and printed tolerances need a prototype check."
+  },
+  "cover_snaps": {
+    "seats": [
+      {
+        "side": -1,
+        "tip_y_mm": -5.0,
+        "hook_engagement_mm": 0.4,
+        "vertical_play_mm": 0.2
+      },
+      {
+        "side": -1,
+        "tip_y_mm": 24.0,
+        "hook_engagement_mm": 0.4,
+        "vertical_play_mm": 0.2
+      },
+      {
+        "side": 1,
+        "tip_y_mm": -5.0,
+        "hook_engagement_mm": 0.4,
+        "vertical_play_mm": 0.2
+      },
+      {
+        "side": 1,
+        "tip_y_mm": 24.0,
+        "hook_engagement_mm": 0.4,
+        "vertical_play_mm": 0.2
+      }
+    ],
+    "release_deflection_mm": 0.6,
+    "cover_screws": 0,
+    "nominal_beam_surface_strain": 0.003673
+  },
   "native_cad_models": 96,
   "missing_native_models": [],
   "pcb_meshes": 88,
@@ -19,8 +58,8 @@
         0.8,
         0.8
       ],
-      "pilot_floor_z": 11.0,
-      "screw_tip_clearance_mm": 7.8
+      "pilot_floor_z": 9.8,
+      "screw_tip_clearance_mm": 6.6
     },
     {
       "name": "MOUNT_TR",
@@ -30,8 +69,8 @@
         0.8,
         0.8
       ],
-      "pilot_floor_z": 11.0,
-      "screw_tip_clearance_mm": 7.8
+      "pilot_floor_z": 9.8,
+      "screw_tip_clearance_mm": 6.6
     },
     {
       "name": "MOUNT_BL",
@@ -41,8 +80,8 @@
         0.8,
         0.8
       ],
-      "pilot_floor_z": 11.0,
-      "screw_tip_clearance_mm": 7.8
+      "pilot_floor_z": 9.8,
+      "screw_tip_clearance_mm": 6.6
     },
     {
       "name": "MOUNT_BR",
@@ -52,8 +91,8 @@
         0.8,
         0.8
       ],
-      "pilot_floor_z": 11.0,
-      "screw_tip_clearance_mm": 7.8
+      "pilot_floor_z": 9.8,
+      "screw_tip_clearance_mm": 6.6
     }
   ],
   "key_strokes": [
@@ -104,10 +143,10 @@
       "start_offset_mm": -24,
       "samples": 49,
       "step_mm": 0.5,
-      "max_overlap_mm3": 0
+      "max_overlap_mm3": 3e-06
     },
     {
-      "assembly": "battery straight into removed rear cover",
+      "assembly": "battery insertion clear of lower PCB bosses",
       "axis": 2,
       "start_offset_mm": -24,
       "samples": 49,
@@ -115,11 +154,35 @@
       "max_overlap_mm3": 0
     },
     {
-      "assembly": "loaded rear cover to front chassis",
+      "assembly": "battery slide to lower stop before fitting PCB",
+      "axis": 1,
+      "start_offset_mm": 6.5,
+      "samples": 14,
+      "step_mm": 0.5,
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "battery seating against adhesive",
+      "axis": 2,
+      "start_offset_mm": -0.1,
+      "samples": 3,
+      "step_mm": 0.05,
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "loaded rear cover snaps into front chassis",
       "axis": 2,
       "start_offset_mm": 24,
-      "samples": 49,
+      "samples": 69,
       "step_mm": 0.5,
+      "max_overlap_mm3": 0
+    },
+    {
+      "assembly": "cover opening with four tabs held released",
+      "axis": 2,
+      "start_offset_mm": 3,
+      "samples": 38,
+      "step_mm": 0.2,
       "max_overlap_mm3": 0
     }
   ],
@@ -132,6 +195,18 @@
     {
       "part": "rear-cover",
       "alpha": 0.2199999988079071,
+      "alphaMode": "BLEND"
+    }
+  ],
+  "native_assembly_transparency": [
+    {
+      "part": "front_chassis",
+      "effective_alpha": 0.5,
+      "alphaMode": "BLEND"
+    },
+    {
+      "part": "rear_cover",
+      "effective_alpha": 0.5,
       "alphaMode": "BLEND"
     }
   ],

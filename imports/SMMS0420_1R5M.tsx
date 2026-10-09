@@ -1,3 +1,5 @@
+import localC133190obj from "../assets/components/C133190.obj";
+import localC133190step from "../assets/components/C133190.step";
 import type { InductorProps } from "@tscircuit/props"
 
 export const SMMS0420_1R5M = (props: Omit<InductorProps, "inductance">) => {
@@ -19,8 +21,8 @@ export const SMMS0420_1R5M = (props: Omit<InductorProps, "inductance">) => {
 <courtyardoutline outline={[{"x":-2.97592799999984,"y":2.485200000000077},{"x":2.985072000000173,"y":2.485200000000077},{"x":2.985072000000173,"y":-2.459799999999973},{"x":-2.97592799999984,"y":-2.459799999999973},{"x":-2.97592799999984,"y":2.485200000000077}]} />
       </footprint>}
       cadModel={{
-        objUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C133190.obj?uuid=2516a1e7eb834d2794cc1600df3863b3",
-        stepUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C133190.step?uuid=2516a1e7eb834d2794cc1600df3863b3",
+        objUrl: localC133190obj,
+        stepUrl: localC133190step,
         pcbRotationOffset: 0,
         modelOriginPosition: { x: 0.00012699999979304266, y: 0, z: -0.1 },
       }}

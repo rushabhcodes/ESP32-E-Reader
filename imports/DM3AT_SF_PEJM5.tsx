@@ -1,3 +1,5 @@
+import localC114218obj from "../assets/components/C114218.obj";
+import localC114218step from "../assets/components/C114218.step";
 import type { ChipProps } from "@tscircuit/props";
 
 export const pinLabels = {
@@ -190,9 +192,9 @@ export const DM3AT_SF_PEJM5 = (props: ChipProps<typeof pinLabels>) => {
 			}
 			cadModel={{
 				objUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C114218.obj?uuid=969c0967dc6241d2ada5963291ad54a4",
+					localC114218obj,
 				stepUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C114218.step?uuid=969c0967dc6241d2ada5963291ad54a4",
+					localC114218step,
 				pcbRotationOffset: 0,
 				modelOriginPosition: {
 					x: 0.004997449999905257,

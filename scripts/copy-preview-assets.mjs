@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
-const previewExtensions = new Set([".glb", ".obj", ".step", ".png"]);
+const previewExtensions = new Set([".glb", ".obj", ".step", ".png", ".stl", ".3mf", ".zip", ".md", ".ini", ".json", ".csv"]);
 let copiedAssets = 0;
 
 async function copyModels(relativeDirectory) {

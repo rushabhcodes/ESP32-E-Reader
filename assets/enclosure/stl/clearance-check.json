@@ -21,10 +21,54 @@
     0.0,
     0.0
   ],
+  "independent_button_strip_strokes": [
+    {
+      "key_x": -21,
+      "travel_mm": 0.2,
+      "rigid_case_overlap_mm3": {
+        "main-body": 2e-06,
+        "front-bezel": 2.1e-05,
+        "battery-partition": 0.0
+      }
+    },
+    {
+      "key_x": -7,
+      "travel_mm": 0.2,
+      "rigid_case_overlap_mm3": {
+        "main-body": 2e-06,
+        "front-bezel": 2.1e-05,
+        "battery-partition": 0.0
+      }
+    },
+    {
+      "key_x": 7,
+      "travel_mm": 0.2,
+      "rigid_case_overlap_mm3": {
+        "main-body": 2e-06,
+        "front-bezel": 2.1e-05,
+        "battery-partition": 0.0
+      }
+    },
+    {
+      "key_x": 21,
+      "travel_mm": 0.2,
+      "rigid_case_overlap_mm3": {
+        "main-body": 2e-06,
+        "front-bezel": 2.1e-05,
+        "battery-partition": 0.0
+      }
+    }
+  ],
+  "button_strip_clamp_z": {
+    "bezel_seat": -4.05,
+    "body_clamp": -3.25,
+    "strip_front": -4.05,
+    "strip_back": -3.25
+  },
   "pcb_mount_supports": [
     {
       "name": "MOUNT_TL",
-      "pilot_floor_z": -3.4,
+      "pilot_floor_z": null,
       "support_heights_z": [
         -0.8,
         -0.8,
@@ -35,7 +79,7 @@
     },
     {
       "name": "MOUNT_TR",
-      "pilot_floor_z": -3.4,
+      "pilot_floor_z": null,
       "support_heights_z": [
         -0.8,
         -0.8,
@@ -46,7 +90,7 @@
     },
     {
       "name": "MOUNT_BL",
-      "pilot_floor_z": -3.45,
+      "pilot_floor_z": null,
       "support_heights_z": [
         -0.8,
         -0.8,
@@ -57,7 +101,7 @@
     },
     {
       "name": "MOUNT_BR",
-      "pilot_floor_z": -3.45,
+      "pilot_floor_z": null,
       "support_heights_z": [
         -0.8,
         -0.8,
@@ -116,14 +160,18 @@
   "battery_shell_surface_intersections": 0,
   "battery_cover_surface_intersections": 0,
   "solid_overlap_mm3": {
+    "body_bezel": 0.0,
+    "body_button_strip": 0.0,
+    "bezel_button_strip": 2.1e-05,
     "shell_partition": 0.0,
     "shell_cover": 0.0,
     "shell_battery": 0.0,
     "partition_battery": 0.0,
     "cover_battery": 0.0
   },
+  "solid_overlap_tolerance_mm3": 0.0001,
   "expected_part_contacts": {
-    "partition_on_shell_ledges": true,
+    "tray_on_pcb_mount_borders": "Checked by scripts/check-enclosure-assembly.py",
     "battery_on_partition": true,
     "cover_on_shell": true
   },

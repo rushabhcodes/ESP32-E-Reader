@@ -88,11 +88,13 @@ def read_usb_body():
     return obj
 
 
-shell = read_mesh(STL / 'front-shell.stl')
+shell = read_mesh(STL / 'main-body.stl')
+bezel = read_mesh(STL / 'front-bezel.stl')
+strip = read_mesh(STL / 'button-strip.stl')
 partition = read_mesh(STL / 'battery-partition.stl')
 cover = read_mesh(STL / 'rear-cover.stl')
 cell = read_mesh(STL / 'battery-envelope-DO-NOT-PRINT.stl')
-buttons = [read_mesh(STL / f'button-{i}.stl') for i in range(1, 5)]
+buttons = [read_mesh(STL / f'button-{i}-DO-NOT-PRINT.stl') for i in range(1, 5)]
 shell_tree = tree(shell)
 partition_tree = tree(partition)
 cover_tree = tree(cover)
@@ -119,7 +121,7 @@ for mount in PCB_MOUNTS['mounts']:
             Vector((x + dx, y + dy, .5)), Vector((0, 0, -1)))
         support_heights.append(round(hit.z, 5) if hit is not None else None)
     correct = (
-        floor is not None and floor.z <= mount['pilotBaseZ'] + .01
+        (floor is None if PCB_MOUNTS.get('pilotThrough') else floor is not None and floor.z <= mount['pilotBaseZ'] + .01)
         and all(z is not None and abs(z - PCB_MOUNTS['supportZ']) < .001
                 for z in support_heights))
     mount_supports.append({'name': mount['name'], 'pilot_floor_z':
@@ -137,7 +139,7 @@ component_objects = []
 # Case parts are checked from the exported STLs above. CLI GLB assembly
 # nodes can contain fallback cubes when a preview asset cannot be fetched.
 assembly_nodes = {'EPD1', 'battery_envelope', 'wifi_antenna_envelope',
-                  'front_shell', 'battery_partition', 'rear_cover',
+                  'pcb_cover_fasteners', 'front_bezel', 'main_body', 'button_strip', 'battery_partition', 'rear_cover',
                   'display_retainer_lower_left', 'display_retainer_lower_right',
                   'display_retainer_upper_left', 'display_retainer_upper_right',
                   'display_cushioning', 'display_retainer_fasteners',
@@ -148,7 +150,7 @@ for obj in set(bpy.data.objects) - before:
     obj.matrix_world = conversion @ obj.matrix_world
     component_objects.append(obj)
     component_tree = tree(obj)
-    if component_tree.overlap(shell_tree):
+    if component_tree.overlap(shell_tree) or component_tree.overlap(tree(bezel)):
         hits.append(obj.name)
     if component_tree.overlap(partition_tree):
         partition_hits.append(obj.name)
@@ -197,6 +199,34 @@ for mount in PCB_MOUNTS['mounts']:
     bpy.data.objects.remove(shaft, do_unlink=True)
     bpy.data.objects.remove(driver, do_unlink=True)
 
+strip_strokes = []
+rest = [v.co.copy() for v in strip.data.vertices]
+for center_x in (-21, -7, 7, 21):
+    for vertex, original in zip(strip.data.vertices, rest):
+        vertex.co = original
+        x, y, z = original
+        if abs(x - center_x) <= 5.81 and y > -46.95 + 1e-5:
+            t = max(0, min(1, (x - (center_x - 5.2)) / 10.4))
+            vertex.co.z += PCB_MOUNTS['buttonTravel'] * (1 if y >= -45.9 else t*t*(3-2*t))
+    strip.data.update(); bpy.context.view_layer.update()
+    overlap = {obj.name: solid_intersection_volume(strip, obj) for obj in (shell, bezel, partition)}
+    assert not any(value > 1e-4 for value in overlap.values()), f'Button strip stroke collision: {center_x}, {overlap}'
+    strip_strokes.append({'key_x': center_x, 'travel_mm': PCB_MOUNTS['buttonTravel'], 'rigid_case_overlap_mm3': overlap})
+for vertex, original in zip(strip.data.vertices, rest): vertex.co = original
+strip.data.update(); bpy.context.view_layer.update()
+
+# Independently confirm the two clamp faces rather than relying on tiny
+# float32 coplanar Boolean volumes (the STL precision is about 1e-6 mm).
+clamp_faces = {}
+for label, obj, origin_z, direction, expected in (
+    ('bezel_seat', bezel, -4.0, -1, -4.05),
+    ('body_clamp', shell, -3.4, 1, -3.25),
+    ('strip_front', strip, -4.2, 1, -4.05),
+    ('strip_back', strip, -3.1, -1, -3.25)):
+    point,*_=tree(obj).ray_cast(Vector((0,-47.55,origin_z)),Vector((0,0,direction)))
+    assert point is not None and abs(point.z-expected)<2e-5, f'Missing button rail clamp: {label}'
+    clamp_faces[label]=round(point.z,5)
+
 report = {
     'input_glb': str(INPUT),
     'modeled_component_mesh_count': len(component_objects),
@@ -206,19 +236,25 @@ report = {
     'usb_c_body_intersections': usb_hits,
     'button_shell_solid_overlap_mm3': [solid_intersection_volume(button, shell) for button in buttons],
     'pressed_button_shell_solid_overlap_mm3': pressed_cap_shell_overlap,
+    'independent_button_strip_strokes': strip_strokes,
+    'button_strip_clamp_z': clamp_faces,
     'pcb_mount_supports': mount_supports,
     'pcb_screw_clearance': screw_checks,
     'battery_shell_surface_intersections': len(cell_tree.overlap(shell_tree)),
     'battery_cover_surface_intersections': len(cell_tree.overlap(cover_tree)),
     'solid_overlap_mm3': {
+        'body_bezel': solid_intersection_volume(shell, bezel),
+        'body_button_strip': solid_intersection_volume(shell, strip),
+        'bezel_button_strip': solid_intersection_volume(bezel, strip),
         'shell_partition': solid_intersection_volume(shell, partition),
         'shell_cover': solid_intersection_volume(shell, cover),
         'shell_battery': solid_intersection_volume(shell, cell),
         'partition_battery': solid_intersection_volume(partition, cell),
         'cover_battery': solid_intersection_volume(cover, cell),
     },
+    'solid_overlap_tolerance_mm3': 1e-4,
     'expected_part_contacts': {
-        'partition_on_shell_ledges': bool(partition_tree.overlap(shell_tree)),
+        'tray_on_pcb_mount_borders': 'Checked by scripts/check-enclosure-assembly.py',
         'battery_on_partition': bool(cell_tree.overlap(partition_tree)),
         'cover_on_shell': bool(cover_tree.overlap(shell_tree)),
     },
@@ -239,5 +275,5 @@ if (hits or partition_hits or button_hits or any(usb_hits.values())
            for check in screw_checks)
     or report['battery_shell_surface_intersections']
     or report['battery_cover_surface_intersections']
-    or any(report['solid_overlap_mm3'].values())):
+    or any(value > 1e-4 for value in report['solid_overlap_mm3'].values())):
     raise RuntimeError('Case/model clearance check failed')

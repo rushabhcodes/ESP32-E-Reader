@@ -1,3 +1,5 @@
+import localC2926676obj from "../assets/components/C2926676.obj";
+import localC2926676step from "../assets/components/C2926676.step";
 import type { ChipProps } from "@tscircuit/props"
 
 export const pinLabels = {
@@ -107,8 +109,8 @@ export const ESP32_C3_WROOM_02U_N4 = (props: ChipProps<typeof pinLabels>) => {
 <courtyardoutline outline={[{"x":-9.902000000000157,"y":7.692200000000071},{"x":9.901999999999816,"y":7.692200000000071},{"x":9.901999999999816,"y":-7.387400000000071},{"x":-9.902000000000157,"y":-7.387400000000071},{"x":-9.902000000000157,"y":7.692200000000071}]} />
       </footprint>}
       cadModel={{
-        objUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C2926676.obj?uuid=99c92cd30bdf44c49576fce166ebf2be",
-        stepUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C2926676.step?uuid=99c92cd30bdf44c49576fce166ebf2be",
+        objUrl: localC2926676obj,
+        stepUrl: localC2926676step,
         pcbRotationOffset: 90,
         modelOriginPosition: { x: 0.000012700000070253736, y: 0, z: -0.01 },
       }}

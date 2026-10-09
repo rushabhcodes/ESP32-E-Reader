@@ -1,3 +1,5 @@
+import localC173752obj from "../assets/components/C173752.obj";
+import localC173752step from "../assets/components/C173752.step";
 import type { ChipProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -133,9 +135,9 @@ export const S2B_PH_K_S_LF__SN_ = (props: ChipProps<typeof pinLabels>) => {
 			}
 			cadModel={{
 				objUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C173752.obj?uuid=79d113e028014698af46865c2d6c6799",
+					localC173752obj,
 				stepUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C173752.step?uuid=79d113e028014698af46865c2d6c6799",
+					localC173752step,
 				pcbRotationOffset: 180,
 				modelOriginPosition: {
 					x: 0.9750000500000624,

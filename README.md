@@ -10,7 +10,7 @@ workflow.
 
 | Specification | Current design |
 | --- | --- |
-| Enclosure outside | 68.0 × 109.5 × **21.1 mm**; prototype CAD, not a measured print |
+| Enclosure outside | 68.0 × 111.0 × **21.1 mm**; prototype CAD, not a measured print |
 | PCB | 62.5 × 95.08 × 1.6 mm; four copper layers |
 | Display | EastRising ER-EPD3.97-1RY, raw display only; 480 × 800, four colors, no frontlight |
 | Processor | ESP32-C3-WROOM-02U-N4; 4 MB flash, Wi-Fi, Bluetooth LE, external antenna |
@@ -106,8 +106,8 @@ sample. Do not force a mismatched ribbon into the socket.
 | Battery | Protected 3.7 V nominal single-cell pack; modeled PRT-13855, 2000 mAh, 49.2 × 68.8 × 5.6 mm |
 | Navigation switches | 4 × Alps Alpine SKRPACE010, bottom-side assembly |
 | Other controls | 2 × Panasonic EVQP7C01P (S1/S2); 1 × C&K JS102011SAQN (SW7) |
-| Printed parts | Front shell, battery partition, rear cover, and 4 separate button caps |
-| Assembly supplies | 4 M2.5 × 4 mm PCB screws (head ≤5 mm diameter, ≤2.5 mm high), 4 nominal M2.5 × 6 mm cover screws, 6 M1.6 × 4 mm countersunk frame screws (3 mm head, 90°), display-compatible border pads, and thin nonconductive cell cushioning |
+| Printed parts | Five: front bezel, main body with integral display retainer, battery tray, rear cover with guides, and connected button strip |
+| Assembly supplies | 4 M2.5 × 4 mm PCB screws (head ≤5 mm diameter, ≤2.5 mm high), 2 M2.5 × 6 mm countersunk upper cover screws (head ≤5 mm, 90°), 2 M1.6 × 4 mm lower cover screws, 6 M1.6 × 4 mm countersunk bezel screws (3 mm head, 90°), display-compatible border pads, and thin nonconductive cell cushioning |
 
 The [source component list and LCSC/JLCPCB mappings](design-data.ts) and the
 [generated BOM](#fabrication-files) cover the remaining passives, charger,
@@ -138,7 +138,7 @@ the PCB.
 
 ## Dimensioned enclosure print prototype
 
-The slim case has a **68.0 × 109.5 × 21.1 mm** outside envelope. From front
+The slim case has a **68.0 × 111.0 × 21.1 mm** outside envelope. From front
 through back it contains the display, 62.5 × 95.08 mm PCB, a 1.4 mm rigid
 partition, a protected 2000 mAh LiPo compartment, and a removable rear cover.
 The case separates the battery from the component side of the board. The
@@ -171,24 +171,34 @@ table](assets/enclosure/PRINTING.md) describes the printed parts.
 
 ![BT1 facing the partition cable opening](assets/enclosure/printable-battery-connector.png)
 
-The display is mechanically retained by four removable perimeter-frame sections
-and six independent M1.6 countersunk screws. Hard stops set the frame height;
-soft pads cushion both faces of the display border. The 1.4 mm frame clears
-the PCB underside by 1.05 mm and has open center notches for the ribbon.
-Its separate sections can be installed around the fixed PCB posts and ledges.
-Pad softness, printed fit and physical retention still need a sample test.
-The [mounting dimensions](assets/enclosure/display-retainer.json) and
-[assembly instructions](assets/enclosure/PRINTING.md) specify the pads and screws.
+The main body now includes the display retaining frame. Six M1.6 countersunk
+screws join it to a removable front bezel, with hard stops and soft pads on
+both faces of the display border. The 1.4 mm retainer clears the PCB underside
+by 1.05 mm. The body and bezel separate straight apart for screen service.
+The rear cover uses two small lower screws and two upper screws; its guides
+locate the cell. Its port roofs lift away to clear USB-C and MicroSD during
+board insertion. The lower lip grows 1.5 mm to keep the lower cover posts
+outside the unchanged PCB. A removable tray rests around the four PCB screw heads, leaving
+an unobstructed board insertion path. Four small button caps are joined by
+independent PETG leaf arms into one printed strip. Button force and printed
+fit still need a physical prototype.
 
-![Display seated under four removable frame sections, with the PCB removed](assets/enclosure/display-retainer-installed.png)
+![Display held by the integral main-body retainer](assets/enclosure/display-retainer-installed.png)
 
-The [printable STL files and full dimension table](assets/enclosure/PRINTING.md)
-include the shell, partition, rear cover, four retaining-frame sections, and four independent front caps.
+The [print ZIP](assets/enclosure/esp32-reader-printable-stls.zip) contains
+**five printed parts**, reduced from eleven. The
+[220 × 220 mm 3MF plate](assets/enclosure/reader-print-plate.3mf) and
+[bed-oriented STLs](assets/enclosure/print/) are ready to import at 100% scale.
+Select your printer/PETG preset and follow the
+[print and assembly instructions](assets/enclosure/PRINTING.md).
+
 The [component inventory](assets/enclosure/component-inventory.csv) lists
 PCB references with footprint size and available 3D model envelopes.
 `bun run export:assembly` resolves the local enclosure, display and GCT USB-C
 models and writes `dist/index/assembly.glb` without substituting fallback
-cubes for local assets. The clearance script also checks J1's local GCT OBJ.
+cubes for local assets. The clearance script also checks J1's local GCT OBJ. All sixteen imported
+component OBJ/STEP models are bundled locally, with source URLs and checksums
+in `assets/components/sources.json`, to avoid external model-server dependencies.
 The screen FPC has a nominal installed
 model; the antenna cable, real battery lead, and manufacturing tolerances
 remain unmodeled. The meshes
@@ -368,11 +378,16 @@ lead, button travel and printed-fit checks remain necessary.
 
 ## Printable enclosure
 
+![Five parts arranged for printing on a 220 mm bed](assets/enclosure/reader-print-plate.png)
+
 The [print package](assets/enclosure/esp32-reader-printable-stls.zip)
-contains the eleven printable parts and the dimensioned guide. The separate
-[STLs](assets/enclosure/stl/) and [print instructions](assets/enclosure/PRINTING.md)
-are also available. Do **not** print the `battery-envelope-DO-NOT-PRINT` file;
-it is a fit gauge.
+contains five bed-oriented STLs, a geometry-only
+[3MF plate](assets/enclosure/reader-print-plate.3mf), and the
+[print instructions](assets/enclosure/PRINTING.md). The separate
+[STLs](assets/enclosure/print/) are also available. Files marked `DO-NOT-PRINT`
+are inspection gauges. The connected button strip needs PETG and removable
+supports beneath its raised rail/arms. Choose your actual printer and filament
+preset before slicing; no printer-specific G-code is supplied.
 
 To regenerate the meshes from source, install Blender and run:
 

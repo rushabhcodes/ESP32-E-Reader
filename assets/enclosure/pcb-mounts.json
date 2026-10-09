@@ -1,46 +1,47 @@
 {
-	"holeDiameter": 2.7,
-	"copperKeepoutRadius": 3.2,
-	"bossDiameter": 5.6,
-	"pilotDiameter": 2.0,
-	"supportZ": -0.8,
-	"screwLength": 4.0,
-	"screwHeadDiameter": 5.0,
-	"screwHeadHeight": 2.5,
-	"driverDiameter": 5.0,
-	"buttonTravel": 0.2,
-	"mounts": [
-		{
-			"name": "MOUNT_TL",
-			"x": -27.0,
-			"y": 44.75,
-			"bossBaseZ": -3.55,
-			"pilotBaseZ": -3.4,
-			"buttonFlangeRelief": false
-		},
-		{
-			"name": "MOUNT_TR",
-			"x": 27.0,
-			"y": 44.75,
-			"bossBaseZ": -3.55,
-			"pilotBaseZ": -3.4,
-			"buttonFlangeRelief": false
-		},
-		{
-			"name": "MOUNT_BL",
-			"x": -28.0,
-			"y": -40.0,
-			"bossBaseZ": -3.65,
-			"pilotBaseZ": -3.45,
-			"buttonFlangeRelief": true
-		},
-		{
-			"name": "MOUNT_BR",
-			"x": 28.0,
-			"y": -40.0,
-			"bossBaseZ": -3.65,
-			"pilotBaseZ": -3.45,
-			"buttonFlangeRelief": true
-		}
-	]
+  "holeDiameter": 2.7,
+  "copperKeepoutRadius": 3.2,
+  "bossDiameter": 5.6,
+  "pilotDiameter": 2.0,
+  "supportZ": -0.8,
+  "screwLength": 4,
+  "screwHeadDiameter": 5.0,
+  "screwHeadHeight": 2.5,
+  "driverDiameter": 5.0,
+  "buttonTravel": 0.2,
+  "mounts": [
+    {
+      "name": "MOUNT_TL",
+      "x": -27.0,
+      "y": 44.75,
+      "bossBaseZ": -3.25,
+      "pilotBaseZ": -3.35,
+      "buttonFlangeRelief": false
+    },
+    {
+      "name": "MOUNT_TR",
+      "x": 27.0,
+      "y": 44.75,
+      "bossBaseZ": -3.25,
+      "pilotBaseZ": -3.35,
+      "buttonFlangeRelief": false
+    },
+    {
+      "name": "MOUNT_BL",
+      "x": -28.0,
+      "y": -40.0,
+      "bossBaseZ": -3.25,
+      "pilotBaseZ": -3.35,
+      "buttonFlangeRelief": true
+    },
+    {
+      "name": "MOUNT_BR",
+      "x": 28.0,
+      "y": -40.0,
+      "bossBaseZ": -3.25,
+      "pilotBaseZ": -3.35,
+      "buttonFlangeRelief": true
+    }
+  ],
+  "pilotThrough": true
 }

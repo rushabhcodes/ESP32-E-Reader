@@ -1,3 +1,5 @@
+import localC202112obj from "../assets/components/C202112.obj";
+import localC202112step from "../assets/components/C202112.step";
 import type { ChipProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -311,9 +313,9 @@ export const FH12_24S_0_5SH_55_ = (props: ChipProps<typeof pinLabels>) => {
 			}
 			cadModel={{
 				objUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C202112.obj?uuid=80a519313ec9409481d237954e09dd94",
+					localC202112obj,
 				stepUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C202112.step?uuid=80a519313ec9409481d237954e09dd94",
+					localC202112step,
 				pcbRotationOffset: 0,
 				modelOriginPosition: {
 					x: -0.000012699999984988608,

@@ -24,13 +24,12 @@ def read_stl(filename, color):
     return obj
 
 
-shell = read_stl('front-shell.stl', (.09, .105, .12))
-retainers = [read_stl(f'display-retainer-{end}-{side}.stl', (.14, .32, .42))
-             for end in ('lower', 'upper') for side in ('left', 'right')]
+shell = read_stl('front-bezel.stl', (.09, .105, .12))
+retainers = [read_stl('main-body.stl', (.09, .105, .12))]
 partition = read_stl('battery-partition.stl', (.26, .28, .31))
 cover = read_stl('rear-cover.stl', (.11, .12, .14))
 cell = read_stl('battery-envelope-DO-NOT-PRINT.stl', (.32, .54, .75))
-buttons = [read_stl(f'button-{i}.stl', (.25, .26, .28)) for i in range(1, 5)]
+buttons = [read_stl('button-strip.stl', (.25, .26, .28))]
 
 # CLI GLB imports into Blender with axes (-PCB X, -PCB Y, PCB Z).
 before = set(bpy.data.objects)
@@ -38,7 +37,7 @@ bpy.ops.import_scene.gltf(filepath='/tmp/esp-reader-current.glb')
 conversion = Matrix(((-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1)))
 board = []
 assembly_nodes = {'EPD1', 'battery_envelope', 'wifi_antenna_envelope',
-                  'front_shell', 'battery_partition', 'rear_cover',
+                  'pcb_cover_fasteners', 'front_bezel', 'main_body', 'button_strip', 'battery_partition', 'rear_cover',
                   'display_retainer_lower_left', 'display_retainer_lower_right',
                   'display_retainer_upper_left', 'display_retainer_upper_right',
                   'display_cushioning', 'display_retainer_fasteners',
@@ -97,6 +96,17 @@ for filename in ('display-cushioning.glb', 'display-retainer-fasteners.glb'):
         obj.color = tuple(obj.data.materials[0].diffuse_color) if obj.data.materials else (.65, .67, .69, 1)
         retention_supplies.append(obj)
 
+lid_hardware = []
+before = set(bpy.data.objects)
+bpy.ops.import_scene.gltf(filepath=str(OUT / 'pcb-cover-fasteners.glb'))
+for obj in set(bpy.data.objects) - before:
+    if obj.type != 'MESH': continue
+    obj.matrix_world = Matrix.Rotation(-pi / 2, 4, 'X') @ obj.matrix_world
+    obj.color = (.65, .67, .69, 1)
+    if 'cover-screw-' in obj.name:
+        obj.hide_render = True; lid_hardware.append(obj)
+    else: obj.hide_render = True
+
 scene = bpy.context.scene
 scene.render.engine = 'BLENDER_WORKBENCH'
 scene.display.shading.color_type = 'OBJECT'
@@ -135,19 +145,29 @@ panel.hide_render = False
 active.hide_render = False
 for obj in flex_objects:
     obj.hide_render = False
+cover.hide_render = False
+for obj in lid_hardware: obj.hide_render = False
 render('printable-front.png', (100, 130, -110))
+cover.hide_render = True
+for obj in lid_hardware: obj.hide_render = True
 render('printable-open-back.png', (-100, -110, 120))
+cover.hide_render = False
+for obj in lid_hardware: obj.hide_render = False
 render('printable-side.png', (190, -25, 35), 140)
+cover.hide_render = True
+for obj in lid_hardware: obj.hide_render = True
 
 # Installed connection close-up with the shell removed so the locking socket
 # and the flex crossing through the actual PCB slot remain visible.
 shell.hide_render = True
+for obj in retainers: obj.hide_render = True
 partition.hide_render = True
 cell.hide_render = True
 render('display-ribbon-connection.png', (35, -83, 30), 44, (0, -34, 0))
 shell.hide_render = False
+for obj in retainers: obj.hide_render = False
 
-# Show the display mount with the PCB lifted out: all four frame sections,
+# Show the integral display retainer with the PCB lifted out:
 # flush fasteners, and the central ribbon opening remain visible.
 for obj in board:
     obj.hide_render = True
@@ -159,6 +179,7 @@ cell.hide_render = False
 
 # Local view of the changed battery connector and the lifted cable notch.
 shell.hide_render = True
+for obj in retainers: obj.hide_render = True
 cell.hide_render = True
 panel.hide_render = True
 active.hide_render = True
@@ -166,6 +187,7 @@ partition.location.z += 10
 render('printable-battery-connector.png', (75, -125, 125), 80, (12, -29, 8))
 partition.location.z -= 10
 shell.hide_render = False
+for obj in retainers: obj.hide_render = False
 cell.hide_render = False
 panel.hide_render = False
 active.hide_render = False
@@ -183,4 +205,30 @@ partition.location.z += 35
 cell.location.z += 44
 cover.location.z += 53
 cover.hide_render = False
+for obj in lid_hardware:
+    obj.location.z += 53; obj.hide_render = False
 render('printable-exploded.png', (165, -145, 125), 185, (0, 5, 38))
+
+# The actual five bed-oriented exports, at their 3MF plate positions.
+for obj in list(bpy.data.objects): obj.hide_render = True
+for name, x, y, color in (
+    ('front-bezel', 38, 61, (.10, .13, .16)),
+    ('main-body', 111, 61, (.15, .30, .38)),
+    ('rear-cover', 184, 61, (.10, .13, .16)),
+    ('battery-partition', 38, 167, (.30, .34, .38)),
+    ('button-strip', 112, 145, (.19, .42, .54))):
+    bpy.ops.wm.stl_import(filepath=str(OUT/'print'/(name+'.stl')))
+    obj = bpy.context.object; obj.location.x += x; obj.location.y += y
+    obj.color = (*color, 1)
+    if name == 'button-strip':
+        label_pos = (x, y - 8, .3)
+    else:
+        label_pos = (x - (32 if name == 'battery-partition' else 34.5), y - 23, .3)
+    bpy.ops.object.text_add(location=label_pos)
+    label = bpy.context.object; label.data.body = name.replace('-', ' ')
+    label.data.size = 3.3; label.data.align_x = 'CENTER' if name == 'button-strip' else 'LEFT'
+    if name != 'button-strip': label.rotation_euler.z = pi / 2
+    label.color = (.15,.18,.20,1)
+bpy.ops.mesh.primitive_cube_add(size=1, location=(110,110,-.65))
+bed = bpy.context.object; bed.dimensions = (220,220,1.2); bed.color = (.78,.80,.81,1)
+render('reader-print-plate.png', (230,-170,390), 325, (110,110,0))

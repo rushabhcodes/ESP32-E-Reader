@@ -1,3 +1,5 @@
+import localC388883obj from "../assets/components/C388883.obj";
+import localC388883step from "../assets/components/C388883.step";
 import type { PushButtonProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -138,9 +140,9 @@ export const EVQP7C01P = (props: PushButtonProps<typeof pinLabels>) => {
 			}
 			cadModel={{
 				objUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C388883.obj?uuid=47afa358d3094fbf913052f46a4feca9",
+					localC388883obj,
 				stepUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C388883.step?uuid=47afa358d3094fbf913052f46a4feca9",
+					localC388883step,
 				pcbRotationOffset: 0,
 				modelOriginPosition: {
 					x: -0.006997699999942597,

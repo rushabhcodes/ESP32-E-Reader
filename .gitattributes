@@ -1,0 +1,3 @@
+# Preserve supplier CAD bytes for the source checksum manifest.
+assets/components/*.obj -text
+assets/components/*.step -text

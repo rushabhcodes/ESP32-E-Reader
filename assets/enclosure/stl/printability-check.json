@@ -1,0 +1,73 @@
+{
+  "slicer": "PrusaSlicer-2.9.6+arch2 based on Slic3r (with GUI support)",
+  "nozzle_mm": 0.4,
+  "layer_mm": 0.2,
+  "bed_mm": [
+    220,
+    220
+  ],
+  "profile_sha256": "9a37ad53088fec521e9381bf155aaa19aabd4a91cda723449f847983d56a0081",
+  "parts": [
+    {
+      "source": "assets/enclosure/print/battery-partition.stl",
+      "source_sha256": "f0b1bb6d934cbd2d6e16a2f955ea0eda3fcbc6cb9109d196e03613893df01d7d",
+      "layer_change_events": 33,
+      "filament_g": 9.43,
+      "support_filament_g": 0.012,
+      "reference_time": "1h 18m 9s",
+      "warnings": [],
+      "exit_code": 0
+    },
+    {
+      "source": "assets/enclosure/print/button-strip.stl",
+      "source_sha256": "dad2b0cb51b488625157655017ec58e421ca3db25917d076fdc13ce8a2fe2d83",
+      "layer_change_events": 19,
+      "filament_g": 1.31,
+      "support_filament_g": 0.592,
+      "reference_time": "9m 40s",
+      "warnings": [],
+      "exit_code": 0
+    },
+    {
+      "source": "assets/enclosure/print/front-bezel.stl",
+      "source_sha256": "14915f0ec94169ff8a0400c3f6634dff75d016e633c38879fb6ab6b2dbee6545",
+      "layer_change_events": 16,
+      "filament_g": 8.03,
+      "support_filament_g": 0.0,
+      "reference_time": "57m 0s",
+      "warnings": [],
+      "exit_code": 0
+    },
+    {
+      "source": "assets/enclosure/print/main-body.stl",
+      "source_sha256": "11ae7978028ee6f86cff3244781edf19839d4e9eb0f6911ebc6ad78fe098d58e",
+      "layer_change_events": 82,
+      "filament_g": 17.18,
+      "support_filament_g": 0.0,
+      "reference_time": "1h 55m 54s",
+      "warnings": [],
+      "exit_code": 0
+    },
+    {
+      "source": "assets/enclosure/print/rear-cover.stl",
+      "source_sha256": "3b740e9f961a8cc052e94f67b8d81983738e9b6e624743b9dd6e5b63687db84e",
+      "layer_change_events": 47,
+      "filament_g": 18.06,
+      "support_filament_g": 0.022,
+      "reference_time": "2h 26m 7s",
+      "warnings": [],
+      "exit_code": 0
+    }
+  ],
+  "plate": {
+    "source": "assets/enclosure/reader-print-plate.3mf",
+    "source_sha256": "63fc14c2068b848f5c84c34cbffe69b004da01dda99a38d75381dbdd1643f242",
+    "layer_change_events": 92,
+    "filament_g": 54.19,
+    "support_filament_g": 0.627,
+    "reference_time": "6h 48m 17s",
+    "warnings": [],
+    "exit_code": 0
+  },
+  "scope": "Toolpath generation only; printer-specific calibration, fit and fatigue remain unverified."
+}

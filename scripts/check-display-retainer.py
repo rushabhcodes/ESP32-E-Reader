@@ -84,10 +84,10 @@ def glb(filename, translation=(0, 0, 0)):
     return objects
 
 
-shell = stl("front-shell")
-frames = [stl(f"display-retainer-{end}-{side}") for end in ("lower", "upper") for side in ("left", "right")]
+shell = stl("front-bezel")
+frames = [stl("main-body")]
 case_parts = [stl(name) for name in ("battery-partition", "rear-cover", "battery-envelope-DO-NOT-PRINT")]
-buttons = [stl(f"button-{i}") for i in range(1, 5)]
+buttons = [stl(f"button-{i}-DO-NOT-PRINT") for i in range(1, 5)]
 pads = glb("display-cushioning.glb")
 fasteners = glb("display-retainer-fasteners.glb")
 display_parts = glb("display-panel.glb", (0, DISPLAY["connector"]["centerY"], DISPLAY["connector"]["boardSurfaceZ"]))
@@ -109,9 +109,9 @@ for obj in set(bpy.data.objects) - before:
     obj.matrix_world = conversion @ obj.matrix_world
     if obj.name in pcb_refs or obj.name in ("Box0", "MeshWithTextures0"):
         components.append(obj)
-    if obj.name.startswith("display_retainer_") and "fasteners" not in obj.name:
+    if obj.name == "main_body":
         published_frames.append(obj)
-assert len(published_frames) == 4, "Missing retaining frame in the circuit assembly"
+assert len(published_frames) == 1, "Missing retaining frame in the circuit assembly"
 for part in frames:
     emitted = next(obj for obj in published_frames if obj.name == part.name.replace("-", "_"))
     assert len(emitted.data.vertices) > 50, "Fallback frame mesh"
@@ -183,7 +183,7 @@ for mount in SCREWS["positions"]:
     bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=SCREWS["driverDiameter"] / 2,
         depth=22, location=(x, y, FRAME["backZ"] + 11.05))
     driver = bpy.context.object
-    driver_overlap = overlap(driver, shell)
+    driver_overlap = overlap(driver, shell) + overlap(driver, frames[0])
     bpy.data.objects.remove(driver, do_unlink=True)
     assert driver_overlap <= EPS, f"Blocked frame screw driver at {mount}"
     mount_checks.append({"x": x, "y": y, "stop_z": stop_z, "pilot_floor_z": pilot_floor, "tip_clearance_mm": round(tip_z - pilot_floor, 3), "driver_shell_overlap_mm3": driver_overlap})
@@ -192,15 +192,8 @@ for mount in SCREWS["positions"]:
 # free thickness is used here, so raised sections do not rub the glass.
 paths = []
 for part in frames:
-    is_lower = "lower" in part.name
-    sign = 1 if "left" in part.name else -1
-    inward = sign * (FRAME["installationInwardOffset"] if is_lower else FRAME["upperInstallationInwardOffset"])
-    dy = 0 if is_lower else FRAME["upperInstallationYOffset"]
-    lift = FRAME["installationLift"]
-    points = [(inward, dy, 24), (inward, dy, lift)]
-    if not is_lower:
-        points.append((inward, 0, lift))
-    points += [(0, 0, lift), (0, 0, 0)]
+    lift = .15
+    points = [(0, 0, 24), (0, 0, lift), (0, 0, 0)]
     carried = [part] + [pad for pad in rear_pads if next(c["owner"] for c in contacts if c["pad"] == pad.name) == part.name]
     original_matrices = {obj: obj.matrix_world.copy() for obj in carried}
     original_data = {}
@@ -237,7 +230,7 @@ for part in frames:
 
 report = {"frame_solid_overlaps_mm3": collisions, "rear_pad_contacts": contacts,
           "front_pads_seated": 10, "hard_stops_and_screws": mount_checks,
-          "installation_paths": paths, "pcb_underside_clearance_mm": round(-.8 - FRAME["backZ"], 3),
+          "installation_paths": paths, "frame_to_pcb_underside_clearance_mm": round(-.8 - FRAME["backZ"], 3),
           "basis": SPEC["basis"], "unverified": ["pad compression force", "printed tolerances", "thread strength", "drop resistance"]}
 (STL / "display-retainer-check.json").write_text(json.dumps(report, indent=2) + "\n")
 print(json.dumps(report, indent=2))

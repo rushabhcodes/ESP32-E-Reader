@@ -1,3 +1,5 @@
+import localC202140obj from "../assets/components/C202140.obj";
+import localC202140step from "../assets/components/C202140.step";
 import type { ChipProps } from "@tscircuit/props"
 
 export const pinLabels = {
@@ -62,8 +64,8 @@ export const TPS63021DSJR = (props: ChipProps<typeof pinLabels>) => {
 <courtyardoutline outline={[{"x":-2.462060600000086,"y":2.0414619999999104},{"x":2.4321393999999827,"y":2.0414619999999104},{"x":2.4321393999999827,"y":-2.4971380000000636},{"x":-2.462060600000086,"y":-2.4971380000000636},{"x":-2.462060600000086,"y":2.0414619999999104}]} />
       </footprint>}
       cadModel={{
-        objUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C202140.obj?uuid=fdc829583767408e90d29293c58f907c",
-        stepUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C202140.step?uuid=fdc829583767408e90d29293c58f907c",
+        objUrl: localC202140obj,
+        stepUrl: localC202140step,
         pcbRotationOffset: 90,
         modelOriginPosition: { x: -0.000025399999913133797, y: 0, z: 0 },
       }}

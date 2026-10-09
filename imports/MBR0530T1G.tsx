@@ -1,3 +1,5 @@
+import localC82046obj from "../assets/components/C82046.obj";
+import localC82046step from "../assets/components/C82046.step";
 import type { DiodeProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -19,9 +21,9 @@ export const MBR0530T1G = (props: DiodeProps) => {
 			footprint="smdpads2_p3.4mm_pw1.2mm_ph0.95mm"
 			cadModel={{
 				objUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C82046.obj?uuid=e9d505c99b6c436aaf827a29c5ba4f84",
+					localC82046obj,
 				stepUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C82046.step?uuid=e9d505c99b6c436aaf827a29c5ba4f84",
+					localC82046step,
 				pcbRotationOffset: 0,
 				modelOriginPosition: { x: 0, y: 0.000012699999999199463, z: -0.6 },
 			}}

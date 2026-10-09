@@ -1,3 +1,5 @@
+import localC54313obj from "../assets/components/C54313.obj";
+import localC54313step from "../assets/components/C54313.step";
 import type { ChipProps } from "@tscircuit/props"
 
 export const pinLabels = {
@@ -68,8 +70,8 @@ export const BQ24074RGTR = (props: ChipProps<typeof pinLabels>) => {
 <courtyardoutline outline={[{"x":-2.6280749999999955,"y":2.1708750000000094},{"x":2.1645249999999976,"y":2.1708750000000094},{"x":2.1645249999999976,"y":-2.189924999999988},{"x":-2.6280749999999955,"y":-2.189924999999988},{"x":-2.6280749999999955,"y":2.1708750000000094}]} />
       </footprint>}
       cadModel={{
-        objUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C54313.obj?uuid=6e50ae26fe4f4c2a8ee6b5b5bc616dea",
-        stepUrl: "https://modelcdn.tscircuit.com/easyeda_models/assets/C54313.step?uuid=6e50ae26fe4f4c2a8ee6b5b5bc616dea",
+        objUrl: localC54313obj,
+        stepUrl: localC54313step,
         pcbRotationOffset: 0,
         modelOriginPosition: { x: 0, y: 0.000012699999999199463, z: 0 },
       }}

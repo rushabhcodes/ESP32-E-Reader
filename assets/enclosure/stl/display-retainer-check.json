@@ -1,77 +1,74 @@
 {
   "frame_solid_overlaps_mm3": {
-    "display-retainer-lower-left": {},
-    "display-retainer-lower-right": {},
-    "display-retainer-upper-left": {},
-    "display-retainer-upper-right": {}
+    "main-body": {}
   },
   "rear_pad_contacts": [
     {
-      "pad": "display-rear-pad-2",
-      "owner": "display-retainer-lower-right",
-      "glass_z": -3.749999761581421,
-      "frame_z": -3.2499983310699463,
-      "outside_active_area": true
-    },
-    {
-      "pad": "display-rear-pad-7",
-      "owner": "display-retainer-lower-left",
-      "glass_z": -3.7499988079071045,
-      "frame_z": -3.2499983310699463,
-      "outside_active_area": true
-    },
-    {
-      "pad": "display-rear-pad-1",
-      "owner": "display-retainer-lower-left",
-      "glass_z": -3.749999761581421,
-      "frame_z": -3.2499983310699463,
-      "outside_active_area": true
-    },
-    {
-      "pad": "display-rear-pad-10",
-      "owner": "display-retainer-upper-right",
-      "glass_z": -3.75000262260437,
-      "frame_z": -3.250002145767212,
-      "outside_active_area": true
-    },
-    {
-      "pad": "display-rear-pad-4",
-      "owner": "display-retainer-lower-right",
+      "pad": "display-rear-pad-3",
+      "owner": "main-body",
       "glass_z": -3.7500009536743164,
       "frame_z": -3.249999523162842,
       "outside_active_area": true
     },
     {
       "pad": "display-rear-pad-5",
-      "owner": "display-retainer-lower-left",
-      "glass_z": -3.750002145767212,
-      "frame_z": -3.2500007152557373,
-      "outside_active_area": true
-    },
-    {
-      "pad": "display-rear-pad-6",
-      "owner": "display-retainer-lower-right",
+      "owner": "main-body",
       "glass_z": -3.750002145767212,
       "frame_z": -3.2500007152557373,
       "outside_active_area": true
     },
     {
       "pad": "display-rear-pad-9",
-      "owner": "display-retainer-upper-left",
+      "owner": "main-body",
       "glass_z": -3.75000262260437,
       "frame_z": -3.250002145767212,
       "outside_active_area": true
     },
     {
-      "pad": "display-rear-pad-3",
-      "owner": "display-retainer-lower-left",
+      "pad": "display-rear-pad-2",
+      "owner": "main-body",
+      "glass_z": -3.749999761581421,
+      "frame_z": -3.2499983310699463,
+      "outside_active_area": true
+    },
+    {
+      "pad": "display-rear-pad-10",
+      "owner": "main-body",
+      "glass_z": -3.75000262260437,
+      "frame_z": -3.250002145767212,
+      "outside_active_area": true
+    },
+    {
+      "pad": "display-rear-pad-6",
+      "owner": "main-body",
+      "glass_z": -3.750002145767212,
+      "frame_z": -3.2500007152557373,
+      "outside_active_area": true
+    },
+    {
+      "pad": "display-rear-pad-7",
+      "owner": "main-body",
+      "glass_z": -3.7499988079071045,
+      "frame_z": -3.2499983310699463,
+      "outside_active_area": true
+    },
+    {
+      "pad": "display-rear-pad-1",
+      "owner": "main-body",
+      "glass_z": -3.749999761581421,
+      "frame_z": -3.2499983310699463,
+      "outside_active_area": true
+    },
+    {
+      "pad": "display-rear-pad-4",
+      "owner": "main-body",
       "glass_z": -3.7500009536743164,
       "frame_z": -3.249999523162842,
       "outside_active_area": true
     },
     {
       "pad": "display-rear-pad-8",
-      "owner": "display-retainer-lower-right",
+      "owner": "main-body",
       "glass_z": -3.7499988079071045,
       "frame_z": -3.2499983310699463,
       "outside_active_area": true
@@ -160,17 +157,12 @@
   ],
   "installation_paths": [
     {
-      "part": "display-retainer-lower-left",
+      "part": "main-body",
       "offset_waypoints_mm": [
         [
-          3.8,
+          0,
           0,
           24
-        ],
-        [
-          3.8,
-          0,
-          0.15
         ],
         [
           0,
@@ -183,107 +175,13 @@
           0
         ]
       ],
-      "samples": 60,
-      "max_step_mm": 0.5,
-      "max_overlap_mm3": 0
-    },
-    {
-      "part": "display-retainer-lower-right",
-      "offset_waypoints_mm": [
-        [
-          -3.8,
-          0,
-          24
-        ],
-        [
-          -3.8,
-          0,
-          0.15
-        ],
-        [
-          0,
-          0,
-          0.15
-        ],
-        [
-          0,
-          0,
-          0
-        ]
-      ],
-      "samples": 60,
-      "max_step_mm": 0.5,
-      "max_overlap_mm3": 0
-    },
-    {
-      "part": "display-retainer-upper-left",
-      "offset_waypoints_mm": [
-        [
-          10,
-          -8,
-          24
-        ],
-        [
-          10,
-          -8,
-          0.15
-        ],
-        [
-          10,
-          0,
-          0.15
-        ],
-        [
-          0,
-          0,
-          0.15
-        ],
-        [
-          0,
-          0,
-          0
-        ]
-      ],
-      "samples": 89,
-      "max_step_mm": 0.5,
-      "max_overlap_mm3": 0
-    },
-    {
-      "part": "display-retainer-upper-right",
-      "offset_waypoints_mm": [
-        [
-          -10,
-          -8,
-          24
-        ],
-        [
-          -10,
-          -8,
-          0.15
-        ],
-        [
-          -10,
-          0,
-          0.15
-        ],
-        [
-          0,
-          0,
-          0.15
-        ],
-        [
-          0,
-          0,
-          0
-        ]
-      ],
-      "samples": 89,
+      "samples": 51,
       "max_step_mm": 0.5,
       "max_overlap_mm3": 0
     }
   ],
-  "pcb_underside_clearance_mm": 1.05,
-  "basis": "Prototype mechanical retention: four frame sections seat on six enclosure hard stops before the PCB is installed. Lower sections enter 3.8 mm inward and 0.15 mm raised, slide outward below the PCB edge ledges, then seat. Upper sections enter 10 mm inward and 8 mm toward the buttons to clear lid/PCB posts; at the raised seating height slide up 8 mm, then outward 10 mm and lower. Nonconductive display-compatible pads touch only the border. Rear pads are modeled at 0.5 mm installed thickness (0.6 mm free thickness, nominal 0.1 mm compression); actual pad softness, tolerance, printed fit and retention need sample testing. M1.6 machine-screw pilots must be tapped before fitting the glass; no heat-set insert is modeled.",
+  "frame_to_pcb_underside_clearance_mm": 1.05,
+  "basis": "Rev. C: retaining frame is integral to the main body. The front bezel lifts straight off in -Z with the PCB and battery tray removed and flex unplugged. Six hard stops at Z -3.25 set nominal rear pad compression. Display-compatible border pads, printed tolerance, thread fit and physical retention need sample testing.",
   "unverified": [
     "pad compression force",
     "printed tolerances",

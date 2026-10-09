@@ -1,3 +1,5 @@
+import localC520357obj from "../assets/components/C520357.obj";
+import localC520357step from "../assets/components/C520357.step";
 import type { InductorProps } from "@tscircuit/props";
 
 export const CR5040_470M = (props: Omit<InductorProps, "inductance">) => {
@@ -62,9 +64,9 @@ export const CR5040_470M = (props: Omit<InductorProps, "inductance">) => {
 			}
 			cadModel={{
 				objUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C520357.obj?uuid=0acce46b82494539a4589a0e8b12d880",
+					localC520357obj,
 				stepUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C520357.step?uuid=0acce46b82494539a4589a0e8b12d880",
+					localC520357step,
 				pcbRotationOffset: 90,
 				modelOriginPosition: { x: 0, y: 0, z: -0.01 },
 			}}

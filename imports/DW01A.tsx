@@ -1,3 +1,5 @@
+import localC2927799obj from "../assets/components/C2927799.obj";
+import localC2927799step from "../assets/components/C2927799.step";
 import type { ChipProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -27,9 +29,9 @@ export const DW01A = (props: ChipProps<typeof pinLabels>) => {
 			footprint="jlcpcb:C2927799"
 			cadModel={{
 				objUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C2927799.obj?uuid=229b69761e2c45dba6a83d8866dec72d",
+					localC2927799obj,
 				stepUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C2927799.step?uuid=229b69761e2c45dba6a83d8866dec72d",
+					localC2927799step,
 				pcbRotationOffset: 90,
 				modelOriginPosition: {
 					x: -0.000012700000070253736,

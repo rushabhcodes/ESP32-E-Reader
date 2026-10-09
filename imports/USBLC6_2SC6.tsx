@@ -1,3 +1,5 @@
+import localC7519obj from "../assets/components/C7519.obj";
+import localC7519step from "../assets/components/C7519.step";
 import type { ChipProps } from "@tscircuit/props";
 
 const pinLabels = {
@@ -239,9 +241,9 @@ export const USBLC6_2SC6 = (props: ChipProps<typeof pinLabels>) => {
 			footprint="jlcpcb:C7519"
 			cadModel={{
 				objUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C7519.obj?uuid=229b69761e2c45dba6a83d8866dec72d",
+					localC7519obj,
 				stepUrl:
-					"https://modelcdn.tscircuit.com/easyeda_models/assets/C7519.step?uuid=229b69761e2c45dba6a83d8866dec72d",
+					localC7519step,
 				pcbRotationOffset: 90,
 				modelOriginPosition: {
 					x: -0.000012700000070253736,

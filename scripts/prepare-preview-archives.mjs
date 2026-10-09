@@ -9,10 +9,24 @@ const enclosure = path.join(root, "assets/enclosure");
 const options = { level: 9, mtime: new Date(1980, 0, 1, 0, 0, 0) };
 const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const exists = (file) => access(file).then(() => true, () => false);
+export const previewImages = [
+  "printable-front.png", "printable-open-back.png", "printable-side.png", "printable-exploded.png",
+  "display-retainer-installed.png", "display-ribbon-connection.png", "printable-pcb-mounts.png", "reader-print-plate.png",
+];
 
 // Git-linked releases omit ZIP/3MF binaries. Recreate them from tracked
 // STEP/STL/JSON sources using the same pinned encoder as local packaging.
-export async function preparePreviewArchives({ supplier = true, print = true, updateSupplier = false } = {}) {
+export async function preparePreviewArchives({ supplier = true, print = true, images = true, updateSupplier = false } = {}) {
+  if (images) {
+    for (const name of previewImages) {
+      const destination = path.join(enclosure, name);
+      if (await exists(destination)) continue;
+      const source = JSON.parse(await readFile(path.join(enclosure, "preview-sources", name + ".json"), "utf8"));
+      const bytes = Buffer.from(source.base64, "base64");
+      if (digest(bytes) !== source.sha256) throw new Error(`Reconstructed preview differs: ${name}`);
+      await writeFile(destination, bytes);
+    }
+  }
   if (supplier) {
     const manifestPath = path.join(root, "assets/components/supplier-step-archives.json");
     const archives = JSON.parse(await readFile(manifestPath, "utf8"));
@@ -52,5 +66,5 @@ export async function preparePreviewArchives({ supplier = true, print = true, up
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const supplierOnly = process.argv.includes("--supplier");
   const printOnly = process.argv.includes("--print");
-  await preparePreviewArchives({ supplier: !printOnly, print: !supplierOnly, updateSupplier: supplierOnly });
+  await preparePreviewArchives({ supplier: !printOnly, print: !supplierOnly, images: !supplierOnly && !printOnly, updateSupplier: supplierOnly });
 }

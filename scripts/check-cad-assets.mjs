@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { previewImages } from "./prepare-preview-archives.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const circuitFile = path.resolve(process.argv[2] ?? path.join(root, "dist/index/circuit.json"));
@@ -31,6 +32,13 @@ paths.add("assets/components/supplier-step-archives.json");
 for (const archive of archives) {
 	assert.equal(digest(await readFile(path.join(root, archive.path))), archive.sha256);
 	paths.add(archive.path);
+}
+for (const filename of previewImages) {
+	const relative = "assets/enclosure/" + filename;
+	const encoded = JSON.parse(await readFile(path.join(root, "assets/enclosure/preview-sources", filename + ".json"), "utf8"));
+	assert.equal(digest(Buffer.from(encoded.base64, "base64")), encoded.sha256);
+	assert.equal(digest(await readFile(path.join(root, relative))), encoded.sha256, `Stale preview restore source: ${filename}`);
+	paths.add(relative);
 }
 const results = [];
 const todo = [...paths];

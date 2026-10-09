@@ -1,4 +1,4 @@
-import { preparePreviewArchives } from "./prepare-preview-archives.mjs";
+import { preparePreviewArchives, previewImages } from "./prepare-preview-archives.mjs";
 import { copyFile, mkdir, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,8 +20,7 @@ const enclosure = [
   "print/front-chassis.stl", "print/rear-cover.stl", "reader-print-plate.3mf",
   "esp32-reader-printable-stls.zip", "PRINTING.md", "fdm-reference.ini", "enclosure-design.json",
   "pcb-mounts.json", "display-connection.json", "component-inventory.csv", "component-envelopes.csv",
-  "printable-front.png", "printable-open-back.png", "printable-side.png", "printable-exploded.png",
-  "display-retainer-installed.png", "display-ribbon-connection.png", "printable-pcb-mounts.png", "reader-print-plate.png",
+  ...previewImages,
   "stl/mesh-check.json", "stl/clearance-check.json", "stl/assembly-check.json",
   "stl/display-retainer-check.json", "stl/display-connection-check.json", "stl/printability-check.json",
 ];

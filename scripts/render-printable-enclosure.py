@@ -5,6 +5,7 @@ it illustrates a transparent CAD material, not the optical finish of FDM PETG.
 """
 from pathlib import Path
 from math import pi
+import subprocess
 import bpy
 from mathutils import Matrix, Vector
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'assets/enclosure'
@@ -92,3 +93,4 @@ for name,x,y in [('front-chassis',65,110),('rear-cover',150,110)]:
     label.data.materials.append(ink)
 bpy.ops.mesh.primitive_cube_add(size=1,location=(1.1,1.1,-.015));bed=bpy.context.object;bed.dimensions=(2.2,2.2,.02)
 render('reader-print-plate.png',(210,-135,360),295,(110,110,0))
+subprocess.run(['python3',str(ROOT/'scripts/package-preview-images.py')],cwd=ROOT,check=True)

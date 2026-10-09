@@ -380,8 +380,9 @@ After the release checks pass, commit the source and publish with
 `tsci push` from the committed runtime files, with original STEP
 models in their small ZIP archives, because direct `tsci push`
 does not honor `.gitignore` and can upload local check fixtures and caches.
-Prebuild reconstructs ZIP/3MF downloads from tracked sources because Git-linked
-releases omit those binary formats.
+Prebuild restores downloads and PNG previews from tracked STEP/STL/JSON sources
+because the Git importer omits ZIP and image files. Re-rendering also refreshes
+the checksummed preview restore sources.
 
 ## Fabrication files
 

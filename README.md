@@ -128,9 +128,10 @@ BOM](https://github.com/IS7V4N/ESP32_E-Reader). Each switch is 4.2 × 3.2 ×
 [manufacturer](https://tech.alpsalpine.com/e/products/category/tact-switch/sub/02/series/skrp/).
 They sit on 14 mm centers within the 62.5 mm board width. Moving the row 4 mm
 closer to the display removes 5 mm from the lower PCB edge while keeping about
-2 mm between the panel outline and the button openings. Four separate slim
-case caps reproduce the reference reader's recessed front-button appearance;
-they are not hot-swappable. This requires bottom-side assembly. Printable caps
+2 mm between the panel outline and the button openings. Four slim case caps
+joined by independent PETG leaf arms form one printable strip and reproduce
+the reference reader's recessed front-button appearance. This requires
+bottom-side assembly. Printable caps
 include a rear retention flange and nominal 0.14 mm clearance to the switch
 body, but actuation and print fit need a physical prototype. Check the actual
 display ribbon width and fold radius against the 26 mm FPC slot before ordering

@@ -283,7 +283,11 @@ export default function ESP32EReader() {
 			/>
 			<assembly.cadassembly
 				name="front_chassis"
-				cadModel={{ glbUrl: frontChassisUrl, modelUnitToMmScale: 1 }}
+				cadModel={{
+					glbUrl: frontChassisUrl,
+					modelUnitToMmScale: 1,
+					showAsTranslucentModel: true,
+				}}
 			/>
 			<assembly.cadassembly
 				name="display_cushioning"
@@ -303,7 +307,11 @@ export default function ESP32EReader() {
 			/>
 			<assembly.cadassembly
 				name="rear_cover"
-				cadModel={{ glbUrl: rearCoverUrl, modelUnitToMmScale: 1 }}
+				cadModel={{
+					glbUrl: rearCoverUrl,
+					modelUnitToMmScale: 1,
+					showAsTranslucentModel: true,
+				}}
 			/>
 		</assembly.device>
 	);

@@ -28,7 +28,7 @@ import { ESP32_C3_WROOM_02U_N4 } from "./imports/ESP32_C3_WROOM_02U_N4";
 import { EVQP7C01P } from "./imports/EVQP7C01P";
 import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
 import { FS8205A } from "./imports/FS8205A";
-import { JS102011SAQN } from "./imports/JS102011SAQN";
+import { MSK12C02_HB } from "./imports/MSK12C02_HB";
 import { MBR0530T1G } from "./imports/MBR0530T1G";
 import { SMMS0420_1R5M } from "./imports/SMMS0420_1R5M";
 import { TPS63021DSJR } from "./imports/TPS63021DSJR";
@@ -129,11 +129,7 @@ const renderChip = (spec: ChipSpec) => {
 		);
 	if (spec.name === "SW7")
 		return (
-			<JS102011SAQN
-				key={spec.name}
-				{...importedCommon}
-				pcbX={spec.pcbX - 1.75}
-			/>
+			<MSK12C02_HB key={spec.name} {...importedCommon} />
 		);
 
 	const common = {

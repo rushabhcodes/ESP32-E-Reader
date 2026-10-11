@@ -72,7 +72,7 @@ export const lcscGroups: Array<[string, string[]]> = [
 	["C133190", ["L2"]],
 	["C388883", ["S1", "S2"]],
 	["C139797", ["SW2", "SW3", "SW4", "SW6"]],
-	["C221660", ["SW7"]],
+	["C431541", ["SW7"]],
 ];
 
 export const lcscByRef = new Map(
@@ -933,8 +933,8 @@ export const chips: ChipSpec[] = [
 	{
 		name: "SW7",
 		value: "MAIN POWER",
-		footprint: kicad("Button_Switch_SMD/SW_SPDT_CK_JS102011SAQN"),
-		pins: ["1", "2", "3"],
+		footprint: "jlcpcb:C431541",
+		pins: ["1", "2", "3", "4"],
 		section: "mcu_power",
 		pcbX: 28.6,
 		pcbY: 14.105,
@@ -1172,6 +1172,7 @@ export const nets: Record<string, string[]> = {
 		endpoint("S2", "1"),
 		endpoint("S2", "3"),
 		endpoint("SW6", "1"),
+		endpoint("SW7", "4"), // All four metal-case solder feet.
 		endpoint("U1", "4"),
 		endpoint("U1", "5"),
 		endpoint("U1", "8"),

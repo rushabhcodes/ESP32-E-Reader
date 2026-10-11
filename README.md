@@ -105,7 +105,7 @@ sample. Do not force a mismatched ribbon into the socket.
 | BT1 battery header | JST S2B-PH-K-S(LF)(SN), 2-pin, 2.0 mm pitch, side entry |
 | Battery | Protected 3.7 V nominal single-cell pack; modeled PRT-13855, 2000 mAh, 49.2 × 68.8 × 5.6 mm |
 | Navigation switches | 4 × Alps Alpine SKRPACE010, bottom-side assembly |
-| Other controls | 2 × Panasonic EVQP7C01P (S1/S2); 1 × C&K JS102011SAQN (SW7) |
+| Other controls | 2 × Panasonic EVQP7C01P (S1/S2); 1 × SHOU HAN MSK12C02-HB / C431541 (SW7) |
 | Printed parts | Two: front chassis with integral keys, screen clips and latch receivers; transparent snap-fit rear cover with PCB supports and battery guides |
 | Assembly supplies | 4 M2.5 × 4 mm internal PCB screws (head ≤5 mm diameter, ≤2.5 mm high), display-border pads, 0.2 mm insulating battery liner and two 0.5 mm nonconductive adhesive strips; zero cover screws |
 
@@ -194,7 +194,7 @@ The [component inventory](assets/enclosure/component-inventory.csv) records
 PCB references, footprint sizes and model envelopes. `bun run export:assembly`
 resolves the local CAD and writes `dist/index/assembly.glb`; missing OBJ/GLB
 fetches fail the export. Supplier OBJ models are bundled for browser rendering.
-The supplier STEP archives ([1](assets/components/supplier-step-models-1.zip), [2](assets/components/supplier-step-models-2.zip), [3](assets/components/supplier-step-models-3.zip), [4](assets/components/supplier-step-models-4.zip), [5](assets/components/supplier-step-models-5.zip)) preserve
+The supplier STEP archives ([1](assets/components/supplier-step-models-1.zip), [2](assets/components/supplier-step-models-2.zip), [3](assets/components/supplier-step-models-3.zip), [4](assets/components/supplier-step-models-4.zip)) preserve
 original source models without loading large STEP duplicates in the preview.
 Source URLs and hashes remain in `assets/components/sources.json`.
 
@@ -419,12 +419,15 @@ checks the BOM, critical placement rows, absence of build errors, centered J2,
 through-via geometry, and the actual minimum plated drill before accepting
 the archive.
 
-The exporter still warns about SW7 because its three straight-line pads do not
-give the pin-1 detector a corner. SW7 uses the exact C221660 supplier footprint;
-the [C&K terminal drawing](https://www.ckswitches.com/media/1434/slides.pdf)
-shows terminal 1 at the left end of that row. With the footprint rotated 90° on
-the board, pad 1 is the bottom pad. The export check requires SW7 on the top
-side at 90°. Confirm the SW7 orientation in the assembler's placement preview.
+SW7 uses the exact C431541 supplier footprint and model: three switch contacts,
+four grounded metal-case solder feet, and two locator holes. The schematic
+labels its terminals ON (1), COM (2), OFF (3), and CASE (4). Pin 2 remains the
+common contact driving U5 EN; pin 1 selects `SYS_OUT`, and pin 3 selects the
+100 kΩ off-state pull-down. Its top-side 90° rotation places contact 1 below
+contacts 2 and 3 and points the actuator into the existing side opening. The
+export check validates the contacts, case ground, footprint, and placement
+against the [supplier drawing](https://datasheet.lcsc.com/datasheet/pdf/21c16deb74d468a7f4a81f736600ec0e.pdf?productCode=C431541).
+Confirm the SW7 orientation in the assembler's placement preview.
 
 > [!CAUTION]
 > This is a prototype hardware design, not a certified consumer product. Review the

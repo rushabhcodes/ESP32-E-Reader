@@ -1,8 +1,8 @@
 [
   {
     "path": "assets/components/supplier-step-models-1.zip",
-    "bytes": 1616763,
-    "sha256": "e9545823a9d150a0fc7a21948f59ec736a356f0689fe4fd0e9158b0b05d32f5c",
+    "bytes": 1616762,
+    "sha256": "240f90e2f410a5c15a63ba139d93cd2c9a7ed02afdd0167aac983d214bb10e12",
     "step_files": [
       "assets/components/C114218.step",
       "assets/components/C133190.step",
@@ -12,42 +12,35 @@
   },
   {
     "path": "assets/components/supplier-step-models-2.zip",
-    "bytes": 1669501,
-    "sha256": "4ae6906b7f7bb2eb1c5210f826facb517a11d88afbfa3dc01f0aebde01ea13b8",
+    "bytes": 2229630,
+    "sha256": "6ae446683b784c136a167b911f3186d32fb56ddf6b470d04358a6a0f02d2e54a",
     "step_files": [
       "assets/components/C202112.step",
       "assets/components/C202140.step",
-      "assets/components/C221660.step"
+      "assets/components/C2830320.step",
+      "assets/components/C2926676.step"
     ]
   },
   {
     "path": "assets/components/supplier-step-models-3.zip",
-    "bytes": 2134326,
-    "sha256": "2e5efa2ae9dfc36315c7e5bbb220005f0c0861ce41640b72c0e4f72a2ce42bf5",
+    "bytes": 1833696,
+    "sha256": "ede37114781c20cc6b296b3d0f254cabf62cebecc42c044485cbef424668c8ea",
     "step_files": [
-      "assets/components/C2830320.step",
-      "assets/components/C2926676.step",
       "assets/components/C2927799.step",
-      "assets/components/C388883.step"
+      "assets/components/C388883.step",
+      "assets/components/C431541.step",
+      "assets/components/C469327.step"
     ]
   },
   {
     "path": "assets/components/supplier-step-models-4.zip",
-    "bytes": 2162964,
-    "sha256": "a9428fd00fd568bb2e4ed0f4534f4c68d65a9493ddfc8b665a0a29f512ea221b",
+    "bytes": 2172766,
+    "sha256": "ab38ef17a82e12c3253510a5f986f8596b625c1b2619fb615d0eac80638cc97f",
     "step_files": [
-      "assets/components/C469327.step",
       "assets/components/C520357.step",
       "assets/components/C54313.step",
       "assets/components/C7519.step",
-      "assets/components/C82046.step"
-    ]
-  },
-  {
-    "path": "assets/components/supplier-step-models-5.zip",
-    "bytes": 507721,
-    "sha256": "3523bbc5ea61ff194a562277528f6d6bbc68c89a77a11b5f8e727abb1f5a0364",
-    "step_files": [
+      "assets/components/C82046.step",
       "imports/USB4105_GF_A/USB4105_GF_A.step"
     ]
   }

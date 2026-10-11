@@ -1,5 +1,25 @@
 {
   "revision": "E",
+  "power_switch": {
+    "reference": "SW7",
+    "supplier_part_number": "C431541",
+    "model_bounds_mm": [
+      [
+        26.9529,
+        32.2029
+      ],
+      [
+        10.105,
+        18.105
+      ],
+      [
+        0.25,
+        2.2
+      ]
+    ],
+    "component_case_collisions": 0
+  },
+  "native_assembly_sha256": "d6961b3924785e29c2c37629bdeefc8a9ca6954390799932e2fd79f0e0ed6330",
   "printed_parts": 2,
   "outside_mm": [
     68.0,

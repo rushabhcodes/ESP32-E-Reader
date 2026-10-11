@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import verified from "../verified-pcb-routes.json";
 import { getVerifiedPcbRoutes } from "../verified-pcb-routes.ts";
 
-assert.equal(getVerifiedPcbRoutes(verified.input).length, 228);
+assert.equal(getVerifiedPcbRoutes(verified.input).length, 229);
 
 // Regenerating database IDs or reordering input elements must preserve routes
 // and reconnect their endpoints to the newly generated physical port IDs.

@@ -81,7 +81,7 @@ SW2,7.0,-42.5,bottom,5.25,2.85,4.698,3.2,-3.31,-0.8,"tsci tessellated model, nom
 SW3,-7.0,-42.5,bottom,5.25,2.85,4.698,3.2,-3.31,-0.8,"tsci tessellated model, nominal"
 SW4,21.0,-42.5,bottom,5.25,2.85,4.698,3.2,-3.31,-0.8,"tsci tessellated model, nominal"
 SW6,-21.0,-42.5,bottom,5.25,2.85,4.698,3.2,-3.31,-0.8,"tsci tessellated model, nominal"
-SW7,26.85,14.105,top,4.5,7.8,7.53,9.0,0.0,4.35,"tsci tessellated model, nominal"
+SW7,28.6,14.105,top,4.512,8.4,5.25,8.0,0.25,2.2,"tsci tessellated model, nominal"
 TP1,-12.5,43.432,top,1.5,1.5,,,,,PCB footprint only; no 3D body model
 TP2,-3.361,18.692,top,1.5,1.5,,,,,PCB footprint only; no 3D body model
 TP3,15,44,top,1.5,1.5,,,,,PCB footprint only; no 3D body model

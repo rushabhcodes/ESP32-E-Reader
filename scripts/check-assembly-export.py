@@ -1,8 +1,8 @@
 """Fail a Gerber export if its BOM or critical pick-and-place rows regress.
 
-SW7 uses the exact JLCPCB C221660 footprint. Its three collinear pads prevent
-tscircuit from inferring a pin-1 corner, so the 90-degree placement is checked
-explicitly against the C&K JS102011SAQN terminal drawing.
+SW7 uses the exact JLCPCB C431541 footprint. Check its asymmetric contact
+spacing, four grounded case feet, locator holes, and side-facing placement
+against the SHOU HAN MSK12C02-HB supplier drawing.
 """
 
 import csv
@@ -25,14 +25,14 @@ EXPECTED = {
     "SW3": ("C139797", "bottom", "180"),
     "SW4": ("C139797", "bottom", "180"),
     "SW6": ("C139797", "bottom", "180"),
-    "SW7": ("C221660", "top", "90"),
+    "SW7": ("C431541", "top", "90"),
 }
 
 SUPPLIER_FOOTPRINTS = {
     "USBLC6_2SC6.tsx": "C7519",
     "DW01A.tsx": "C2927799",
     "SKRPACE010.tsx": "C139797",
-    "JS102011SAQN.tsx": "C221660",
+    "MSK12C02_HB.tsx": "C431541",
 }
 
 
@@ -138,21 +138,77 @@ def main(path: Path):
     }
     if len(sw7_ids) != 1:
         raise ValueError("Expected exactly one SW7 PCB component")
-    sw7_pads = {
-        item["port_hints"][0]: item
-        for item in circuit
+    all_sw7_pads = [
+        item for item in circuit
         if item.get("type") == "pcb_smtpad"
         and item.get("pcb_component_id") in sw7_ids
-    }
-    if set(sw7_pads) != {"pin1", "pin2", "pin3"}:
-        raise ValueError("SW7 must have exactly three numbered pads")
-    if not all(pad["layer"] == "top" for pad in sw7_pads.values()):
+    ]
+    contacts = {item["port_hints"][0]: item for item in all_sw7_pads
+                if item["port_hints"][0] in {"pin1", "pin2", "pin3"}}
+    case_pads = [item for item in all_sw7_pads if "pin4" in item["port_hints"]]
+    if len(all_sw7_pads) != 7 or len(contacts) != 3 or len(case_pads) != 4:
+        raise ValueError("SW7 needs three contact pads and four metal-case solder feet")
+    pcb_ports = {item["pcb_port_id"]: item for item in circuit if item["type"] == "pcb_port"}
+    source_ports = {item["source_port_id"]: item for item in circuit if item["type"] == "source_port"}
+    for pad in all_sw7_pads:
+        port = pcb_ports.get(pad.get("pcb_port_id"))
+        if port is None:
+            raise ValueError("SW7 pad is not bound to an electrical PCB port")
+        physical_pin = int(pad["port_hints"][0].removeprefix("pin"))
+        if f"pin{physical_pin}" not in source_ports[port["source_port_id"]]["port_hints"]:
+            raise ValueError("SW7 pad maps to the wrong schematic pin")
+    if not all(pad["layer"] == "top" for pad in all_sw7_pads):
         raise ValueError("SW7 pads must be on the top layer")
-    if not (sw7_pads["pin1"]["y"] < sw7_pads["pin2"]["y"] < sw7_pads["pin3"]["y"]):
+    if not (contacts["pin1"]["y"] < contacts["pin2"]["y"] < contacts["pin3"]["y"]):
         raise ValueError("SW7 pad 1 must be below pads 2 and 3")
+    for a, b, pitch in [("pin1", "pin2", 3.0), ("pin2", "pin3", 1.5)]:
+        if abs(contacts[b]["y"] - contacts[a]["y"] - pitch) > 0.01:
+            raise ValueError(f"SW7 {a}/{b} contact spacing must be {pitch} mm")
+        if abs(contacts[b]["x"] - contacts[a]["x"]) > 0.001:
+            raise ValueError("SW7 contacts must remain collinear")
+    sw7_source_id = next(item["source_component_id"] for item in circuit
+                         if item["type"] == "source_component" and item["name"] == "SW7")
+    expected_nets = {1: "SYS_OUT", 2: "POWER_ENABLE", 3: "POWER_OFF_PULLDOWN", 4: "GND"}
+    net_ids = {item["name"]: item["source_net_id"] for item in circuit
+               if item["type"] == "source_net"}
+    for pin, net in expected_nets.items():
+        port_id = next(item["source_port_id"] for item in circuit
+                       if item["type"] == "source_port"
+                       and item["source_component_id"] == sw7_source_id
+                       and item["pin_number"] == pin
+                       and item["name"] == {1: "ON", 2: "COM", 3: "OFF", 4: "CASE"}[pin])
+        if not any(item["type"] == "source_trace"
+                   and port_id in item.get("connected_source_port_ids", [])
+                   and net_ids[net] in item.get("connected_source_net_ids", [])
+                   for item in circuit):
+            raise ValueError(f"SW7 pin {pin} must connect to {net}")
+    # The supplier's four case feet get separate PCB ports with internal ties.
+    parent = {}
+    def connected_group(identity):
+        parent.setdefault(identity, identity)
+        if parent[identity] != identity:
+            parent[identity] = connected_group(parent[identity])
+        return parent[identity]
+    groups = [item.get("connected_source_port_ids", []) + item.get("connected_source_net_ids", [])
+              for item in circuit if item["type"] == "source_trace"]
+    groups += [group for item in circuit if item["type"] == "source_component"
+               for group in item.get("internally_connected_source_port_ids", [])]
+    for members in groups:
+        for member in members[1:]:
+            parent[connected_group(member)] = connected_group(members[0])
+    for pad in all_sw7_pads:
+        pin = int(pad["port_hints"][0].removeprefix("pin"))
+        source_port = pcb_ports[pad["pcb_port_id"]]["source_port_id"]
+        if connected_group(source_port) != connected_group(net_ids[expected_nets[pin]]):
+            raise ValueError(f"SW7 pad {pin} is not electrically tied to {expected_nets[pin]}")
+    locator_holes = [item for item in circuit if item["type"] == "pcb_hole"
+                     and item.get("pcb_component_id") in sw7_ids]
+    if len(locator_holes) != 2 or any(abs(item["hole_diameter"] - 0.9) > 0.01
+                                     for item in locator_holes):
+        raise ValueError("SW7 needs the supplier's two 0.9 mm locator holes")
 
     print(f"Assembly export checked: {len(bom)} BOM and placement rows; no missing part numbers.")
-    print("SW7: C221660 top-side 90° placement and pad-1-down order match the reviewed supplier drawing.")
+    print("SW7: C431541 top-side 90°, asymmetric contacts, grounded case feet, and locator holes verified.")
 
 
 if __name__ == "__main__":

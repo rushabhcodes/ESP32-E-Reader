@@ -27,5 +27,8 @@ for i,group in enumerate(groups,1):
     records.append({'path':'assets/components/'+name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'step_files':[p.relative_to(ROOT).as_posix() for p in group]})
 (OUT/'supplier-step-archives.json').write_text(json.dumps(records,indent=2)+'\n')
 (OUT/'supplier-step-models.zip').unlink(missing_ok=True)
+active={Path(record['path']).name for record in records}
+for obsolete in OUT.glob('supplier-step-models-*.zip'):
+    if obsolete.name not in active:obsolete.unlink()
 subprocess.run(['bun',str(ROOT/'scripts/prepare-preview-archives.mjs'),'--supplier'],cwd=ROOT,check=True)
 print('Packaged',len(sources),'original STEP models in',len(records),'standard ZIPs within registry request limits')

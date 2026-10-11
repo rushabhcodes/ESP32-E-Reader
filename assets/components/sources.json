@@ -48,18 +48,6 @@
     "bytes": 3733312
   },
   {
-    "path": "assets/components/C221660.obj",
-    "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C221660.obj?uuid=d337b619ac8046ecb63111370d25527b",
-    "sha256": "42a9b2c6faf5765dee1d455f5c873ae741f3c94c7bb5d140156b62e0d3fdd2f2",
-    "bytes": 115369
-  },
-  {
-    "path": "assets/components/C221660.step",
-    "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C221660.step?uuid=d337b619ac8046ecb63111370d25527b",
-    "sha256": "19d751ed7687ec027ef7fa07af39778c9c87f66237724339ea59ec88e5d44a3c",
-    "bytes": 2185168
-  },
-  {
     "path": "assets/components/C82046.obj",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C82046.obj?uuid=e9d505c99b6c436aaf827a29c5ba4f84",
     "sha256": "7c8e2c97e9b3e5c32c1eca57a40e13681407e988333317e3024a8635b37b7344",
@@ -190,5 +178,17 @@
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C2926676.step?uuid=99c92cd30bdf44c49576fce166ebf2be",
     "sha256": "952e6e3f996e20d95317b4b701c72c0cd44da45d978499a6657ee536617728e5",
     "bytes": 2214935
+  },
+  {
+    "path": "assets/components/C431541.obj",
+    "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C431541.obj?uuid=52f1cee24f744214bc077f746cfb201a",
+    "sha256": "643ac778792498bd9afe118d0b4e8f7375112f09b82f8b8d4980603f66b6d826",
+    "bytes": 172907
+  },
+  {
+    "path": "assets/components/C431541.step",
+    "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C431541.step?uuid=52f1cee24f744214bc077f746cfb201a",
+    "sha256": "b19a22ee573a22d213a9aa2b52c9358f305f2250e56e71f127dc8d9f546977fa",
+    "bytes": 1473354
   }
 ]

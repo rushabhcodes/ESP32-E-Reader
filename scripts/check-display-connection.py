@@ -24,12 +24,20 @@ sources = {item["name"]: item["source_component_id"] for item in circuit if item
 j2 = next(item for item in circuit if item["type"] == "cad_component" and item.get("source_component_id") == sources["J2"])
 screen = next(item for item in circuit if item["type"] == "cad_component" and item.get("source_component_id") == sources["EPD1"])
 assert j2["position"] == screen["position"], "Screen must follow the actual J2 CAD anchor"
+assert abs(j2["position"]["x"] - SPEC["connector"]["centerX"]) < 1e-6
 assert abs(j2["position"]["y"] - SPEC["connector"]["centerY"]) < 1e-6
 assert abs(j2["position"]["z"] - SPEC["connector"]["boardSurfaceZ"]) < 1e-6
 assert j2["rotation"]["z"] == 0
+assert screen["rotation"]["z"] == SPEC["connector"]["screenCadRotationZ"]
 
 
 def intersection(a, b):
+    bounds = []
+    for obj in (a, b):
+        points = [obj.matrix_world @ Vector(p) for p in obj.bound_box]
+        bounds.append([(min(p[i] for p in points), max(p[i] for p in points)) for i in range(3)])
+    if any(min(x[1], y[1]) <= max(x[0], y[0]) for x, y in zip(*bounds)):
+        return 0.0
     test = a.copy()
     test.data = a.data.copy()
     bpy.context.collection.objects.link(test)
@@ -43,6 +51,10 @@ def intersection(a, b):
     mesh.from_mesh(test.data)
     value = abs(mesh.calc_volume(signed=True))
     mesh.free()
+    if value > 1e-5:
+        points = [test.matrix_world @ v.co for v in test.data.vertices]
+        print("Intersection region:", a.name, b.name,
+              [[round(min(p[i] for p in points), 5), round(max(p[i] for p in points), 5)] for i in range(3)], flush=True)
     bpy.data.objects.remove(test, do_unlink=True)
     return round(value, 6)
 
@@ -71,7 +83,7 @@ before = set(bpy.data.objects)
 bpy.ops.import_scene.gltf(filepath=str(ROOT / "assets/enclosure/display-panel.glb"))
 parts = [obj for obj in set(bpy.data.objects) - before if obj.type == "MESH"]
 for obj in parts:
-    obj.matrix_world = Matrix.Translation(Vector(tuple(screen["position"][key] for key in ("x", "y", "z")))) @ Matrix.Rotation(-pi / 2, 4, "X") @ obj.matrix_world
+    obj.matrix_world = Matrix.Translation(Vector(tuple(screen["position"][key] for key in ("x", "y", "z")))) @ Matrix.Rotation(screen["rotation"]["z"]*pi/180,4,"Z") @ Matrix.Rotation(-pi / 2, 4, "X") @ obj.matrix_world
 panel = next(obj for obj in parts if "nominal-outline" in obj.name)
 flex = next(obj for obj in parts if "flex-polyimide" in obj.name)
 stiffener = next(obj for obj in parts if "stiffener" in obj.name)
@@ -85,7 +97,7 @@ from math import hypot
 length = sum(hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(path, path[1:]))
 assert abs(length - SPEC["flex"]["nominalTailLength"]) < SPEC["flex"]["tailLengthTolerance"]
 assert abs(max((stiffener.matrix_world @ v.co).y for v in stiffener.data.vertices) - path[-1][0]) < 1e-5
-assert all(max((obj.matrix_world @ v.co).z for v in obj.data.vertices) < SPEC["flex"]["entryZ"] for obj in contacts), "Bottom-contact socket needs exposed fingers toward -Z"
+assert all(max((obj.matrix_world @ v.co).z for v in obj.data.vertices) < SPEC["flex"]["entryZ"] for obj in contacts), "The installed tail exposes contacts toward -Z"
 for obj in contacts:
     pin = int(obj.name.rsplit("-", 1)[1])
     source_port = next(item for item in circuit if item["type"] == "source_port" and item.get("source_component_id") == sources["J2"] and item.get("pin_number") == pin)
@@ -93,20 +105,12 @@ for obj in contacts:
     points = [obj.matrix_world @ v.co for v in obj.data.vertices]
     assert abs((max(p.x for p in points) + min(p.x for p in points)) / 2 - pcb_port["x"]) < .02, f"Contact {pin} reversed or offset"
 
-# Construct the FR-4 solid from the emitted outline and actual routed cutout.
+# Use a conservative solid FR-4 outline. Small component locator cutouts are
+# filled in this ribbon test; removing them could only increase clearance.
 board = next(item for item in circuit if item["type"] == "pcb_board")
 pcb = prism("actual-PCB-outline", board["outline"], -board["thickness"] / 2, board["thickness"] / 2)
-slot = next(item for item in circuit if item["type"] == "pcb_cutout" and item["shape"] == "polygon")
-slot_y = (min(p["y"] for p in slot["points"]) + max(p["y"] for p in slot["points"])) / 2
-assert abs(slot_y - SPEC["slot"]["centerY"]) < 1e-6, "Wrong display cutout"
-cutter = prism("actual-display-slot", slot["points"], -1, 1)
-bpy.context.view_layer.objects.active = pcb
-modifier = pcb.modifiers.new("display-slot", "BOOLEAN")
-modifier.operation = "DIFFERENCE"
-modifier.solver = "EXACT"
-modifier.object = cutter
-bpy.ops.object.modifier_apply(modifier=modifier.name)
-bpy.data.objects.remove(cutter, do_unlink=True)
+assert all(item.get("pcb_component_id") for item in circuit if item["type"] == "pcb_cutout"), "Edge-wrap revision must not retain a board-level display slot"
+assert SPEC["route"]["bendCenterY"] < min(p["y"] for p in board["outline"]), "Bend must be outside PCB"
 obstacles = [pcb]
 for name in ["front-chassis", "rear-cover", "battery-envelope-DO-NOT-PRINT"]:
     bpy.ops.wm.stl_import(filepath=str(ROOT / "assets/enclosure/stl" / (name + ".stl")))
@@ -130,7 +134,8 @@ overlaps = {part.name: {obj.name: value for obj in obstacles if (value := inters
 # Insulating ribbon and stiffener must fit the modeled mating cavity. The
 # exposed conductive contact faces intentionally mate with socket contacts.
 connector_overlaps = {part.name: intersection(part, connector) for part in (flex, stiffener)}
-report = {"nominal_installed_length_mm": round(length, 6), "nominal_tail_length_mm": SPEC["flex"]["nominalTailLength"], "bend_radius_mm": SPEC["flex"]["bendRadius"], "modeled_contacts": len(contacts), "contact_face": "bottom (-Z)", "slot_center_y_mm": slot_y, "connector_center_y_mm": j2["position"]["y"], "solid_overlaps_mm3": overlaps, "connector_insulation_overlaps_mm3": connector_overlaps, "basis": SPEC["basis"]}
+report = {"nominal_installed_length_mm": round(length, 6), "nominal_tail_length_mm": SPEC["flex"]["nominalTailLength"], "bend_radius_mm": SPEC["flex"]["bendRadius"], "modeled_contacts": len(contacts), "contact_face": "bottom (-Z)", "route": SPEC["route"], "connector_center_y_mm": j2["position"]["y"], "solid_overlaps_mm3": overlaps, "connector_insulation_overlaps_mm3": connector_overlaps, "basis": SPEC["basis"]}
+report["scope"] = "Nominal mesh clearance only. Run check-display-interface.py separately: CAD overlap success does not establish real panel-tail compatibility."
 (ROOT / "assets/enclosure/stl/display-connection-check.json").write_text(json.dumps(report, indent=2) + "\n")
 print(json.dumps(report, indent=2))
 assert not any(overlaps.values()), "Display assembly collision"

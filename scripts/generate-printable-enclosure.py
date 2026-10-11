@@ -1,4 +1,4 @@
-"""Generate dimensioned prototype STLs (millimetres) for the Rev. E reader.
+"""Generate dimensioned prototype STLs (millimetres) for the Rev. H reader.
 
 Run: blender --background --python scripts/generate-printable-enclosure.py
 The cell dimensions are the published *nominal* SparkFun PRT-13855 pack dimensions.
@@ -6,6 +6,7 @@ See assets/enclosure/PRINTING.md before fitting a real cell or powering a board.
 """
 
 from math import cos, pi, sin
+from mathutils import Matrix, Vector
 from pathlib import Path
 import json
 import sys
@@ -23,7 +24,9 @@ OUT = ROOT / "assets" / "enclosure" / "stl"
 OUT.mkdir(parents=True, exist_ok=True)
 
 # PCB coordinates: +Z is the component/battery side; front display faces -Z.
-CASE_W, CASE_H, CASE_Y, CORNER_R = 68.0, 111.0, 5.0, 5.0
+DISPLAY = display_flex.SPEC["panel"]
+CASE = display_flex.SPEC["case"]
+CASE_W, CASE_H, CASE_Y, CORNER_R = CASE["width"], CASE["height"], CASE["centerY"], 5.0
 
 
 def reset():
@@ -65,6 +68,18 @@ def box(name, dims, center):
     obj.name = name
     obj.dimensions = dims
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    return obj
+
+
+def outline_prism(name, points, low, high):
+    count=len(points)
+    vertices=[(x,y,z) for z in (low,high) for x,y in points]
+    faces=[tuple(reversed(range(count))),tuple(range(count,2*count))]
+    faces += [(i,(i+1)%count,(i+1)%count+count,i+count) for i in range(count)]
+    mesh=bpy.data.meshes.new(name);mesh.from_pydata(vertices,[],faces);mesh.update()
+    obj=bpy.data.objects.new(name,mesh);bpy.context.collection.objects.link(obj)
+    bm=bmesh.new();bm.from_mesh(mesh)
+    bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(mesh);bm.free()
     return obj
 
 
@@ -183,10 +198,11 @@ REAR_THICKNESS = 1.2
 LID_INNER = CELL_BASE + CELL_THICKNESS + ADHESIVE_THICKNESS
 LID_OUTER = LID_INNER + REAR_THICKNESS
 GUIDE_BASE = CELL_BASE - .4
-CLIP_TIPS = (-27.0, 3.0, 27.0)
-CLIP_PAD_Z = -3.4
+CLIP_TIPS = tuple(CASE["screenClipTipY"])
+CLIP_PAD_Z = CASE["clipFaceZ"]
 SNAP_TIPS = (-5.0, 24.0)
 SNAP_LENGTH, SNAP_RELEASE = 14.0, .6
+RIBBON_ROOT_CLEARANCE=[(-11.5,-32.8),(11.5,-32.8),(11.5,-49.),(-11.5,-49.)]
 
 def paint(obj, mat):
     # Booleans may leave empty material slots. Assign every polygon explicitly.
@@ -207,16 +223,19 @@ def save_gauge(obj, filename):
     export(obj,filename)
 
 reset()
-front=prism('front-chassis',68,111,5,FRONT_Z,-3.25,y=5)
-cut(front,prism('screen-window',52.8,87.2,1.8,FRONT_Z-.1,5.5,y=10.5))
-cut(front,prism('screen-drop-in-rebate',56.8,97.2,1.3,-4.8,5.5,y=10.5))
-wall=prism('front-sidewalls',68,111,5,-3.3,SEAM_Z,y=5)
-cut(wall,prism('rear-opening',64,107,3.1,-3.4,SEAM_Z+.1,y=5))
+front=prism('front-chassis',CASE_W,CASE_H,CORNER_R,FRONT_Z,-3.25,y=CASE_Y)
+cut(front,prism('screen-window',52.8,87.2,1.8,FRONT_Z-.1,5.5,y=DISPLAY["activeCenterY"]))
+cut(front,prism('screen-drop-in-rebate',56.8,97.2,1.3,-4.8,5.5,y=DISPLAY["centerY"]))
+wall=prism('front-sidewalls',CASE_W,CASE_H,CORNER_R,-3.3,SEAM_Z,y=CASE_Y)
+cut(wall,prism('rear-opening',CASE_W-4,CASE_H-4,3.1,-3.4,SEAM_Z+.1,y=CASE_Y))
 # The display extends beyond the upper PCB edge. Preserve its full rebate.
-cut(wall,prism('top-panel-pocket',56.8,97.2,1.3,-4.8,SEAM_Z+.1,y=10.5))
+cut(wall,prism('top-panel-pocket',56.8,97.2,1.3,-4.8,SEAM_Z+.1,y=DISPLAY["centerY"]))
 add(front,wall)
-# Keep the installed display tail clear between the glass exit and PCB slot.
-cut(front,box('ribbon-service-opening',(15,7,3),(0,-37.5,-2.5)))
+# Recess the tail from the rear, retaining a rigid front floor to protect it.
+# Both key pairs sit entirely beside this central channel.
+cut(front,box('ribbon-protected-channel-recess',(23.,16,1.0),(0,-41,-3.45)))
+cut(front,outline_prism('ribbon-root-and-taper-clearance',
+    RIBBON_ROOT_CLEARANCE,-3.95,-2.95))
 for x,y,w,low in ((34,36.3,11.,-1.7),(-34,-18.5,16.,-1.7),(34,14.1,11.,-1.5)):
     cut(front,box('open-assembly-port',(10,w,SEAM_Z+.2-low),(x,y,(SEAM_Z+.2+low)/2)))
 # Rear-cover support columns nest in sidewall grooves; the front chassis
@@ -232,51 +251,55 @@ for side in (-1,1):
         cut(front,box('snap-release-window',(3.0,6.0,1.5),(side*33.2,tip,3.75)))
 # Free printed key faces, rear flanges and spring leaves. Through slots prevent
 # bridges from fusing to a floor beneath them; roots remain joined to the shell.
-for x in (-21.,-7.,7.,21.):
+for x in display_flex.SPEC["controls"]["navigationX"]:
     cut(front,prism('key-face-opening',10.8,5.2,2.5,FRONT_Z-.1,-3.1,x=x,y=-42.5))
-    cut(front,prism('key-flange-pocket',12.2,6.6,2.5,-4.3,-3.1,x=x,y=-42.5))
-    cut(front,box('leaf-free-slot',(12.4,1.8,3.0),(x,-46.3,-4.45)))
-    cut(front,box('leaf-tip-free-slot',(1.4,3.4,3.0),(x+5.2,-45.3,-4.45)))
+    cut(front,prism('key-flange-pocket',10.8,6.6,2.5,-4.3,-3.1,x=x,y=-42.5))
+    cut(front,box('leaf-free-slot',(10.8,1.8,3.0),(x,-46.3,-4.45)))
+    direction=1
+    cut(front,box('leaf-tip-free-slot',(1.4,3.4,3.0),(x+direction*4.5,-45.3,-4.45)))
 # Clearance below each cam lip lets the clip move outwards without striking
 # the back of the display rebate. The front support ledge stays intact.
 for side in (-1,1):
     for tip in CLIP_TIPS:
-        cut(front,box('clip-release-pocket',(3.4,20,1.8),(side*29.95,tip+6,-2.9)))
+        cut(front,box('clip-release-pocket',(3.4,20,1.8),(side*29.95,tip+6,CLIP_PAD_Z+.5)))
 # Inspection gauge is the rigid portion; it is excluded from the print package.
 rigid=front.copy();rigid.data=front.data.copy();bpy.context.collection.objects.link(rigid)
 save_gauge(rigid,'front-rigid-DO-NOT-PRINT.stl');bpy.data.objects.remove(rigid,do_unlink=True)
 clips=[]
 for side in (-1,1):
     for tip in CLIP_TIPS:
-        leaf=box('screen-leaf',(0.8,14.0,1.2),(side*29.3,tip+7,-2.8))
-        lip=wedge('screen-cam-lip',[(side*27.5,-3.4),(side*29.7,-3.4),(side*29.7,-2.2)],tip-2.5,tip+2.5)
+        leaf=box('screen-leaf',(0.8,14.0,1.2),(side*29.3,tip+7,CLIP_PAD_Z+.6))
+        lip=wedge('screen-cam-lip',[(side*27.5,CLIP_PAD_Z),(side*29.7,CLIP_PAD_Z),(side*29.7,CLIP_PAD_Z+1.2)],tip-2.5,tip+2.5)
         add(leaf,lip)
         # Root alone joins the case. The rest has lateral deflection clearance.
-        add(front,box('screen-leaf-root',(3.4,1.2,1.2),(side*30.6,tip+14,-2.8)))
+        add(front,box('screen-leaf-root',(3.4,1.2,1.2),(side*30.6,tip+14,CLIP_PAD_Z+.6)))
         gauge=leaf.copy();gauge.data=leaf.data.copy();bpy.context.collection.objects.link(gauge);clips.append(gauge)
         add(front,leaf)
 export_glb(clips,'screen-clips-DO-NOT-PRINT.glb')
 for o in clips:bpy.data.objects.remove(o,do_unlink=True)
-strip=box('integral-key-rail',(54,.8,.8),(0,-47.55,-3.65))
-for idx,x in enumerate((-21.,-7.,7.,21.),1):
+strip=box('integral-key-rail',(65.2,.8,1.0),(0,-47.55,-4.5))
+for idx,x in enumerate(display_flex.SPEC["controls"]["navigationX"],1):
     cap=prism('key-'+str(idx),9.6,4,1.7,FRONT_Z,-4.05,x=x,y=-42.5)
-    flange=prism('key-flange',11.6,6,2.2,-4.06,-3.65,x=x,y=-42.5)
+    flange=prism('key-flange',10.2,6,2.2,-4.06,-3.65,x=x,y=-42.5)
     for m in PCB_MOUNTS['mounts']:
         if m['buttonFlangeRelief'] and abs(x-m['x'])<9:
             cut(flange,prism('PCB-boss-relief',6.4,6.4,3.2,-4.2,-3.4,x=m['x'],y=m['y']))
+    # Full retaining flanges now sit beside the tail; no ribbon notch is needed.
     add(cap,flange);add(cap,prism('key-plunger',2.2,2.2,.6,-3.7,-3.35,x=x,y=-42.5))
     save_gauge(cap,'button-'+str(idx)+'-DO-NOT-PRINT.stl')
     add(strip,cap)
-    add(strip,box('key-spring-leaf',(11.2,.8,.8),(x,-46.3,-3.65)))
-    add(strip,box('key-root',(.8,1.7,.8),(x-5.2,-47.,-3.65)))
-    add(strip,box('key-tip',(.8,2.8,.8),(x+5.2,-45.3,-3.65)))
+    add(strip,box('key-spring-leaf',(9.8,.8,.8),(x,-46.3,-4.35)))
+    # Each leaf connects its complete flange to the rigid rear rail.
+    direction=1
+    add(strip,box('key-root',(.8,1.7,.8),(x-direction*4.5,-47.,-4.35)))
+    add(strip,box('key-tip',(.8,2.8,.8),(x+direction*4.5,-45.3,-4.35)))
 bm=bmesh.new();bm.from_mesh(strip.data)
 bmesh.ops.bisect_plane(bm,geom=list(bm.verts)+list(bm.edges)+list(bm.faces),dist=1e-6,plane_co=(0,-46.95,0),plane_no=(0,1,0))
 bm.to_mesh(strip.data);bm.free()
 save_gauge(strip,'button-flexures-DO-NOT-PRINT.stl')
-for idx,x in enumerate((-21.,-7.,7.,21.),1):
+for idx,x in enumerate(display_flex.SPEC["controls"]["navigationX"],1):
     moving=strip.copy();moving.data=strip.data.copy();bpy.context.collection.objects.link(moving)
-    boolean(moving,box('free-key-gauge',(13.6,10,4),(x,-41.95,-4.2)),'INTERSECT')
+    boolean(moving,box('free-key-gauge',(10.8,10,4),(x,-41.95,-4.2)),'INTERSECT')
     save_gauge(moving,'button-moving-'+str(idx)+'-DO-NOT-PRINT.stl')
     bpy.data.objects.remove(moving,do_unlink=True)
 add(front,strip)
@@ -285,13 +308,13 @@ export(front,'front-chassis.stl')
 export_glb([front],'front-chassis.glb')
 
 reset()
-rear=prism('rear-cover',68,111,5,LID_INNER,LID_OUTER,y=5)
-wall=prism('rear-sidewalls',68,111,5,SEAM_Z,LID_INNER+.05,y=5)
-cut(wall,prism('rear-interior',64,107,3.1,SEAM_Z-.1,LID_INNER+.15,y=5));add(rear,wall)
-tongue=prism('seam-tongue',63.6,106.4,2.8,SEAM_Z-1.2,SEAM_Z+.05,y=5)
-cut(tongue,prism('tongue-interior',62.0,104.8,2.0,SEAM_Z-1.3,SEAM_Z+.15,y=5))
-collar=prism('seam-connecting-collar',68,111,5,SEAM_Z,SEAM_Z+.8,y=5)
-cut(collar,prism('collar-interior',62.0,104.8,2.0,SEAM_Z-.1,SEAM_Z+.9,y=5))
+rear=prism('rear-cover',CASE_W,CASE_H,CORNER_R,LID_INNER,LID_OUTER,y=CASE_Y)
+wall=prism('rear-sidewalls',CASE_W,CASE_H,CORNER_R,SEAM_Z,LID_INNER+.05,y=CASE_Y)
+cut(wall,prism('rear-interior',CASE_W-4,CASE_H-4,3.1,SEAM_Z-.1,LID_INNER+.15,y=CASE_Y));add(rear,wall)
+tongue=prism('seam-tongue',CASE_W-4.4,CASE_H-4.6,2.8,SEAM_Z-1.2,SEAM_Z+.05,y=CASE_Y)
+cut(tongue,prism('tongue-interior',CASE_W-6,CASE_H-6.2,2.0,SEAM_Z-1.3,SEAM_Z+.15,y=CASE_Y))
+collar=prism('seam-connecting-collar',CASE_W,CASE_H,CORNER_R,SEAM_Z,SEAM_Z+.8,y=CASE_Y)
+cut(collar,prism('collar-interior',CASE_W-6,CASE_H-6.2,2.0,SEAM_Z-.1,SEAM_Z+.9,y=CASE_Y))
 add(rear,collar);add(rear,tongue)
 # PCB clamps to the underside of cantilever bosses in the rear cover.
 # Columns stay outside the board outline; bridges stay below the battery.
@@ -305,13 +328,13 @@ for m in PCB_MOUNTS['mounts']:
 # Nonconductive pouch-compatible foam adhesive holds it against the lid;
 # a thin liner shields its PCB-facing surface. Four guides locate its edges.
 for x in (CELL_X-25.2,CELL_X+25.2):add(rear,box('cell-side-guide',(.8,70.4,LID_INNER+.05-GUIDE_BASE),(x,CELL_Y,(LID_INNER+.05+GUIDE_BASE)/2)))
-# Leave the upper end open: insert the pack at Y -2, above the lower PCB
-# bosses, then slide it 6.5 mm towards the single lower stop before fitting PCB.
+# Leave the upper end open: insert the pack at Y +1, above the lower PCB
+# bosses, then slide it 9.5 mm towards the single lower stop before fitting PCB.
 add(rear,box('cell-lower-stop',(50.2,.8,LID_INNER+.05-GUIDE_BASE),(CELL_X,CELL_Y-35,(LID_INNER+.05+GUIDE_BASE)/2)))
-cut(rear,box('BT1-and-lead-notch',(1.,14,8),(CELL_X+25.2,-32.4,7.0)))
+cut(rear,box('BT1-and-lead-notch',(1.,14,8),(CELL_X+25.2,CASE["batteryLeadNotchY"],7.0)))
 # Two upper-border columns pass completely above the PCB outline. Their pads
 # support the long display end without a loose retainer or pressure on pixels.
-for x in (-12.,12.):add(rear,box('upper-screen-support',(10,1.4,LID_INNER+.05-CLIP_PAD_Z),(x,55.4,(LID_INNER+.05+CLIP_PAD_Z)/2)))
+for x in (-12.,12.):add(rear,box('upper-screen-support',(10,1.4,LID_INNER+.05-CLIP_PAD_Z),(x,CASE["topSupportY"],(LID_INNER+.05+CLIP_PAD_Z)/2)))
 # Four long side leaves flex inward without crossing PCB or battery envelopes.
 # The rail above the free slots stays joined to the flat rear wall.
 for side in (-1,1):
@@ -341,11 +364,11 @@ for m in PCB_MOUNTS['mounts']:
 for o in hardware:paint(o,display_flex.material('fastener',(.65,.67,.69)))
 export_glb(hardware,'pcb-cover-fasteners.glb')
 reset();pads=[]
-front_pads=[(side*27.1,y,1.4,10) for side in (-1,1) for y in (-22,8,32)]+[(x,y,10,1.4) for x in (-16,16) for y in (-34.4,55.4)]
+front_pads=[(side*27.1,y,1.4,10) for side in (-1,1) for y in (-22,8,32)]+[(x,y,10,1.4) for x in (-16,16) for y in (CASE["bottomSupportY"],CASE["topSupportY"])]
 for idx,(x,y,w,h) in enumerate(front_pads):pads.append(box('front-screen-pad-'+str(idx),(w,h,.15),(x,y,-4.725)))
 for side in (-1,1):
-    for tip in CLIP_TIPS:pads.append(box('clip-pad',(0.55,4,.35),(side*27.82,tip,-3.575)))
-for x in (-12,12):pads.append(box('upper-display-pad',(10,1.4,.35),(x,55.4,-3.575)))
+    for tip in CLIP_TIPS:pads.append(box('clip-pad',(0.55,4,.35),(side*27.82,tip,CLIP_PAD_Z-.175)))
+for x in (-12,12):pads.append(box('upper-display-pad',(10,1.4,.35),(x,CASE["topSupportY"],CLIP_PAD_Z-.175)))
 for o in pads:paint(o,display_flex.material('display-compatible-foam',(.32,.34,.36)))
 export_glb(pads,'display-cushioning.glb')
 reset();liner=prism('battery-insulating-adhesive-liner',49.4,69,1.0,CELL_BASE-LINER_THICKNESS,CELL_BASE,x=CELL_X,y=CELL_Y)
@@ -360,15 +383,18 @@ export(cell,'battery-envelope-DO-NOT-PRINT.stl')
 reset();antenna=prism('Taoglas-film',5.9,4.1,.2,LID_INNER-.24,LID_INNER,x=25,y=44)
 export(antenna,'antenna-envelope-DO-NOT-PRINT.stl')
 reset();display=display_flex.SPEC['panel']
-panel=prism('ER-EPD3.97-1RY-nominal-outline',display['width'],display['height'],1,display['frontZ'],display['backZ'],y=display['centerY'])
-active=prism('480x800-active-area',51.84,86.4,.3,-4.71,-4.65,y=10.5)
+panel=prism('Waveshare-3.97-G-nominal-outline',display['width'],display['height'],1,display['frontZ'],display['backZ'],y=display['centerY'])
+active=prism('480x800-active-area',display['activeWidth'],display['activeHeight'],.3,display['frontZ']-.06,display['frontZ'],y=display['activeCenterY'])
 paint(panel,display_flex.material('EPD-black-perimeter',(.075,.075,.08)))
 paint(active,display_flex.material('EPD-paper',(.86,.85,.77)))
 flex,length=display_flex.create_flex();connector=display_flex.SPEC['connector']
-for o in (panel,active,*flex):o.location.y-=connector['centerY'];o.location.z-=connector['boardSurfaceZ']
+for o in (panel,active,*flex):
+    # assembly.screen rotates imported geometry with the connector insertion
+    # direction. Store the inverse so the installed custom panel stays put.
+    o.matrix_world=Matrix.Rotation(-connector['screenCadRotationZ']*pi/180,4,'Z')@Matrix.Translation(Vector((-connector['centerX'],-connector['centerY'],-connector['boardSurfaceZ'])))@o.matrix_world
 export_glb([panel,active,*flex],'display-panel.glb')
 (OUT/'mesh-check.json').write_text(json.dumps(report,indent=2)+'\n')
-spec={'revision':'E','printedParts':['front-chassis','rear-cover'],'outsideMm':[CASE_W,CASE_H,round(LID_OUTER-FRONT_Z,3)],'frontZ':FRONT_Z,'seamZ':SEAM_Z,'rearInnerZ':LID_INNER,'rearOuterZ':LID_OUTER,'battery':{'centerX':CELL_X,'centerY':CELL_Y,'baseZ':CELL_BASE,'sizeMm':[49.2,68.8,CELL_THICKNESS],'linerThickness':LINER_THICKNESS,'linerZ':[CELL_BASE-LINER_THICKNESS,CELL_BASE],'mountAdhesiveThickness':ADHESIVE_THICKNESS,'guideBaseZ':GUIDE_BASE,'lowerStopY':CELL_Y-35,'loadingOffsetY':6.5,'loadingStandOffZ':CELL_LOADING_STANDOFF,'loadingDirection':'insert +Z at Y -2, slide -Y 6.5 mm with 0.1 mm lid stand-off, then seat adhesive before fitting PCB'},'screen':{'rebateFloorZ':-4.8,'frontPadThickness':.15,'clipFaceZ':CLIP_PAD_Z,'rearPadThickness':.35,'clipSides':[-1,1],'clipTipY':list(CLIP_TIPS),'beamLength':14.,'beamWidth':.8,'beamZ':[-3.4,-2.2],'releaseDeflectionMm':1.0,'topSupportX':[-12.,12.]},'coverSnaps':{'count':4,'sides':[-1,1],'tipY':list(SNAP_TIPS),'beamLength':SNAP_LENGTH,'beamWidth':.8,'beamZ':[4.7,8.3],'hookOuterX':33.6,'retainingFaceX':33.2,'retainingWallThicknessMm':.8,'hookEngagementMm':.4,'releaseDeflectionMm':SNAP_RELEASE,'windowZ':[3.,4.5],'printedClosureParts':0,'coverScrews':0},'cadAlpha':{'front':.38,'rear':.22},'scope':'Nominal CAD and toolpaths. Clear PETG is translucent; CAD transparency does not predict optical clarity. Physical fit, flexure force/fatigue and battery lead routing need prototype testing.'}
+spec={'revision':CASE['revision'],'printedParts':['front-chassis','rear-cover'],'outsideMm':[CASE_W,CASE_H,round(LID_OUTER-FRONT_Z,3)],'frontZ':FRONT_Z,'seamZ':SEAM_Z,'rearInnerZ':LID_INNER,'rearOuterZ':LID_OUTER,'battery':{'centerX':CELL_X,'centerY':CELL_Y,'baseZ':CELL_BASE,'sizeMm':[49.2,68.8,CELL_THICKNESS],'linerThickness':LINER_THICKNESS,'linerZ':[CELL_BASE-LINER_THICKNESS,CELL_BASE],'mountAdhesiveThickness':ADHESIVE_THICKNESS,'guideBaseZ':GUIDE_BASE,'lowerStopY':CELL_Y-35,'loadingOffsetY':9.5,'loadingStandOffZ':CELL_LOADING_STANDOFF,'loadingDirection':'insert +Z at Y +1, slide -Y 9.5 mm with 0.1 mm lid stand-off, then seat adhesive before fitting PCB'},'screen':{'rebateFloorZ':-4.8,'frontPadThickness':.15,'clipFaceZ':CLIP_PAD_Z,'rearPadThickness':.35,'clipSides':[-1,1],'clipTipY':list(CLIP_TIPS),'beamLength':14.,'beamWidth':.8,'beamZ':[CLIP_PAD_Z,CLIP_PAD_Z+1.2],'releaseDeflectionMm':1.0,'topSupportX':[-12.,12.]},'coverSnaps':{'count':4,'sides':[-1,1],'tipY':list(SNAP_TIPS),'beamLength':SNAP_LENGTH,'beamWidth':.8,'beamZ':[4.7,8.3],'hookOuterX':33.6,'retainingFaceX':33.2,'retainingWallThicknessMm':.8,'hookEngagementMm':.4,'releaseDeflectionMm':SNAP_RELEASE,'windowZ':[3.,4.5],'printedClosureParts':0,'coverScrews':0},'cadAlpha':{'front':.38,'rear':.22},'scope':'Nominal CAD meshes; see printability-check.json for the current slicing status. Clear PETG is translucent; CAD transparency does not predict optical clarity. Physical fit, flexure force/fatigue and battery lead routing need prototype testing.'}
 (OUT.parent/'enclosure-design.json').write_text(json.dumps(spec,indent=2)+'\n')
 from runpy import run_path
 run_path(str(ROOT/'scripts/prepare-print-package.py'))

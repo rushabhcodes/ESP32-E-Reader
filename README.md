@@ -10,9 +10,9 @@ workflow.
 
 | Specification | Current design |
 | --- | --- |
-| Enclosure outside | 68.0 × 111.0 × **16.8 mm**; prototype CAD, not a measured print |
+| Enclosure outside | 68.0 × 116.81 × **16.8 mm**; prototype CAD, not a measured print |
 | PCB | 62.5 × 95.08 × 1.6 mm; four copper layers |
-| Display | EastRising ER-EPD3.97-1RY, raw display only; 480 × 800, four colors, no frontlight |
+| Display | Waveshare 3.97inch e-Paper (G), raw display only; 480 × 800, four colors, no frontlight |
 | Processor | ESP32-C3-WROOM-02U-N4; 4 MB flash, Wi-Fi, Bluetooth LE, external antenna |
 | Storage | MicroSD over SPI |
 | Battery | Protected 1-cell LiPo, 3.7 V nominal; modeled around 2000 mAh SparkFun PRT-13855 |
@@ -30,59 +30,77 @@ final printed fit have not been measured on an assembled device.
 
 ## Display
 
-The selected panel is the [EastRising ER-EPD3.97-1RY](https://www.buydisplay.com/3-97-inch-quad-color-e-paper-screen-e-ink-display-480x800),
-identified by the user on 6 October 2026. Its [datasheet](https://www.buydisplay.com/download/manual/ER-EPD3.97-1_Datasheet.pdf)
-(Rev. 1.0, 18 August 2026) specifies an SSD2677 controller, 480 × 800 pixels,
-and a 56.24 × 96.62 mm panel, matching the existing display envelope.
+The selected screen is the **Waveshare 3.97inch e-Paper (G)**: black, white,
+red and yellow, 800 × 480 landscape / 480 × 800 portrait, with an SSD2677.
+The [manufacturer manual](https://www.waveshare.com/wiki/3.97inch_e-Paper_HAT%2B_%28G%29_Manual)
+and [Rev. 1.0 raw-panel datasheet](https://files.waveshare.com/wiki/3.97inch_e-Paper_HAT%2B_G/3.97inch_e-Paper_G.pdf)
+are the design basis. Buy the exact **(G)** model from
+[Robu India, SKU R254505](https://robu.in/product/waveshare-3-97inch-e-paper-display/).
+The retail kit includes a driver HAT; this PCB connects directly to the raw
+panel's ribbon and supplies its boost circuit, so the HAT is not installed.
+Confirm the kit's panel label before assembly.
 
-J2 remains the Hirose FH12-24S-0.5SH(55), with 24 positions at 0.50 mm
-pitch. At the user's direction, the supplier product listing is authoritative
-for connector pitch in this revision. No adapter is used. The conflicting
-0.80 mm drawing is recorded as a supplier documentation discrepancy, rather
-than the design basis. Connector fit remains a listing-based assumption;
-contact side, stiffener thickness and cable fold still need a sample fit.
+**The PCB order is still gated by the delivered screen tail.** Rev. H corrects
+the early fold and replaces the FH12 socket with a short-contact candidate,
+[Hirose FH34SRJ-24S-0.5SH(50), C324726](https://www.lcsc.com/product-detail/C324726.html).
+It has 24 contacts at 0.5 mm pitch and accepts either contact face. The exact
+supplier footprint and local OBJ/STEP are bundled. Its recommended tail has a
+shorter exposed area than FH12, but the panel's full tolerances are not contained
+in Hirose's recommended drawing. Nominal matching dimensions alone cannot
+establish acceptance. See [the ordering gate](ORDERING.md) and
+[interface report](assets/enclosure/stl/display-interface-check.json).
 
-The PDF pin assignments match J2's existing functions. Pins 6 (TSCL) and
-7 (TSDA) are connected to GND to give the unused sensor inputs defined low
-levels, as required by page 7. Pin 8 is also low for four-wire SPI.
+The [display import](imports/Waveshare_3_97inch_ePaper_G.tsx) and
+[shared dimensions](assets/enclosure/display-connection.json) position the
+56.24 × 96.62 mm glass at Y +15.31 and model its maximum 1.10 mm thickness.
+Its 51.84 × 86.40 mm active area is at Y +18.22. The offset L-shaped tail has a
+12.50 mm tip at X +21.87, a 33.66 mm longitudinal projection, 3.00 ± 0.30 mm
+stiffener and 1.70 ± 0.30 mm exposed contacts.
 
-The display uses the same connection style as the
-[Linux Game Boy Advance reference](https://tscircuit.com/ShiboSoftwareDev/linux-gameboy-advance#3d):
-a folded flat ribbon entering a horizontal, bottom-contact ZIF socket.
-The reader uses the [24-pin Hirose FH12](https://www.hirose.com/en/product/p/CL0586-0521-0-55)
-for its e-paper pinout. Open the flip latch, insert the tail straight with its
-exposed contacts facing the PCB, then close the latch.
+The first **15.00 mm stays flat**, through the bonded/driver region, before
+bending at the OEM positioning line (17.40 − 2.40 mm). The tail wraps around
+the bottom PCB edge at Y −48.60; the old PCB slot is removed. It returns above
+the PCB at Z +1.70 before settling into J2, centered at
+**X +21.87, Y −35.08101 mm**, with PCB and supplier rotation 0°.
+Socket pin 1 is +X in the canonical footprint. The panel mechanical drawing
+does not establish its pin-1 direction; CAD finger numbering is only socket
+numbering. Verify panel numbering independently before ordering/powering.
+The two main 0.6 mm bends remain installation assumptions, not an OEM rating.
+The [ribbon preview](assets/enclosure/display-ribbon-connection.png) shows
+this nominal route.
 
-J2 and the 26 × 2 mm rounded ribbon slot share X = 0 mm. J2 is now at
-Y = −32.34 mm and the slot at Y = −38.41 mm, shortening the path from the
-lower panel edge. The installed model has two 0.6 mm-radius quarter bends
-and an approximately 11.316 mm centerline, within the drawing's
-11.27 ± 0.30 mm extension below the glass. It passes through the slot and
-shows 24 bottom-facing contacts and a nominal 0.3 mm reinforced insertion tip.
-The panel remains 56.24 × 96.62 × 0.9 mm at Y = 10.5 mm, Z −4.65…−3.75 mm;
-the model now subtracts J2's 0.8 mm anchor height to align with the case rebate.
+The two-part transparent snap-fit enclosure is **68 × 116.81 × 16.8 mm**.
+The lower end grows 1.00 mm from Rev. F to clear the edge wrap; thickness is
+unchanged. The custom GLB compensates the 180° rotation that `assembly.screen`
+derives from J2’s −Y insertion direction. The fit check compares source solids
+with every native exported display vertex. The navigation switches and complete printed keys now sit in two pairs at
+X ±16.5 and ±27.5 mm, entirely beside the front ribbon corridor. The integral
+front floor shields the tail between the pairs. No key flange is notched for
+the ribbon. The lower mounts are at (−25.5, −36.5) and (+28, −29) mm. R6 and the
+lowest screen clips move to Y −22 mm to clear the right mount. All four PCB
+mounts remain. BT1 stays at X +26, Y −4, with its matching lead notch.
 
-The [connection dimensions](assets/enclosure/display-connection.json) and
-[installed ribbon preview](assets/enclosure/display-ribbon-connection.png)
-describe nominal installation geometry, not OEM flex CAD. Its 12.5 mm tip
-width follows the user-selected 24-pin, 0.5 mm listing specification; it does
-not reproduce the conflicting PDF's 19.6 mm, 0.8 mm tip. The delivered tail's
-width, contact face, reinforcement and allowable bend radius need a physical
-sample. Do not force a mismatched ribbon into the socket.
+The [Waveshare reference schematic](https://files.waveshare.com/wiki/3.97inch_e-Paper_HAT%2B_G/3.97inch_e-Paper_HAT%2B.pdf)
+specifies a **10 µH** display boost inductor. L1 now uses the exact supplier
+footprint and local CAD for [SMMS0420-100M, C133195](https://www.lcsc.com/product-detail/C133195.html),
+a 2 mm-high shielded part with a 1.6 A current rating and 2 A saturation current. J2 pins **1, 4, 6, 7 and 19
+are left open**; pin 8 is tied to GND for four-wire SPI. VDDIO and VCI remain
+at 3.3 V. All other SPI, control and charge-pump pins follow the raw-panel table.
+BUSY is active low. Firmware must use the Waveshare SSD2677 four-color driver
+and initialization sequence; this repository does not yet include reader firmware.
 
-> [!IMPORTANT]
-> Do not select a panel based only on the “4.2-inch” description or the 24-pin
-> connector. Many e-paper panels use similar FPCs but have different pinouts,
-> resolutions, controllers, dimensions, and voltage requirements. The PCB and
-> firmware must match the **EastRising ER-EPD3.97-1RY** pinout.
-> J2 selection uses the supplier listing's 24-pin, 0.50 mm specification.
+J2's dual contacts permit the installed exposed face toward the PCB. Confirm
+full insertion and locking, the actual reinforced tip thickness, contact width,
+contact exposure and stiffener length, and screen pin numbering on a sample.
+Do not force or crease the ribbon. The PCB order gate remains closed until
+that evidence is recorded; no physical sample has been tested.
 
 ## Hardware overview
 
 | Function | Implementation |
 | --- | --- |
 | MCU | ESP32-C3-WROOM-02U-N4, 4 MB flash, Wi-Fi and Bluetooth LE |
-| Display | EastRising ER-EPD3.97-1RY raw 480 × 800 four-color panel |
+| Display | Waveshare 3.97inch e-Paper (G) raw 480 × 800 four-color panel |
 | Storage | MicroSD card over shared SPI |
 | USB | USB-C power, native USB data, CC resistors, and USB ESD protection |
 | Battery | Single-cell LiPo through a 2-pin JST-PH connector |
@@ -97,9 +115,9 @@ sample. Do not force a mismatched ribbon into the socket.
 | Item | Selection / requirement |
 | --- | --- |
 | U4 microcontroller | ESP32-C3-WROOM-02U-N4 with external U.FL antenna |
-| Display | EastRising ER-EPD3.97-1RY, raw display only |
+| Display | Waveshare 3.97inch e-Paper (G); use the raw panel from the retail kit |
 | External antenna | Taoglas FXP75.07.0045B, 45 mm cable; rear-cover adhesive mount |
-| J2 display connector | Hirose FH12-24S-0.5SH(55), 24 positions at 0.5 mm pitch |
+| J2 display connector | Hirose FH34SRJ-24S-0.5SH(50), 24 positions at 0.5 mm pitch |
 | J4 MicroSD socket | Hirose DM3AT-SF-PEJM5 |
 | J1 USB-C receptacle | GCT USB4105-GF-A |
 | BT1 battery header | JST S2B-PH-K-S(LF)(SN), 2-pin, 2.0 mm pitch, side entry |
@@ -126,19 +144,19 @@ bottom-side tactile switch listed in the [original reader's
 BOM](https://github.com/IS7V4N/ESP32_E-Reader). Each switch is 4.2 × 3.2 ×
 2.5 mm, with 0.2 mm travel and 2.55 N operating force according to the
 [manufacturer](https://tech.alpsalpine.com/e/products/category/tact-switch/sub/02/series/skrp/).
-They sit on 14 mm centers within the 62.5 mm board width. Moving the row 4 mm
-closer to the display removes 5 mm from the lower PCB edge while keeping about
-2 mm between the panel outline and the button openings. Four slim key caps and independent PETG leaf arms are integral to the front
-chassis. This requires bottom-side switch assembly. Each key has a nominal
+Their X centers are −27.5, −16.5, +16.5 and +27.5 mm within the 62.5 mm board width. The Waveshare glass
+leaves 6.9 mm between its lower edge and the navigation key openings. Four
+slim key caps and independent PETG leaf arms are integral to the front chassis. This requires bottom-side switch assembly. Each key has a nominal
 0.04 mm rest gap and 0.25 mm total stroke, giving about 0.21 mm switch
 compression. Force, return and print fit need a physical prototype. Check the actual
-display ribbon width and fold radius against the 26 mm FPC slot before ordering
+display ribbon width and fold radius against the edge-wrap route before ordering
 the PCB.
 
 ## Dimensioned enclosure print prototype
 
-The redesigned Rev. E enclosure uses **two printed parts** in a
-**68.0 × 111.0 × 16.8 mm** envelope, 1.2 mm (6.7%) thinner than Rev. D.
+The redesigned Rev. H enclosure uses **two printed parts** in a
+**68.0 × 116.81 × 16.8 mm** envelope. The Waveshare screen and edge wrap add 5.81 mm
+across the upper and lower ends while retaining the 16.8 mm thickness.
 Moving the same battery toward the button end avoids stacking it over the
 ESP32 module. The front chassis combines the screen
 ledge, six releasable padded border clips and four independently moving keys.
@@ -156,9 +174,9 @@ cover with two nonconductive foam adhesive strips; a thin insulating liner
 covers its PCB-facing surface. No separate battery tray needs printing.
 The battery is now centered at X −6.0, Y −8.5 mm and lowered from Z 4.9 to
 Z 3.7. The rear wall remains 1.2 mm thick. The screen's padded ledge, six clips
-and two upper supports retain their original seating positions.
-Print both Rev. E shells as a pair. The battery loads through the open upper
-end of its guides and slides 6.5 mm toward the lower stop before fitting the PCB.
+and two upper supports are adjusted for the Waveshare glass thickness and active-area offset.
+Print both Rev. H shells as a pair. The battery loads through the open upper
+end of its guides and slides 9.5 mm toward the lower stop before fitting the PCB.
 
 | Thickness contribution | mm |
 | --- | ---: |
@@ -170,7 +188,7 @@ end of its guides and slides 6.5 mm toward the lower stop before fitting the PCB
 | **Modeled outside thickness** | **16.8** |
 
 The battery liner has 0.25 mm nominal clearance above the lower PCB mounting
-bosses and about 0.59 mm above L1. The shifted battery's liner clears the
+bosses; electronic clearances are recorded in the regenerated CAD report. The shifted battery's liner clears the
 ESP32 module by 1.63 mm in Y. These are CAD measurements; actual pack thickness,
 swelling allowance, wires and printed tolerances need a prototype check.
 
@@ -198,11 +216,11 @@ The supplier STEP archives ([1](assets/components/supplier-step-models-1.zip), [
 original source models without loading large STEP duplicates in the preview.
 Source URLs and hashes remain in `assets/components/sources.json`.
 
-Four PCB mounting holes retain their original coordinates: the upper pair at
-X ±27, Y 44.75 mm and the lower pair at X ±28, Y −40 mm. Each 2.7 mm hole has
+Four PCB mounting holes locate the board: the upper pair is at
+X ±27, Y 44.75 mm; the lower mounts are at (−25.5, −36.5) and (+28, −29) mm. Each 2.7 mm hole has
 a 3.2 mm copper keepout on every layer. The board seats at Z +0.8 on rear-cover
-bosses and the M2.5 × 4 mm screws enter from the underside. PCB geometry,
-component placement, electrical connections and routed copper remain unchanged.
+bosses and the M2.5 × 4 mm screws enter from the underside. The Rev. H connector, middle keys, lower holes and edge-wrap geometry require
+fresh routing; cached copper from earlier geometry is rejected.
 Run `bun scripts/check-pcb-mounts.mjs` after the routed build to check drills,
 board edges and copper. The enclosure check verifies screwdriver access with
 the front chassis removed.
@@ -254,7 +272,7 @@ these settings target standard fabrication, not a guaranteed price.
 (accessed 6 October 2026) state that 0.20/0.25 mm holes with pads below
 0.45 mm incur extra charges. The former 0.20/0.42 mm vias met that condition;
 the new 0.30/0.60 mm target avoids it. The 2.7 mm mounting holes and 2 mm
-ribbon slot exceed the 0.5 mm NPTH and 1 mm non-plated slot minima.
+mounting holes exceed the 0.5 mm NPTH minimum; the ribbon wraps outside the PCB.
 Select 0.30 mm as the order's minimum via drill only after checking the
 exported drill file.
 
@@ -292,11 +310,11 @@ resistors below and names beside each key. The SKRPACE010 symbol explicitly
 maps its active contacts to physical pins 1 and 4. After building, run
 `bun scripts/check-controls-schematic.mjs` to verify the visible bus and
 resistor connections, including terminals missed by ordinary style checks.
-The design reuses the verified copper from release 1.0.54, rechecked with the
-four mounting holes in release 1.0.57, through
-`verified-pcb-routes.json`. The cache compares the complete routing geometry,
-connectivity, keepouts, widths, and rules; physical changes use the autorouter
-again. Check this guard with `bun scripts/check-routing-cache.mjs`.
+The Waveshare connector, edge-wrap route, battery socket and boost inductor require
+fresh routing. `verified-pcb-routes.json` stores the validated routing baseline;
+its guard compares all physical geometry, connectivity, keepouts, widths and
+rules. Any physical change invokes routing again. Check the guard with
+`bun scripts/check-routing-cache.mjs`.
 
 ## Getting started
 
@@ -345,7 +363,7 @@ bunx tsci check placement index.circuit.tsx
 bunx tsci check trace-length index.circuit.tsx
 bunx tsci check routing-difficulty index.circuit.tsx
 bun run build:release
-bunx tsci check shorts dist/index/circuit.json
+bunx tsci check shorts dist/index/circuit.json --layer all
 ```
 
 Update the checked-in schematic, PCB, and 3D snapshots with:
@@ -354,17 +372,30 @@ Update the checked-in schematic, PCB, and 3D snapshots with:
 bun run snapshot:update
 ```
 
-The current cloud-style build completes with 228 routed traces, zero DRC
-errors, and no Gerber-derived shorts across all four layers. Its 178 vias are
-all 0.30/0.60 mm ordinary through vias. Netlist, schematic placement, PCB
-placement, and TypeScript checks pass. Schematic style analysis reports no
-issues across all five sheets. Buried-layer keepouts prevent through vias from
-overlapping the USB-C contacts, U3 contacts, and C19/C20 ground pads.
-
-The source and regenerated fabrication export ground J2 pins 6 and 7. The export guard
-rejects artifacts without both sensor pins grounded. Connector pitch follows
-the supplier listing at the user's direction. Physical screen-tail, battery
-lead, button travel and printed-fit checks remain necessary.
+The Waveshare adaptation builds locally with **227 routed traces and 176
+ordinary through vias**, with zero build errors and no Gerber-derived shorts
+on top, bottom, inner1 or inner2. Netlist, schematic placement, PCB placement,
+TypeScript, mounting-hole copper clearance and the 87-row assembly export pass.
+The offset ribbon and screen clear the PCB, component meshes, battery and case
+in the nominal CAD checks. Sampled enclosure assembly/release paths pass.
+The export guard verifies the offset J2 location and requires pins 1, 4, 6, 7
+and 19 to remain open. It rejects build errors, missing supplier IDs and
+nonstandard drills. Connector pitch follows the Waveshare raw-panel datasheet.
+J2 intentionally accepts the internal ribbon from the −Y side with the case
+open. The canonical C324726 footprint places socket pin 1 on +X, with 0°
+PCB/CAD and supplier placement rotation. The edge-access heuristic warns
+because +X is the nearest outer edge; the actual internal tail enters from −Y
+with the case open, and is checked separately in CAD.
+The regenerated two-part meshes are manifold. PrusaSlicer 2.9.6+arch5 slices
+both parts and their 3MF plate without warnings using the 0.4 mm / 0.2 mm
+reference PETG profile. The plate estimate, including supports, is recorded in the current slice report. Toolpath presence for the springs, clips, snaps and upper screen
+supports, bed bounds and selected layers were checked. See the
+[slice report](assets/enclosure/stl/printability-check.json) and
+[toolpath inspection](assets/enclosure/stl/toolpath-check.json).
+The ribbon's separate drawing check requires supplier/sample acceptance; its
+collision-free CAD does not establish compatibility. A target-printer slice,
+physical screen-tail, battery lead, button travel and printed-fit checks remain
+necessary.
 
 ## Printable enclosure
 
@@ -407,15 +438,17 @@ bun run build:release
 bun run export:gerbers
 ```
 
-`export:gerbers` uses the just-built `dist/index/circuit.json`, so it does not
+`export:gerbers` first runs the display-interface ordering gate and exits
+without creating an archive while supplier/sample qualification is missing.
+Once qualified, it uses the just-built `dist/index/circuit.json`, so it does not
 routinely rerun the autorouter. The output is written to
 `dist/esp32-e-reader-gerbers.zip` and includes the
 four copper layers, solder mask, paste, silkscreen, fabrication and edge-cut
 Gerbers, plated/non-plated drill files, BOM, and pick-and-place CSV files.
 All BOM rows have JLCPCB part numbers, including the four SKRPACE010
-navigation switches (C139797). U1, U2, U3, U4, U5, L2, SW2, SW3, SW4, and
+navigation switches (C139797). U1, U2, U3, U4, U5, L1, L2, SW2, SW3, SW4, and
 SW6 use imported supplier footprints for assembly placement. `export:gerbers`
-checks the BOM, critical placement rows, absence of build errors, centered J2,
+checks the BOM, critical placement rows, absence of build errors, Waveshare J2 position,
 through-via geometry, and the actual minimum plated drill before accepting
 the archive.
 
@@ -437,9 +470,10 @@ Confirm the SW7 orientation in the assembler's placement preview.
 
 ### Release checks requiring physical parts
 
-The design changes below address the known schematic and drawing-level
-blockers. **Do not release a full assembly order yet.** First mate a sample selected panel with J2 and confirm the FPC fold through the slot, pin 1,
-contact side, and latch closure. Fit the exact protected battery and its keyed
+The ribbon document check still requires connector-tail tolerance acceptance,
+physical panel pin numbering and installed bend-radius confirmation. **Do not release a full assembly order yet.** Resolve those
+findings, then mate a sample selected panel with the validated connector and
+confirm pin 1, contact side, full insertion, fold and latch closure. Fit the exact protected battery and its keyed
 plug in a printed case, then inspect the USB-C body, antenna cable, and lid
 closure. On a prototype PCB, measure charge termination while reading,
 3.3 V ripple and transient response at low battery, and Wi-Fi performance

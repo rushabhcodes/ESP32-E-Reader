@@ -6,15 +6,18 @@ it illustrates a transparent CAD material, not the optical finish of FDM PETG.
 from pathlib import Path
 from math import pi
 import subprocess
+import json
 import bpy
 from mathutils import Matrix, Vector
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'assets/enclosure'
+DISPLAY_SPEC=json.loads((ROOT/'assets/enclosure/display-connection.json').read_text())
+DISPLAY_ANCHOR=tuple(DISPLAY_SPEC['connector'][key] for key in ('centerX','centerY','boardSurfaceZ'))
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
 
-def local(name,offset=(0,0,0)):
+def local(name,offset=(0,0,0),rotation_z=0):
     before=set(bpy.data.objects);bpy.ops.import_scene.gltf(filepath=str(OUT/name))
     objects=[o for o in set(bpy.data.objects)-before if o.type=='MESH']
-    for o in objects:o.matrix_world=Matrix.Translation(Vector(offset))@Matrix.Rotation(-pi/2,4,'X')@o.matrix_world
+    for o in objects:o.matrix_world=Matrix.Translation(Vector(offset))@Matrix.Rotation(rotation_z*pi/180,4,'Z')@Matrix.Rotation(-pi/2,4,'X')@o.matrix_world
     return objects
 
 front=local('front-chassis.glb');rear=local('rear-cover.glb')
@@ -22,7 +25,7 @@ cell=local('battery-envelope-DO-NOT-PRINT.glb')
 liner=local('battery-liner-DO-NOT-PRINT.glb');adhesive=local('battery-adhesive-DO-NOT-PRINT.glb')
 antenna=local('antenna-envelope-DO-NOT-PRINT.glb')
 keys=front # Key caps/leaves are part of the same connected chassis mesh.
-display=local('display-panel.glb',(0,-32.34,.8))
+display=local('display-panel.glb',DISPLAY_ANCHOR,DISPLAY_SPEC['connector']['screenCadRotationZ'])
 pads=local('display-cushioning.glb');hardware=local('pcb-cover-fasteners.glb')
 pcb_screws=[o for o in hardware if o.name.startswith('PCB-')]
 cover_screws=[o for o in hardware if o not in pcb_screws]
@@ -73,7 +76,7 @@ render('printable-pcb-mounts.png',(0,5,220),133)
 reset();hide(rear+cell+liner+adhesive+antenna+hardware+board)
 render('display-retainer-installed.png',(70,-110,150),132,(0,9,-3))
 reset();hide(front+rear+cell+liner+adhesive+antenna+hardware+pads)
-render('display-ribbon-connection.png',(30,-80,28),43,(0,-34,0))
+render('display-ribbon-connection.png',(45,-82,35),62,(8,-39,0))
 reset();shift(display,8);shift(pads,8);shift(board+pcb_screws,25)
 shift(cell+liner+adhesive,44);shift(rear+antenna+cover_screws,60)
 render('printable-exploded.png',(130,-135,130),185,(0,5,33))

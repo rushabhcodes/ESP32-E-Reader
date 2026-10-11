@@ -1,5 +1,5 @@
 {
-  "revision": "E",
+  "revision": "H",
   "front_pad_seats": 10,
   "side_clip_seats": 6,
   "upper_cover_supports": 2,
@@ -9,7 +9,7 @@
     "start_offset_mm": 12,
     "samples": 25,
     "step_mm": 0.5,
-    "max_overlap_mm3": 3.3e-05
+    "max_overlap_mm3": 0
   },
   "scope": "Nominal geometry, sampled insertion and flexure deformation only. Fit, force, fatigue, optical clarity and adhesive retention need physical testing."
 }

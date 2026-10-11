@@ -8,6 +8,7 @@ import {
 	SOLVERS,
 } from "tscircuit";
 import { getVerifiedPcbRoutes } from "./verified-pcb-routes";
+import { removeSupersededRoutingSeeds } from "./routing-output";
 
 type EventHandlers = {
 	complete: Array<(event: AutorouterCompleteEvent) => void>;
@@ -78,10 +79,10 @@ export class PreExpansionAutorouter implements GenericLocalAutorouter {
 
 	private getTraces(): SimplifiedPcbTrace[] {
 		if (this.verifiedTraces) return this.verifiedTraces;
-		return [
+		return removeSupersededRoutingSeeds(this.input, [
 			...this.solver.getUpdatedPreloadedTraces(),
 			...this.solver.getNewTracesBeforePowerExpansion(),
-		];
+		]);
 	}
 
 	private runCycle = () => {

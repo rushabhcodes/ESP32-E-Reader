@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import fixture from './fixtures/cc2-routing-seed.json';
+import {removeSupersededRoutingSeeds} from '../routing-output';
+const [seed,replacement]=fixture.traces;
+assert.deepEqual(removeSupersededRoutingSeeds(fixture.input,fixture.traces),[replacement]);
+assert.deepEqual(removeSupersededRoutingSeeds(fixture.input,[seed]),[seed],'Keep unresolved failures visible');
+const differentNet={...replacement,connection_name:'different_net'};
+assert(removeSupersededRoutingSeeds(fixture.input,[seed,differentNet]).includes(seed));
+const broken={...replacement,route:replacement.route.filter(p=>p.route_type!=='via')};
+assert(removeSupersededRoutingSeeds(fixture.input,[seed,broken]).includes(seed),'A replacement without layer transitions is incomplete');
+const branched=structuredClone(fixture.input);
+branched.connections[0].pointsToConnect.push({x:0,y:0,layer:'top',pointId:'branch'});
+assert.deepEqual(removeSupersededRoutingSeeds(branched,fixture.traces),fixture.traces,'Leave multipoint branches intact');
+console.log('Actual CC2 regression: connected replacement retained; missing vias, wrong net, absent replacement and branches remain visible.');

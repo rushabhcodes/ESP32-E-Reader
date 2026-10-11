@@ -20,13 +20,13 @@ import {
 	supplierPartNumbersFor,
 	testpoints,
 } from "./design-data";
-import { CR5040_470M } from "./imports/CR5040_470M";
+import { SMMS0420_100M } from "./imports/SMMS0420_100M";
 import { BQ24074RGTR } from "./imports/BQ24074RGTR";
 import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
 import { DW01A } from "./imports/DW01A";
 import { ESP32_C3_WROOM_02U_N4 } from "./imports/ESP32_C3_WROOM_02U_N4";
 import { EVQP7C01P } from "./imports/EVQP7C01P";
-import { FH12_24S_0_5SH_55_ } from "./imports/FH12_24S_0_5SH_55_";
+import { FH34SRJ_24S_0_5SH_50_ } from "./imports/FH34SRJ_24S_0_5SH_50_";
 import { FS8205A } from "./imports/FS8205A";
 import { MSK12C02_HB } from "./imports/MSK12C02_HB";
 import { MBR0530T1G } from "./imports/MBR0530T1G";
@@ -55,11 +55,11 @@ const renderChip = (spec: ChipSpec) => {
 
 	if (spec.name === "J2")
 		return (
-			<FH12_24S_0_5SH_55_
+			<FH34SRJ_24S_0_5SH_50_
 				key={spec.name}
 				{...importedCommon}
-				pcbY={spec.pcbY + 0.03723375}
-				noConnect={["pin1", "pin4", "pin19", "pin25", "pin26"]}
+				pcbY={spec.pcbY}
+				noConnect={["pin1", "pin4", "pin6", "pin7", "pin19", "pin25", "pin26"]}
 			/>
 		);
 	if (spec.name === "J4")
@@ -71,7 +71,7 @@ const renderChip = (spec: ChipSpec) => {
 			/>
 		);
 	// Turn BT1's keyed mating face toward the partition lead slot (-Y).
-	// Move it 2 mm inward for plug insertion room at the PCB's lower edge.
+	// Its right-side position clears the Waveshare ribbon and battery pouch.
 	if (spec.name === "BT1")
 		return (
 			<S2B_PH_K_S_LF__SN_
@@ -269,7 +269,7 @@ export const CircuitSections = () => (
 		))}
 		{inductors.map((spec) =>
 			spec.name === "L1" ? (
-				<CR5040_470M
+				<SMMS0420_100M
 					key={spec.name}
 					name={spec.name}
 					pcbX={spec.pcbX}

@@ -1,7 +1,94 @@
 {
-  "panel": { "name": "ER-EPD3.97-1RY", "width": 56.24, "height": 96.62, "centerY": 10.5, "frontZ": -4.65, "backZ": -3.75 },
-  "connector": { "name": "J2", "centerY": -32.34, "boardSurfaceZ": 0.8, "modelOriginY": 1.38898035, "tipModelY": 1.3 },
-  "slot": { "centerY": -38.41, "width": 26, "height": 2 },
-  "flex": { "width": 12.5, "thickness": 0.1, "rootZ": -3.7, "entryZ": 1.55, "bendRadius": 0.6, "stiffenerLength": 4.5, "stiffenerThickness": 0.19, "contactLength": 3.5, "contactWidth": 0.35, "contactPitch": 0.5, "contacts": 24, "nominalTailLength": 11.27, "tailLengthTolerance": 0.3 },
-  "basis": "Nominal installed flex under the user-selected 24-pin 0.5 mm supplier-listing specification; not OEM flex CAD. Width, contact face, stiffener and 0.6 mm installation bends need a physical sample. The conflicting 0.8 mm/19.6 mm PDF tip is not used."
+  "panel": {
+    "name": "Waveshare 3.97inch e-Paper (G)",
+    "controller": "SSD2677",
+    "colors": [
+      "black",
+      "white",
+      "red",
+      "yellow"
+    ],
+    "width": 56.24,
+    "height": 96.62,
+    "centerY": 15.31,
+    "frontZ": -4.65,
+    "backZ": -3.55,
+    "activeWidth": 51.84,
+    "activeHeight": 86.4,
+    "activeCenterY": 18.22
+  },
+  "connector": {
+    "name": "J2",
+    "centerX": 21.87,
+    "centerY": -35.08101356236891,
+    "boardSurfaceZ": 0.8,
+    "modelOriginY": 0.1999876,
+    "tipModelY": -0.05,
+    "partNumber": "FH34SRJ-24S-0.5SH(50)",
+    "supplierPartNumber": "C324726",
+    "pcbRotation": 0,
+    "supplierRotation": 0,
+    "pin1Side": "positive_x",
+    "screenCadRotationZ": 180
+  },
+  "flex": {
+    "width": 12.5,
+    "thickness": 0.1,
+    "rootZ": -3.5,
+    "entryZ": 1.32,
+    "routingZ": 1.7,
+    "bendRadius": 0.6,
+    "flatRootLength": 15.0,
+    "settleAtLength": 28.0,
+    "stiffenerLength": 3.0,
+    "stiffenerThickness": 0.19,
+    "contactLength": 1.7,
+    "contactWidth": 0.35,
+    "contactPitch": 0.5,
+    "contacts": 24,
+    "nominalTailLength": 33.66,
+    "tailLengthTolerance": 0.3,
+    "rootWidth": 21.28,
+    "wingStartLength": 17.4,
+    "wingEndLength": 25.4,
+    "wingMinX": -6.34,
+    "wingMaxX": 28.12,
+    "neckWidth": 12.66
+  },
+  "case": {
+    "width": 68,
+    "height": 116.81,
+    "centerY": 6.905,
+    "topSupportY": 62.65,
+    "bottomSupportY": -29.59,
+    "clipFaceZ": -3.2,
+    "batteryLeadNotchY": -6.4,
+    "screenClipTipY": [
+      -22.0,
+      3.0,
+      27.0
+    ],
+    "revision": "H"
+  },
+  "sources": {
+    "panel": "https://files.waveshare.com/wiki/3.97inch_e-Paper_HAT%2B_G/3.97inch_e-Paper_G.pdf",
+    "referenceCircuit": "https://files.waveshare.com/wiki/3.97inch_e-Paper_HAT%2B_G/3.97inch_e-Paper_HAT%2B.pdf",
+    "indiaSupplier": "https://robu.in/product/waveshare-3-97inch-e-paper-display/"
+  },
+  "basis": "Waveshare Rev 1.0 mechanical drawing, printed page 4: 56.24 x 96.62 mm glass, 24 contacts at 0.5 mm, 12.50 mm tip, offset L-shaped tail with 33.66 mm projection, 3.00 mm stiffener and 1.70 mm contact exposure. The first bend begins at the marked 15.00 mm line (17.40 minus 2.40), beyond the PCB bottom edge; the bonded/driver region stays flat. Glass modeled at conservative 1.10 mm maximum table thickness. Undimensioned outline corners and 0.6 mm installation radius remain nominal. FH34SRJ is a short-contact, dual-contact candidate; its 0.30 +/-0.03 mm recommendation does not cover the panel full +/-0.05 mm thickness tolerance. Panel pin-1 direction is not established by the unlabeled mechanical drawing. CAD finger numbers follow the selected socket and must not be mistaken for verified panel numbering. Physical mating and bend radius require confirmation before PCB order.",
+  "route": {
+    "type": "around_bottom_edge",
+    "bendCenterY": -48.6,
+    "panelPin1Verified": false
+  },
+  "controls": {
+    "navigationX": [
+      -27.5,
+      -16.5,
+      16.5,
+      27.5
+    ],
+    "navigationY": -42.5,
+    "layout": "Two pairs beside a protected central ribbon channel sized for the full 21.28 mm front root width; moving flanges clear that entire width."
+  }
 }

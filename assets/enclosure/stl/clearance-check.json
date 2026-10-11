@@ -1,5 +1,5 @@
 {
-  "revision": "E",
+  "revision": "H",
   "power_switch": {
     "reference": "SW7",
     "supplier_part_number": "C431541",
@@ -19,17 +19,17 @@
     ],
     "component_case_collisions": 0
   },
-  "native_assembly_sha256": "d6961b3924785e29c2c37629bdeefc8a9ca6954390799932e2fd79f0e0ed6330",
+  "native_assembly_sha256": "589b0216f959cf4013b8254517793c768d30526dd802b28e3c10758792d7687d",
   "printed_parts": 2,
   "outside_mm": [
-    68.0,
-    111.0,
+    68,
+    116.81,
     16.8
   ],
   "measured_mesh_thickness_mm": 16.8,
   "battery_clearances": {
     "highest_underlying_component": "L1",
-    "insulation_to_component_mm": 0.59,
+    "insulation_to_component_mm": 0.69,
     "insulation_to_pcb_boss_mm": 0.25,
     "battery_liner_to_esp32_xy_mm": 1.63,
     "scope": "Nominal CAD clearances; actual pack thickness, swelling, wires and printed tolerances need a prototype check."
@@ -121,28 +121,59 @@
       "key_travel_mm": 0.25,
       "rest_actuator_gap_mm": 0.04,
       "switch_compression_at_full_stroke_mm": 0.21,
-      "other_part_collisions": 0
+      "other_part_collisions": 0,
+      "front_ribbon_projection_gap_mm": 11.76
     },
     {
       "switch": "SW3",
       "key_travel_mm": 0.25,
       "rest_actuator_gap_mm": 0.04,
       "switch_compression_at_full_stroke_mm": 0.21,
-      "other_part_collisions": 0
+      "other_part_collisions": 0,
+      "front_ribbon_projection_gap_mm": 0.76
     },
     {
       "switch": "SW2",
       "key_travel_mm": 0.25,
       "rest_actuator_gap_mm": 0.04,
       "switch_compression_at_full_stroke_mm": 0.21,
-      "other_part_collisions": 0
+      "other_part_collisions": 0,
+      "front_ribbon_projection_gap_mm": 0.76
     },
     {
       "switch": "SW4",
       "key_travel_mm": 0.25,
       "rest_actuator_gap_mm": 0.04,
       "switch_compression_at_full_stroke_mm": 0.21,
-      "other_part_collisions": 0
+      "other_part_collisions": 0,
+      "front_ribbon_projection_gap_mm": 11.76
+    }
+  ],
+  "ribbon_guard_floor": [
+    {
+      "x": -10.65,
+      "y": -42.5,
+      "floor_thickness_mm": 1.85
+    },
+    {
+      "x": 0.0,
+      "y": -42.5,
+      "floor_thickness_mm": 1.85
+    },
+    {
+      "x": 10.65,
+      "y": -42.5,
+      "floor_thickness_mm": 1.85
+    },
+    {
+      "x": 0.0,
+      "y": -47.5,
+      "floor_thickness_mm": 1.85
+    },
+    {
+      "x": 0.0,
+      "y": -36.5,
+      "floor_thickness_mm": 1.85
     }
   ],
   "screen_front_pad_seats": 10,
@@ -155,7 +186,7 @@
       "start_offset_mm": 12,
       "samples": 25,
       "step_mm": 0.5,
-      "max_overlap_mm3": 3.3e-05
+      "max_overlap_mm3": 0
     },
     {
       "assembly": "PCB straight into removed rear cover",
@@ -163,7 +194,7 @@
       "start_offset_mm": -24,
       "samples": 49,
       "step_mm": 0.5,
-      "max_overlap_mm3": 3e-06
+      "max_overlap_mm3": 5e-06
     },
     {
       "assembly": "battery insertion clear of lower PCB bosses",
@@ -176,8 +207,8 @@
     {
       "assembly": "battery slide to lower stop before fitting PCB",
       "axis": 1,
-      "start_offset_mm": 6.5,
-      "samples": 14,
+      "start_offset_mm": 9.5,
+      "samples": 20,
       "step_mm": 0.5,
       "max_overlap_mm3": 0
     },
@@ -232,5 +263,9 @@
   ],
   "native_assembly_transparency_verified": true,
   "volume_epsilon_mm3": 0.0001,
-  "scope": "Nominal geometry, sampled insertion and flexure deformation only. Fit, force, fatigue, optical clarity and adhesive retention need physical testing."
+  "scope": "Nominal geometry, sampled insertion and flexure deformation only. Fit, force, fatigue, optical clarity and adhesive retention need physical testing.",
+  "pcb_collision_model": "Watertight emitted outline with drills filled conservatively; bounds match native PCB export.",
+  "native_display_geometry_max_vertex_deviation_mm": 1.113e-05,
+  "key_display_collision_model": "Separate source glass, flex, stiffener and contact solids; vertices match native export.",
+  "numerical_contact_epsilon_mm": 0.0001
 }

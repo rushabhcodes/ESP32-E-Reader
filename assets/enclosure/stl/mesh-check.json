@@ -2,15 +2,15 @@
   "front-rigid-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 9793.789,
+    "signed_volume_mm3": 10916.391,
     "bounds_mm": [
       [
         -34.0,
         34.0
       ],
       [
-        -50.5,
-        60.5
+        -51.5,
+        65.31
       ],
       [
         -5.8,
@@ -21,11 +21,11 @@
   "button-1-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 88.925,
+    "signed_volume_mm3": 87.211,
     "bounds_mm": [
       [
-        -26.8,
-        -15.2
+        -32.6,
+        -22.4
       ],
       [
         -45.5,
@@ -40,11 +40,11 @@
   "button-2-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 90.655,
+    "signed_volume_mm3": 87.211,
     "bounds_mm": [
       [
-        -12.8,
-        -1.2
+        -21.6,
+        -11.4
       ],
       [
         -45.5,
@@ -59,11 +59,11 @@
   "button-3-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 90.655,
+    "signed_volume_mm3": 87.211,
     "bounds_mm": [
       [
-        1.2,
-        12.8
+        11.4,
+        21.6
       ],
       [
         -45.5,
@@ -78,11 +78,11 @@
   "button-4-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 88.925,
+    "signed_volume_mm3": 87.211,
     "bounds_mm": [
       [
-        15.2,
-        26.8
+        22.4,
+        32.6
       ],
       [
         -45.5,
@@ -97,11 +97,11 @@
   "button-flexures-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 427.555,
+    "signed_volume_mm3": 432.053,
     "bounds_mm": [
       [
-        -27.0,
-        27.0
+        -32.6,
+        32.6
       ],
       [
         -47.95,
@@ -109,18 +109,18 @@
       ],
       [
         -5.8,
-        -3.25
+        -3.35
       ]
     ]
   },
   "button-moving-1-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 97.256,
+    "signed_volume_mm3": 94.817,
     "bounds_mm": [
       [
-        -26.8,
-        -15.2
+        -32.6,
+        -22.4
       ],
       [
         -46.95,
@@ -128,18 +128,18 @@
       ],
       [
         -5.8,
-        -3.25
+        -3.35
       ]
     ]
   },
   "button-moving-2-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 98.986,
+    "signed_volume_mm3": 94.817,
     "bounds_mm": [
       [
-        -12.8,
-        -1.2
+        -21.6,
+        -11.4
       ],
       [
         -46.95,
@@ -147,18 +147,18 @@
       ],
       [
         -5.8,
-        -3.25
+        -3.35
       ]
     ]
   },
   "button-moving-3-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 98.986,
+    "signed_volume_mm3": 94.817,
     "bounds_mm": [
       [
-        1.2,
-        12.8
+        11.4,
+        21.6
       ],
       [
         -46.95,
@@ -166,18 +166,18 @@
       ],
       [
         -5.8,
-        -3.25
+        -3.35
       ]
     ]
   },
   "button-moving-4-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 97.256,
+    "signed_volume_mm3": 94.817,
     "bounds_mm": [
       [
-        15.2,
-        26.8
+        22.4,
+        32.6
       ],
       [
         -46.95,
@@ -185,22 +185,22 @@
       ],
       [
         -5.8,
-        -3.25
+        -3.35
       ]
     ]
   },
   "front-chassis.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 10320.16,
+    "signed_volume_mm3": 11430.097,
     "bounds_mm": [
       [
         -34.0,
         34.0
       ],
       [
-        -50.5,
-        60.5
+        -51.5,
+        65.31
       ],
       [
         -5.8,
@@ -211,18 +211,18 @@
   "rear-rigid-DO-NOT-PRINT.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 13679.105,
+    "signed_volume_mm3": 14264.287,
     "bounds_mm": [
       [
         -34.0,
         34.0
       ],
       [
-        -50.5,
-        60.5
+        -51.5,
+        65.31
       ],
       [
-        -3.4,
+        -3.2,
         11.0
       ]
     ]
@@ -230,18 +230,18 @@
   "rear-cover.stl": {
     "nonmanifold_edges": 0,
     "connected_shells": 1,
-    "signed_volume_mm3": 13866.689,
+    "signed_volume_mm3": 14451.871,
     "bounds_mm": [
       [
         -34.0,
         34.0
       ],
       [
-        -50.5,
-        60.5
+        -51.5,
+        65.31
       ],
       [
-        -3.4,
+        -3.2,
         11.0
       ]
     ]

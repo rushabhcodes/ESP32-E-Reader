@@ -22,7 +22,7 @@ const enclosure = [
   "pcb-mounts.json", "display-connection.json", "component-inventory.csv", "component-envelopes.csv",
   ...previewImages,
   "stl/mesh-check.json", "stl/clearance-check.json", "stl/assembly-check.json",
-  "stl/display-retainer-check.json", "stl/display-connection-check.json", "stl/printability-check.json",
+  "stl/display-interface-check.json", "stl/toolpath-check.json", "stl/display-retainer-check.json", "stl/display-connection-check.json", "stl/printability-check.json",
 ];
 files.push(...enclosure.map((name) => "assets/enclosure/" + name));
 // The browser loads OBJ/GLB. Keep supplier STEP originals together in a ZIP;

@@ -14,8 +14,11 @@ import bpy
 import bmesh
 from mathutils import Matrix, Vector
 from mathutils.bvhtree import BVHTree
+from mathutils.kdtree import KDTree
 
 ROOT = Path(__file__).resolve().parents[1]
+DISPLAY_SPEC=json.loads((ROOT/'assets/enclosure/display-connection.json').read_text())
+DISPLAY_ANCHOR=tuple(DISPLAY_SPEC['connector'][key] for key in ('centerX','centerY','boardSurfaceZ'))
 STL = ROOT / 'assets/enclosure/stl'
 INPUT = Path(sys.argv[sys.argv.index('--') + 1])
 PCB_MOUNTS = json.loads((ROOT / 'assets/enclosure/pcb-mounts.json').read_text())
@@ -66,12 +69,13 @@ def cylinder(name, diameter, low, high, x, y):
 
 
 EPS=1e-4
+CONTACT_EPS_MM=1e-4  # Float32 CAD transforms at intentionally touching seats.
 checks=[]
 def bounds(o):
     pts=[o.matrix_world@Vector(v) for v in o.bound_box]
     return [(min(p[i] for p in pts),max(p[i] for p in pts)) for i in range(3)]
 def overlap(a,b):
-    if any(min(x[1],y[1])-max(x[0],y[0])<=1e-5 for x,y in zip(bounds(a),bounds(b))):return 0.
+    if any(min(x[1],y[1])-max(x[0],y[0])<=CONTACT_EPS_MM for x,y in zip(bounds(a),bounds(b))):return 0.
     ta,tb=tree(a),tree(b)
     if not ta.overlap(tb):
         ray=Vector((.912,.317,.257)).normalized()
@@ -111,14 +115,26 @@ emitted={}
 for o in set(bpy.data.objects)-before:
     if o.type=='MESH':o.matrix_world=conversion@o.matrix_world;emitted[o.name]=o
 circuit=json.loads((ROOT/'dist/index/circuit.json').read_text())
+board_spec=next(o for o in circuit if o['type']=='pcb_board')
+# The viewer's PCB mesh has split/open edges around generated drilling. A
+# conservative watertight outline is suitable for solid collision tests; fill
+# drill holes here, and verify its bounds against the actual exported body.
+points=board_spec['outline'];count=len(points);half=board_spec['thickness']/2
+mesh=bpy.data.meshes.new('PCB-outline-solid')
+mesh.from_pydata([(p['x'],p['y'],z) for z in (-half,half) for p in points],[],
+    [tuple(reversed(range(count))),tuple(range(count,2*count))]+
+    [(i,(i+1)%count,(i+1)%count+count,i+count) for i in range(count)])
+mesh.update();pcb_solid=bpy.data.objects.new('PCB-outline-solid',mesh);bpy.context.collection.objects.link(pcb_solid)
+bm=bmesh.new();bm.from_mesh(mesh);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(mesh);bm.free()
+native_pcb=next(o for name,o in emitted.items() if name in ('Box0','MeshWithTextures0'))
+assert all(abs(a-b)<.001 for solid_axis,native_axis in zip(bounds(pcb_solid),bounds(native_pcb)) for a,b in zip(solid_axis,native_axis)), 'PCB solid differs from emitted board bounds'
 sources={o['source_component_id']:o['name'] for o in circuit if o['type']=='source_component'}
 cads={sources[o['source_component_id']]:o for o in circuit if o['type']=='cad_component'}
 pcb_refs={sources[o['source_component_id']] for o in circuit if o['type']=='pcb_component'}
 missing=sorted(set(cads)-set(emitted));assert not missing,f'Missing CAD: {missing}'
 for name,spec in cads.items():
     if spec.get('model_obj_url') or spec.get('model_glb_url'):assert len(emitted[name].data.vertices)>8,f'Fallback CAD for {name}'
-board_parts=[o for n,o in emitted.items() if n in pcb_refs or n in ('Box0','MeshWithTextures0')]
-assert any(o.name in ('Box0','MeshWithTextures0') for o in board_parts),'No PCB body'
+board_parts=[o for n,o in emitted.items() if n in pcb_refs]+[pcb_solid]
 # Check the assembled model actually contains the current printable geometry.
 for name,local in (('front_chassis',front),('rear_cover',rear),('battery_envelope',cell),('battery_liner',liner[0])):
     assert all(abs(a-b)<.001 for local_axis,native_axis in zip(bounds(local),bounds(emitted[name])) for a,b in zip(local_axis,native_axis)),f'Stale or shifted native CAD: {name}'
@@ -189,9 +205,31 @@ for snap in cover_snaps:
     snap.data.update()
 
 # Four integral key leaves have independent full actuation stroke plus a rest gap.
+display=local_glb('display-panel.glb')
+for o in display:o.matrix_world=Matrix.Translation(Vector(DISPLAY_ANCHOR))@Matrix.Rotation(math.radians(cads['EPD1']['rotation']['z']),4,'Z')@o.matrix_world
+source_display_bounds=[(min(bounds(o)[axis][0] for o in display),max(bounds(o)[axis][1] for o in display)) for axis in range(3)]
+assert all(abs(a-b)<.001 for source_axis,native_axis in zip(source_display_bounds,bounds(emitted['EPD1'])) for a,b in zip(source_axis,native_axis)), 'Native display differs from anchored source solids'
+source_points=[o.matrix_world@v.co for o in display for v in o.data.vertices]
+native_points=[emitted['EPD1'].matrix_world@v.co for v in emitted['EPD1'].data.vertices]
+display_deviation=0.
+for reference,compared in ((source_points,native_points),(native_points,source_points)):
+    kd=KDTree(len(reference))
+    for i,point in enumerate(reference):kd.insert(point,i)
+    kd.balance()
+    display_deviation=max(display_deviation,max(kd.find(point)[2] for point in compared))
+assert display_deviation<1e-4, 'Native export changed display solid geometry'
 key_strokes=[];key_refs=['SW6','SW3','SW2','SW4']
-for key,x,ref in zip(keys,(-21.,-7.,7.,21.),key_refs):
+for key,x,ref in zip(keys,DISPLAY_SPEC['controls']['navigationX'],key_refs):
     original=[v.co.copy() for v in key.data.vertices]
+    # Front-side ribbon must also clear the moving key's XY projection, rather
+    # than relying on a shallow Z gap or notching its retaining flange.
+    kb=bounds(key);root_y=DISPLAY_SPEC['panel']['centerY']-DISPLAY_SPEC['panel']['height']/2
+    sl=max(0.,root_y-kb[1][1]);sh=min(DISPLAY_SPEC['flex']['flatRootLength'],root_y-kb[1][0])
+    assert sl<sh,'Expected key row beside the flat tail region'
+    # Use the widest root throughout this region, independent of taper corners.
+    left=-DISPLAY_SPEC['flex']['rootWidth']/2;right=-left
+    projection_gap=left-kb[0][1] if x<0 else kb[0][0]-right
+    assert projection_gap>=.5,f'Moving {ref} overlaps full front ribbon corridor: {projection_gap}'
     switch=emitted[ref];hit=tree(switch).ray_cast(Vector((x,-42.5,-10)),Vector((0,0,1)))[0]
     assert hit is not None,'No switch actuator surface'
     plunger=-3.35;gap=hit.z-plunger
@@ -199,33 +237,42 @@ for key,x,ref in zip(keys,(-21.,-7.,7.,21.),key_refs):
     for stroke in (0,.1,.25):
         for v,p in zip(key.data.vertices,original):
             v.co=p;wx,wy,wz=key.matrix_world@p
-            t=max(0,min(1,(wx-(x-5.2))/10.4))
+            direction=1
+            t=max(0,min(1,(direction*(wx-x)+4.5)/9.0))
             v.co.z+=stroke*(1 if wy>=-45.9 else t*t*(3-2*t))
         key.data.update();bpy.context.view_layer.update()
         clear('key stroke/static shell',key,rigid)
+        for part in display:clear('key stroke/display ribbon',key,part)
         for other in keys:
             if other!=key:clear('independent key stroke',key,other)
         for o in board_parts:
             if o.name!=ref:clear('key stroke/other electronics',key,o)
-    key_strokes.append({'switch':ref,'key_travel_mm':.25,'rest_actuator_gap_mm':round(gap,4),'switch_compression_at_full_stroke_mm':round(.25-gap,4),'other_part_collisions':0})
+    key_strokes.append({'switch':ref,'key_travel_mm':.25,'rest_actuator_gap_mm':round(gap,4),'switch_compression_at_full_stroke_mm':round(.25-gap,4),'other_part_collisions':0,'front_ribbon_projection_gap_mm':round(projection_gap,4)})
     for v,p in zip(key.data.vertices,original):v.co=p
     key.data.update()
+# An integral floor shields the front-side tail from fingers between the keys.
+ribbon_guard=[]
+for x,y in ((-10.65,-42.5),(0.,-42.5),(10.65,-42.5),(0.,-47.5),(0.,-36.5)):
+    exterior=tree(front).ray_cast(Vector((x,y,-10)),Vector((0,0,1)))[0]
+    interior=tree(front).ray_cast(Vector((x,y,-3.8)),Vector((0,0,-1)))[0]
+    assert exterior is not None and interior is not None,'Missing central ribbon guard'
+    thickness=interior.z-exterior.z
+    assert thickness>=1.8,'Ribbon channel exposes the tail to the key face'
+    ribbon_guard.append({'x':x,'y':y,'floor_thickness_mm':round(thickness,4)})
 # Ten front pads land on a continuous perimeter ledge, outside the active area.
-front_pad_positions=[(side*27.1,y) for side in (-1,1) for y in (-22,8,32)]+[(x,y) for x in (-16,16) for y in (-34.4,55.4)]
+front_pad_positions=[(side*27.1,y) for side in (-1,1) for y in (-22,8,32)]+[(x,y) for x in (-16,16) for y in (DISPLAY_SPEC['case']['bottomSupportY'],DISPLAY_SPEC['case']['topSupportY'])]
 for x,y in front_pad_positions:
     hit=tree(front).ray_cast(Vector((x,y,-4.6)),Vector((0,0,-1)))[0]
     assert hit is not None and abs(hit.z+4.8)<1e-4,'Missing screen ledge'
 for side in (-1,1):
-    for y in (-27,3,27):
+    for y in design['screen']['clipTipY']:
         hit=tree(front).ray_cast(Vector((side*27.82,y,-3.7)),Vector((0,0,1)))[0]
-        assert hit is not None and abs(hit.z+3.4)<1e-4,'Missing screen clip seating face'
+        assert hit is not None and abs(hit.z-DISPLAY_SPEC['case']['clipFaceZ'])<1e-4,'Missing screen clip seating face'
 for x in (-12,12):
-    hit=tree(rear).ray_cast(Vector((x,55.4,-3.7)),Vector((0,0,1)))[0]
-    assert hit is not None and abs(hit.z+3.4)<1e-4,'Missing upper screen support'
+    hit=tree(rear).ray_cast(Vector((x,DISPLAY_SPEC['case']['topSupportY'],-3.7)),Vector((0,0,1)))[0]
+    assert hit is not None and abs(hit.z-DISPLAY_SPEC['case']['clipFaceZ'])<1e-4,'Missing upper screen support'
 # Release six PETG leaf clips before dropping the padded glass. This rigid
 # insertion model checks geometric freedom; no actuation force is predicted.
-display=local_glb('display-panel.glb')
-for o in display:o.matrix_world=Matrix.Translation(Vector((0,-32.34,.8)))@o.matrix_world
 panel=next(o for o in display if 'nominal-outline' in o.name)
 clip_original={o:[v.co.copy() for v in o.data.vertices] for o in clips}
 for o,vertices in clip_original.items():
@@ -242,7 +289,7 @@ assert len(clip_pads)==6 and len(front_pads)==10
 pad_original={o:[v.co.copy() for v in o.data.vertices] for o in clip_pads}
 for o,vertices in pad_original.items():
     world=[o.matrix_world@p for p in vertices];center=sum(world,Vector())/len(world)
-    side=1 if center.x>0 else -1;tip=min((-27,3,27),key=lambda y:abs(y-center.y))
+    side=1 if center.x>0 else -1;tip=min(design['screen']['clipTipY'],key=lambda y:abs(y-center.y))
     for v,p,w in zip(o.data.vertices,vertices,world):
         t=max(0,min(1,(w.y-tip)/14.))
         v.co=o.matrix_world.inverted()@(w+Vector((side*(1-t)*(1-t)*(1+2*t),0,0)))
@@ -312,7 +359,11 @@ switch_source=next(item for item in circuit if item['type']=='source_component' 
 power_switch={'reference':'SW7','supplier_part_number':switch_source['supplier_part_numbers']['jlcpcb'][0],
               'model_bounds_mm':[[round(value,4) for value in axis] for axis in bounds(emitted['SW7'])],
               'component_case_collisions':0}
-report={'revision':design['revision'],'power_switch':power_switch,'native_assembly_sha256':hashlib.sha256(INPUT.read_bytes()).hexdigest(),'printed_parts':2,'outside_mm':design['outsideMm'],'measured_mesh_thickness_mm':round(height,4),'battery_clearances':battery_margins,'cover_snaps':{'seats':snap_seats,'release_deflection_mm':snap_spec['releaseDeflectionMm'],'cover_screws':0,'nominal_beam_surface_strain':round(3*snap_spec['beamWidth']*snap_spec['releaseDeflectionMm']/(2*snap_spec['beamLength']**2),6)},'native_cad_models':len(cads),'missing_native_models':missing,'pcb_meshes':len(board_parts),'component_case_collisions':0,'pcb_mounts':seats,'key_strokes':key_strokes,'screen_front_pad_seats':10,'screen_rear_clip_seats':6,'upper_screen_supports':2,'installation_paths':paths,'cad_transparency':materials,'native_assembly_transparency':native_transparency,'native_assembly_transparency_verified':True,'volume_epsilon_mm3':EPS,'scope':'Nominal geometry, sampled insertion and flexure deformation only. Fit, force, fatigue, optical clarity and adhesive retention need physical testing.'}
+report={'revision':design['revision'],'power_switch':power_switch,'native_assembly_sha256':hashlib.sha256(INPUT.read_bytes()).hexdigest(),'printed_parts':2,'outside_mm':design['outsideMm'],'measured_mesh_thickness_mm':round(height,4),'battery_clearances':battery_margins,'cover_snaps':{'seats':snap_seats,'release_deflection_mm':snap_spec['releaseDeflectionMm'],'cover_screws':0,'nominal_beam_surface_strain':round(3*snap_spec['beamWidth']*snap_spec['releaseDeflectionMm']/(2*snap_spec['beamLength']**2),6)},'native_cad_models':len(cads),'missing_native_models':missing,'pcb_meshes':len(board_parts),'component_case_collisions':0,'pcb_mounts':seats,'key_strokes':key_strokes,'ribbon_guard_floor':ribbon_guard,'screen_front_pad_seats':10,'screen_rear_clip_seats':6,'upper_screen_supports':2,'installation_paths':paths,'cad_transparency':materials,'native_assembly_transparency':native_transparency,'native_assembly_transparency_verified':True,'volume_epsilon_mm3':EPS,'scope':'Nominal geometry, sampled insertion and flexure deformation only. Fit, force, fatigue, optical clarity and adhesive retention need physical testing.'}
+report['pcb_collision_model']='Watertight emitted outline with drills filled conservatively; bounds match native PCB export.'
+report['native_display_geometry_max_vertex_deviation_mm']=round(display_deviation,8)
+report['key_display_collision_model']='Separate source glass, flex, stiffener and contact solids; vertices match native export.'
+report['numerical_contact_epsilon_mm']=CONTACT_EPS_MM
 (STL/'clearance-check.json').write_text(json.dumps(report,indent=2)+'\n')
 (STL/'assembly-check.json').write_text(json.dumps({'revision':design['revision'],'native_cad_models':len(cads),'missing_native_models':missing,'installation_paths':paths,'scope':report['scope']},indent=2)+'\n')
 (STL/'display-retainer-check.json').write_text(json.dumps({'revision':design['revision'],'front_pad_seats':10,'side_clip_seats':6,'upper_cover_supports':2,'screen_insertion':paths[0],'scope':report['scope']},indent=2)+'\n')

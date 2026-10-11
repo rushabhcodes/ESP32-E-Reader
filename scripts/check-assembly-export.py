@@ -20,6 +20,8 @@ EXPECTED = {
     "U3": ("C2927799", "top", "90"),
     "U4": ("C2926676", "top", "0"),
     "U5": ("C202140", "top", "0"),
+    "J2": ("C324726", "top", "0"),
+    "L1": ("C133195", "top", "270"),
     "L2": ("C133190", "top", "0"),
     "SW2": ("C139797", "bottom", "180"),
     "SW3": ("C139797", "bottom", "180"),
@@ -113,22 +115,22 @@ def main(path: Path):
             raise ValueError("NPTH below JLCPCB 0.50 mm minimum")
     j2 = [item for item in circuit if item["type"] == "pcb_component"
           and source_names.get(item.get("source_component_id")) == "J2"]
-    if len(j2) != 1 or abs(j2[0]["center"]["x"]) > 1e-6:
-        raise ValueError("J2 must remain centered at X = 0")
+    spec = json.loads((imports.parent / "assets/enclosure/display-connection.json").read_text())
+    if len(j2) != 1 or any(abs(j2[0]["center"][axis] - spec["connector"]["center" + axis.upper()]) > 1e-6 for axis in ("x", "y")):
+        raise ValueError("J2 must match the Waveshare L-tail connector position")
+    if j2[0].get("pin1_location") != "topside_right":
+        raise ValueError("J2 pin 1 must match the canonical FH34SRJ footprint")
     j2_source_id = j2[0]["source_component_id"]
-    ground_id = next(item["source_net_id"] for item in circuit
-                     if item["type"] == "source_net" and item["name"] == "GND")
-    for pin in (6, 7):
+    for pin in (1, 4, 6, 7, 19):
         port = next(item for item in circuit if item["type"] == "source_port"
                     and item.get("source_component_id") == j2_source_id
                     and item.get("pin_number") == pin)
-        grounded = any(item["type"] == "source_trace"
-                       and port["source_port_id"] in item.get("connected_source_port_ids", [])
-                       and ground_id in item.get("connected_source_net_ids", [])
-                       for item in circuit)
-        if port.get("do_not_connect") or not grounded:
-            raise ValueError(f"J2 pin {pin} must have its unused sensor input tied to GND")
-    print(f"Fabrication sizes checked: {len(vias)} vias at least 0.30/0.60 mm; J2 centered.")
+        connected = any(item["type"] == "source_trace"
+                        and port["source_port_id"] in item.get("connected_source_port_ids", [])
+                        for item in circuit)
+        if not port.get("do_not_connect") or connected:
+            raise ValueError(f"Waveshare J2 pin {pin} must be left open")
+    print(f"Fabrication sizes checked: {len(vias)} vias at least 0.30/0.60 mm; Waveshare connector/NC pins checked.")
 
     sw7_ids = {
         item["pcb_component_id"]

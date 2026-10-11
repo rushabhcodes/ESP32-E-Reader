@@ -26,7 +26,7 @@ def slice_part(source):
         if line.startswith(';TYPE:'):kind=line[6:].strip().lower()
         if line.startswith('M83'):relative=True
         if line.startswith('M82'):relative=False
-        words=dict(re.findall(r'([XYZE])(-?\d+(?:\.\d+)?)',line.split(';')[0]))
+        words=dict(re.findall(r'([XYZE])(-?(?:\d+(?:\.\d*)?|\.\d+))',line.split(';')[0]))
         if line.startswith('G92') and 'E' in words:last_e=float(words['E'])
         if not line.startswith(('G0 ','G1 ')):continue
         moving=any(axis in words and abs(float(words[axis])-xyz[axis])>1e-6 for axis in ('X','Y'))
@@ -46,7 +46,8 @@ def slice_part(source):
     return report
 with ThreadPoolExecutor(max_workers=2) as pool:reports=list(pool.map(slice_part,parts))
 plate=slice_part(ASSETS/'reader-print-plate.3mf')
-report={'slicer':version,'nozzle_mm':.4,'layer_mm':.2,'bed_mm':[220,220],
+report={'status':'reference_slice_pass','revision':json.loads((ASSETS/'enclosure-design.json').read_text())['revision'],
+        'slicer':version,'nozzle_mm':.4,'layer_mm':.2,'bed_mm':[220,220],
         'profile_sha256':hashlib.sha256((ASSETS/'fdm-reference.ini').read_bytes()).hexdigest(),
         'parts':reports,'plate':plate,'scope':'Toolpath generation only; printer-specific calibration, fit and fatigue remain unverified.'}
 (ASSETS/'stl/printability-check.json').write_text(json.dumps(report,indent=2)+'\n')

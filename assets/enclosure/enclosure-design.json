@@ -1,12 +1,12 @@
 {
-  "revision": "E",
+  "revision": "H",
   "printedParts": [
     "front-chassis",
     "rear-cover"
   ],
   "outsideMm": [
-    68.0,
-    111.0,
+    68,
+    116.81,
     16.8
   ],
   "frontZ": -5.8,
@@ -30,29 +30,29 @@
     "mountAdhesiveThickness": 0.5,
     "guideBaseZ": 3.3000000000000003,
     "lowerStopY": -43.5,
-    "loadingOffsetY": 6.5,
+    "loadingOffsetY": 9.5,
     "loadingStandOffZ": 0.1,
-    "loadingDirection": "insert +Z at Y -2, slide -Y 6.5 mm with 0.1 mm lid stand-off, then seat adhesive before fitting PCB"
+    "loadingDirection": "insert +Z at Y +1, slide -Y 9.5 mm with 0.1 mm lid stand-off, then seat adhesive before fitting PCB"
   },
   "screen": {
     "rebateFloorZ": -4.8,
     "frontPadThickness": 0.15,
-    "clipFaceZ": -3.4,
+    "clipFaceZ": -3.2,
     "rearPadThickness": 0.35,
     "clipSides": [
       -1,
       1
     ],
     "clipTipY": [
-      -27.0,
+      -22.0,
       3.0,
       27.0
     ],
     "beamLength": 14.0,
     "beamWidth": 0.8,
     "beamZ": [
-      -3.4,
-      -2.2
+      -3.2,
+      -2.0
     ],
     "releaseDeflectionMm": 1.0,
     "topSupportX": [
@@ -92,5 +92,5 @@
     "front": 0.38,
     "rear": 0.22
   },
-  "scope": "Nominal CAD and toolpaths. Clear PETG is translucent; CAD transparency does not predict optical clarity. Physical fit, flexure force/fatigue and battery lead routing need prototype testing."
+  "scope": "Nominal CAD meshes; see printability-check.json for the current slicing status. Clear PETG is translucent; CAD transparency does not predict optical clarity. Physical fit, flexure force/fatigue and battery lead routing need prototype testing."
 }

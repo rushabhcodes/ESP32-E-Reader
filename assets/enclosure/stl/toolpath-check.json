@@ -1,0 +1,250 @@
+{
+  "status": "reference_toolpaths_inspected",
+  "parts_and_plate": {
+    "front-chassis": {
+      "gcode_sha256": "f9a82f0071b4a737ff624217dd72410a4710f34b79511003c54574c34d25f859",
+      "extrusion_bounds_xy_mm": [
+        [
+          69.821,
+          150.179
+        ],
+        [
+          45.424,
+          174.584
+        ]
+      ],
+      "extrusion_z_range_mm": [
+        0.2,
+        11.2
+      ],
+      "extrusion_layers": 59,
+      "extruded_xy_moves": 42610,
+      "reference_bed_bounds_pass": true,
+      "key_leaf_toolpath_layers": {
+        "-27.5": [
+          1.2,
+          1.4,
+          1.6,
+          1.8
+        ],
+        "-16.5": [
+          1.2,
+          1.4,
+          1.6,
+          1.8
+        ],
+        "16.5": [
+          1.2,
+          1.4,
+          1.6,
+          1.8
+        ],
+        "27.5": [
+          1.2,
+          1.4,
+          1.6,
+          1.8
+        ]
+      },
+      "six_screen_leaf_toolpath_layers": {
+        "-1,-22.0": [
+          2.8,
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8
+        ],
+        "-1,3.0": [
+          2.8,
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8
+        ],
+        "-1,27.0": [
+          2.8,
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8
+        ],
+        "1,-22.0": [
+          2.8,
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8
+        ],
+        "1,3.0": [
+          2.8,
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8
+        ],
+        "1,27.0": [
+          2.8,
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8
+        ]
+      }
+    },
+    "rear-cover": {
+      "gcode_sha256": "fa786b7172484cc89861bafb71daf047e20c1e3d1719877a3e82ff60ad54b570",
+      "extrusion_bounds_xy_mm": [
+        [
+          69.821,
+          150.179
+        ],
+        [
+          45.424,
+          174.584
+        ]
+      ],
+      "extrusion_z_range_mm": [
+        0.2,
+        14.2
+      ],
+      "extrusion_layers": 84,
+      "extruded_xy_moves": 35755,
+      "reference_bed_bounds_pass": true,
+      "four_cover_snap_toolpath_layers": {
+        "-1,-5.0": [
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8,
+          4.0,
+          4.2,
+          4.4,
+          4.6,
+          4.8,
+          5.0,
+          5.2,
+          5.4,
+          5.6,
+          5.8,
+          6.0,
+          6.2
+        ],
+        "-1,24.0": [
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8,
+          4.0,
+          4.2,
+          4.4,
+          4.6,
+          4.8,
+          5.0,
+          5.2,
+          5.4,
+          5.6,
+          5.8,
+          6.0,
+          6.2
+        ],
+        "1,-5.0": [
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8,
+          4.0,
+          4.2,
+          4.4,
+          4.6,
+          4.8,
+          5.0,
+          5.2,
+          5.4,
+          5.6,
+          5.8,
+          6.0,
+          6.2
+        ],
+        "1,24.0": [
+          3.0,
+          3.2,
+          3.4,
+          3.6,
+          3.8,
+          4.0,
+          4.2,
+          4.4,
+          4.6,
+          4.8,
+          5.0,
+          5.2,
+          5.4,
+          5.6,
+          5.8,
+          6.0,
+          6.2
+        ]
+      },
+      "two_upper_screen_support_toolpath_layers": {
+        "-12.0": [
+          12.0,
+          12.2,
+          12.4,
+          12.6,
+          12.8,
+          13.0,
+          13.2,
+          13.4,
+          13.6,
+          13.8,
+          14.0,
+          14.2
+        ],
+        "12.0": [
+          12.0,
+          12.2,
+          12.4,
+          12.6,
+          12.8,
+          13.0,
+          13.2,
+          13.4,
+          13.6,
+          13.8,
+          14.0,
+          14.2
+        ]
+      }
+    },
+    "reader-print-plate": {
+      "gcode_sha256": "8e667b0e793d2c8296e62f1b255922cee262b213a9519f50a07447ac0eacf949",
+      "extrusion_bounds_xy_mm": [
+        [
+          24.821,
+          190.171
+        ],
+        [
+          45.417,
+          174.584
+        ]
+      ],
+      "extrusion_z_range_mm": [
+        0.2,
+        14.2
+      ],
+      "extrusion_layers": 86,
+      "extruded_xy_moves": 78801,
+      "reference_bed_bounds_pass": true
+    }
+  },
+  "scope": "Actual extrusion bounds, layer coverage, four key springs, six screen leaves, four cover snaps and two upper screen supports checked for toolpath presence. Selected layers rendered for visual review. Support removal, printed fit, snap force and fatigue need a prototype; this is not machine-ready G-code."
+}

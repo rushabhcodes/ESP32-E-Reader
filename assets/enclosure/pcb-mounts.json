@@ -28,19 +28,19 @@
     },
     {
       "name": "MOUNT_BL",
-      "x": -28.0,
-      "y": -40.0,
+      "x": -25.5,
+      "y": -36.5,
       "bossBaseZ": 0.8,
       "pilotBaseZ": 0.7,
-      "buttonFlangeRelief": true
+      "buttonFlangeRelief": false
     },
     {
       "name": "MOUNT_BR",
       "x": 28.0,
-      "y": -40.0,
+      "y": -29.0,
       "bossBaseZ": 0.8,
       "pilotBaseZ": 0.7,
-      "buttonFlangeRelief": true
+      "buttonFlangeRelief": false
     }
   ],
   "pilotNote": "Prepare 2 mm pilots from Z 0.8 to 3.35 before fitting electronics; M2.5 x 4 screw tip ends at Z 3.2.",

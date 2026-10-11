@@ -1,13 +1,17 @@
 {
-  "nominal_installed_length_mm": 11.315786,
-  "nominal_tail_length_mm": 11.27,
+  "nominal_installed_length_mm": 33.659926,
+  "nominal_tail_length_mm": 33.66,
   "bend_radius_mm": 0.6,
   "modeled_contacts": 24,
   "contact_face": "bottom (-Z)",
-  "slot_center_y_mm": -38.41,
-  "connector_center_y_mm": -32.34,
+  "route": {
+    "type": "around_bottom_edge",
+    "bendCenterY": -48.6,
+    "panelPin1Verified": false
+  },
+  "connector_center_y_mm": -35.08101356236891,
   "solid_overlaps_mm3": {
-    "ER-EPD3.97-1RY-nominal-outline": {},
+    "Waveshare-3.97-G-nominal-outline": {},
     "EPD-flex-polyimide-nominal": {},
     "EPD-flex-tip-stiffener-nominal": {}
   },
@@ -15,5 +19,6 @@
     "EPD-flex-polyimide-nominal": 0.0,
     "EPD-flex-tip-stiffener-nominal": 0.0
   },
-  "basis": "Nominal installed flex under the user-selected 24-pin 0.5 mm supplier-listing specification; not OEM flex CAD. Width, contact face, stiffener and 0.6 mm installation bends need a physical sample. The conflicting 0.8 mm/19.6 mm PDF tip is not used."
+  "basis": "Waveshare Rev 1.0 mechanical drawing, printed page 4: 56.24 x 96.62 mm glass, 24 contacts at 0.5 mm, 12.50 mm tip, offset L-shaped tail with 33.66 mm projection, 3.00 mm stiffener and 1.70 mm contact exposure. The first bend begins at the marked 15.00 mm line (17.40 minus 2.40), beyond the PCB bottom edge; the bonded/driver region stays flat. Glass modeled at conservative 1.10 mm maximum table thickness. Undimensioned outline corners and 0.6 mm installation radius remain nominal. FH34SRJ is a short-contact, dual-contact candidate; its 0.30 +/-0.03 mm recommendation does not cover the panel full +/-0.05 mm thickness tolerance. Panel pin-1 direction is not established by the unlabeled mechanical drawing. CAD finger numbers follow the selected socket and must not be mistaken for verified panel numbering. Physical mating and bend radius require confirmation before PCB order.",
+  "scope": "Nominal mesh clearance only. Run check-display-interface.py separately: CAD overlap success does not establish real panel-tail compatibility."
 }

@@ -57,7 +57,7 @@ export async function preparePreviewArchives({ supplier = true, print = true, im
     for (const name of ["front-chassis", "rear-cover"])
       entries[name + ".stl"] = new Uint8Array(await readFile(path.join(enclosure, "print", name + ".stl")));
     entries["reader-print-plate.3mf"] = plate;
-    for (const name of ["PRINTING.md", "fdm-reference.ini", "pcb-mounts.json", "display-connection.json", "enclosure-design.json", "stl/mesh-check.json", "stl/printability-check.json", "stl/clearance-check.json"])
+    for (const name of ["PRINTING.md", "fdm-reference.ini", "pcb-mounts.json", "display-connection.json", "enclosure-design.json", "stl/mesh-check.json", "stl/printability-check.json", "stl/toolpath-check.json", "stl/clearance-check.json", "stl/display-connection-check.json", "stl/assembly-check.json", "stl/display-retainer-check.json", "stl/display-interface-check.json"])
       entries[name] = new Uint8Array(await readFile(path.join(enclosure, name)));
     await writeFile(path.join(enclosure, "esp32-reader-printable-stls.zip"), zipSync(entries, options));
   }

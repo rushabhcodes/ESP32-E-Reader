@@ -11,7 +11,7 @@ import batteryEnvelopeUrl from "./assets/enclosure/battery-envelope-DO-NOT-PRINT
 import antennaEnvelopeUrl from "./assets/enclosure/antenna-envelope-DO-NOT-PRINT.glb";
 import batteryLinerUrl from "./assets/enclosure/battery-liner-DO-NOT-PRINT.glb";
 import batteryAdhesiveUrl from "./assets/enclosure/battery-adhesive-DO-NOT-PRINT.glb";
-import displayPanelUrl from "./assets/enclosure/display-panel.glb";
+import { Waveshare_3_97inch_ePaper_G } from "./imports/Waveshare_3_97inch_ePaper_G";
 import displayConnection from "./assets/enclosure/display-connection.json";
 import frontChassisUrl from "./assets/enclosure/front-chassis.glb";
 import displayCushioningUrl from "./assets/enclosure/display-cushioning.glb";
@@ -38,15 +38,7 @@ const boardOutline = [
 	{ x: -29.79, y: 46.62 },
 ];
 
-// A 2 mm router creates rounded slot ends; avoid impossible square corners.
-const displayFpcSlot = [-1, 1].flatMap((side) =>
-	Array.from({ length: 17 }, (_, i) => {
-		const angle = (side === 1 ? -Math.PI / 2 : Math.PI / 2) + i * Math.PI / 16;
-		return { x: side * 12 + Math.cos(angle), y: Math.sin(angle) };
-	}),
-);
-
-function EReaderBoard() {
+export function EReaderBoard() {
 	return (
 		<board
 			title="ESP32 E-Reader Rev. B"
@@ -99,8 +91,8 @@ function EReaderBoard() {
 			<keepout
 				shape="circle"
 				radius="0.65mm"
-				pcbX={4.72}
-				pcbY={displayConnection.connector.centerY + 1.31}
+				pcbX={displayConnection.connector.centerX + 4.75}
+				pcbY={displayConnection.connector.centerY + 1.25}
 				layers={["inner1", "inner2", "bottom"]}
 			/>
 
@@ -109,9 +101,9 @@ function EReaderBoard() {
 			<keepout
 				shape="rect"
 				width="13mm"
-				height="1.8mm"
-				pcbX={0}
-				pcbY={displayConnection.connector.centerY + 1.81276625}
+				height="1.4mm"
+				pcbX={displayConnection.connector.centerX}
+				pcbY={displayConnection.connector.centerY + 1.250061}
 				layers={["inner1", "inner2", "bottom"]}
 			/>
 			{/* Keep layer-transition pads clear of the C28 pin-2 edge. */}
@@ -213,15 +205,7 @@ function EReaderBoard() {
 				boardEdgeMargin="0.3mm"
 			/>
 
-			<cutout
-				name="DISPLAY_FPC_SLOT"
-				shape="polygon"
-				points={displayFpcSlot}
-				pcbX={0}
-				pcbY={displayConnection.slot.centerY}
-			/>
-
-			<silkscreentext text="BATT" pcbX={25} pcbY={-25} fontSize="1mm" />
+			<silkscreentext text="BATT" pcbX={27} pcbY={0} fontSize="1mm" />
 			<silkscreentext
 				text="USB"
 				pcbX={27}
@@ -266,13 +250,7 @@ export default function ESP32EReader() {
 	return (
 		<assembly.device name="ESP32_E_READER">
 			<EReaderBoard />
-			<assembly.screen
-				name="EPD1"
-				connectsTo=".J2"
-				width="56.24mm"
-				height="96.62mm"
-				modelUrl={displayPanelUrl}
-			/>
+			<Waveshare_3_97inch_ePaper_G />
 			<assembly.cadassembly
 				name="battery_envelope"
 				cadModel={{ glbUrl: batteryEnvelopeUrl, modelUnitToMmScale: 1 }}

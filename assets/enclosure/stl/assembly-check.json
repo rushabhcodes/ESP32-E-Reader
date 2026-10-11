@@ -1,5 +1,5 @@
 {
-  "revision": "E",
+  "revision": "H",
   "native_cad_models": 96,
   "missing_native_models": [],
   "installation_paths": [
@@ -9,7 +9,7 @@
       "start_offset_mm": 12,
       "samples": 25,
       "step_mm": 0.5,
-      "max_overlap_mm3": 3.3e-05
+      "max_overlap_mm3": 0
     },
     {
       "assembly": "PCB straight into removed rear cover",
@@ -17,7 +17,7 @@
       "start_offset_mm": -24,
       "samples": 49,
       "step_mm": 0.5,
-      "max_overlap_mm3": 3e-06
+      "max_overlap_mm3": 5e-06
     },
     {
       "assembly": "battery insertion clear of lower PCB bosses",
@@ -30,8 +30,8 @@
     {
       "assembly": "battery slide to lower stop before fitting PCB",
       "axis": 1,
-      "start_offset_mm": 6.5,
-      "samples": 14,
+      "start_offset_mm": 9.5,
+      "samples": 20,
       "step_mm": 0.5,
       "max_overlap_mm3": 0
     },

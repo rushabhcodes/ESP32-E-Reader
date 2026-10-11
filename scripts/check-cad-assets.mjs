@@ -25,6 +25,8 @@ for (const item of manifest) {
 // These files must be directly downloadable from the hosted release as well.
 for (const filename of ["reader-print-plate.3mf", "esp32-reader-printable-stls.zip", "PRINTING.md", "fdm-reference.ini"])
 	paths.add("assets/enclosure/" + filename);
+for (const filename of ["display-connection.json", "stl/display-interface-check.json", "stl/display-connection-check.json", "stl/toolpath-check.json", "stl/printability-check.json", "stl/clearance-check.json", "stl/mesh-check.json"])
+	paths.add("assets/enclosure/" + filename);
 for (const filename of ["front-chassis", "rear-cover"])
 	paths.add(`assets/enclosure/print/${filename}.stl`);
 const archives = JSON.parse(await readFile(path.join(root, "assets/components/supplier-step-archives.json"), "utf8"));

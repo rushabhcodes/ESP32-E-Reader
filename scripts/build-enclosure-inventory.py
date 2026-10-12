@@ -19,7 +19,7 @@ def usb_obj_bounds():
     angle = math.radians(cad['rotation']['z'])
     cosine, sine = math.cos(angle), math.sin(angle)
     coords = []
-    for line in (ROOT / 'imports/USB4105_GF_A/USB4105_GF_A.obj').read_text().splitlines():
+    for line in (ROOT / cad['model_obj_url'].removeprefix('./')).read_text().splitlines():
         if line.startswith('v '):
             x, y, z = (float(value) for value in line.split()[1:4])
             x, y, z = x - origin['x'], y - origin['y'], z - origin['z']
@@ -48,6 +48,6 @@ with OUTPUT.open('w', newline='') as file:
             dims = J1_BOUNDS
         w.writerow([name, round(p['center']['x'], 3), round(p['center']['y'], 3), p['layer'],
                     round(p['width'], 3), round(p['height'], 3), *dims,
-                    'GCT manufacturer OBJ, nominal' if name == 'J1' else
+                    'HRO supplier OBJ, nominal' if name == 'J1' else
                     'tsci tessellated model, nominal' if model else 'PCB footprint only; no 3D body model'])
 print(OUTPUT)

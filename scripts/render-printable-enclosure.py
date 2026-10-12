@@ -7,6 +7,7 @@ from pathlib import Path
 from math import pi
 import subprocess
 import json
+import sys
 import bpy
 from mathutils import Matrix, Vector
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'assets/enclosure'
@@ -21,7 +22,8 @@ def local(name,offset=(0,0,0),rotation_z=0):
     return objects
 
 front=local('front-chassis.glb');rear=local('rear-cover.glb')
-cell=local('battery-envelope-DO-NOT-PRINT.glb')
+cell=local('battery-pack.glb')
+leads=local('battery-leads.glb');plug=local('battery-plug.glb')
 liner=local('battery-liner-DO-NOT-PRINT.glb');adhesive=local('battery-adhesive-DO-NOT-PRINT.glb')
 antenna=local('antenna-envelope-DO-NOT-PRINT.glb')
 keys=front # Key caps/leaves are part of the same connected chassis mesh.
@@ -31,7 +33,7 @@ pcb_screws=[o for o in hardware if o.name.startswith('PCB-')]
 cover_screws=[o for o in hardware if o not in pcb_screws]
 before=set(bpy.data.objects);bpy.ops.import_scene.gltf(filepath=str(ROOT/'dist/index/assembly.glb'))
 conversion=Matrix(((-1,0,0,0),(0,-1,0,0),(0,0,1,0),(0,0,0,1)))
-assembly={'EPD1','battery_envelope','wifi_antenna_envelope','front_chassis','rear_cover','battery_liner','battery_adhesive','display_cushioning','pcb_cover_fasteners'}
+assembly={'EPD1','battery_pack','battery_leads','battery_plug','wifi_antenna_envelope','front_chassis','rear_cover','battery_liner','battery_adhesive','display_cushioning','pcb_cover_fasteners'}
 board=[]
 for o in set(bpy.data.objects)-before:
     if o.type!='MESH':continue
@@ -42,6 +44,7 @@ for o in bpy.data.objects:
     if o.type=='MESH':o.matrix_world=Matrix.Scale(.01,4)@o.matrix_world
 objects=[o for o in bpy.data.objects if o.type=='MESH'];original={o:o.matrix_world.copy() for o in objects}
 scene=bpy.context.scene;scene.render.engine='CYCLES';scene.cycles.samples=24
+if '--battery-update' in sys.argv:scene.cycles.samples=12
 scene.cycles.use_denoising=True;scene.render.resolution_x=1100;scene.render.resolution_y=1000
 scene.render.resolution_percentage=100;scene.render.image_settings.file_format='PNG'
 scene.world.use_nodes=True;scene.world.node_tree.nodes['Background'].inputs[0].default_value=(.82,.87,.91,1)
@@ -61,24 +64,32 @@ def shift(group,z):
     for o in group:o.matrix_world=Matrix.Translation(Vector((0,0,z*.01)))@o.matrix_world
 
 def render(name,pos,scale=145,target=(0,5,3)):
+    requested=next((arg.split('=',1)[1] for arg in sys.argv if arg.startswith('--view=')),None)
+    if requested and name!=requested:return
+    if '--battery-only' in sys.argv and name!='battery-wired-connection.png':return
+    if '--battery-update' in sys.argv and name not in {'printable-front.png','printable-side.png','printable-exploded.png'}:return
     bpy.ops.object.camera_add(location=Vector(pos)*.01);cam=bpy.context.object
     cam.rotation_euler=(Vector(target)*.01-cam.location).to_track_quat('-Z','Y').to_euler()
     cam.data.type='ORTHO';cam.data.ortho_scale=scale*.01;cam.data.clip_start=.001
     scene.camera=cam;scene.render.filepath=str(OUT/name);bpy.ops.render.render(write_still=True)
     bpy.data.objects.remove(cam,do_unlink=True);print('Rendered',name,flush=True)
 
-render('printable-front.png',(80,110,-125))
-render('printable-side.png',(170,-55,65),142)
-hide(rear+cell+liner+adhesive+antenna+cover_screws)
+if '--battery-only' not in sys.argv:
+    render('printable-front.png',(80,110,-125))
+    render('printable-side.png',(170,-55,65),142)
+hide(rear+adhesive)
+render('battery-wired-connection.png',(55,-105,175),126,(-1,2,5))
+hide(cell+leads+plug+liner+adhesive+antenna+cover_screws)
 render('printable-open-back.png',(-85,-110,135))
 hide(display+pads)
 render('printable-pcb-mounts.png',(0,5,220),133)
-reset();hide(rear+cell+liner+adhesive+antenna+hardware+board)
+reset();hide(rear+cell+leads+plug+liner+adhesive+antenna+hardware+board)
 render('display-retainer-installed.png',(70,-110,150),132,(0,9,-3))
-reset();hide(front+rear+cell+liner+adhesive+antenna+hardware+pads)
+reset();hide(front+rear+cell+leads+plug+liner+adhesive+antenna+hardware+pads)
 render('display-ribbon-connection.png',(45,-82,35),62,(8,-39,0))
 reset();shift(display,8);shift(pads,8);shift(board+pcb_screws,25)
-shift(cell+liner+adhesive,44);shift(rear+antenna+cover_screws,60)
+# Disconnect and lift the external harness with the pack in the exploded view.
+shift(cell+leads+plug+liner+adhesive,44);shift(rear+antenna+cover_screws,60)
 render('printable-exploded.png',(130,-135,130),185,(0,5,33))
 # Print plate: show the actual two oriented exports with opaque material so
 # the support features remain legible. Assembly previews above retain alpha.

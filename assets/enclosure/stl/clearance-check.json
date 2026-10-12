@@ -19,7 +19,7 @@
     ],
     "component_case_collisions": 0
   },
-  "native_assembly_sha256": "589b0216f959cf4013b8254517793c768d30526dd802b28e3c10758792d7687d",
+  "native_assembly_sha256": "d88323116a04a019687d74cf3037a983a14f63ddda6d6ccfb336287fa8fdef9b",
   "printed_parts": 2,
   "outside_mm": [
     68,
@@ -65,7 +65,7 @@
     "cover_screws": 0,
     "nominal_beam_surface_strain": 0.003673
   },
-  "native_cad_models": 96,
+  "native_cad_models": 98,
   "missing_native_models": [],
   "pcb_meshes": 88,
   "component_case_collisions": 0,

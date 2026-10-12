@@ -89,6 +89,12 @@ validation; the included geometry and slicing checks assume PETG FDM.
 
 ## Required nonprinted supplies
 
+- SparkFun PRT-13855 protected 1S, 3.7 V / 2000 mAh pack with mating JST-PH
+  plug. The dimensioned model now shows the foil pouch and both insulated
+  leads. Route the leads around the open upper end of the guides and down
+  the right-side space to BT1, with red on pin 1 and black on pin 2. This
+  route needs 94 mm usable free lead, including slack; verify the supplied
+  cable and polarity before connecting. No additional printed part is used.
 - Four M2.5 × 4 mm PCB screws, head diameter ≤5 mm and head height ≤2.5 mm.
   The board clamps against the rear-cover boss underside at Z +0.8. Screws
   enter from the display-facing side, with heads at Z −3.3…−0.8 and tips at

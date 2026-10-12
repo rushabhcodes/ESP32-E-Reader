@@ -7,7 +7,7 @@
 
 import { Fragment } from "react";
 import { assembly } from "tscircuit";
-import batteryEnvelopeUrl from "./assets/enclosure/battery-envelope-DO-NOT-PRINT.glb";
+import { SparkFun_PRT_13855 } from "./imports/SparkFun_PRT_13855";
 import antennaEnvelopeUrl from "./assets/enclosure/antenna-envelope-DO-NOT-PRINT.glb";
 import batteryLinerUrl from "./assets/enclosure/battery-liner-DO-NOT-PRINT.glb";
 import batteryAdhesiveUrl from "./assets/enclosure/battery-adhesive-DO-NOT-PRINT.glb";
@@ -120,8 +120,8 @@ export function EReaderBoard() {
 			<keepout
 				shape="rect"
 				width="1.65mm"
-				height="7.5mm"
-				pcbX={23.875}
+				height="7.4mm"
+				pcbX={23.811}
 				pcbY={36.26}
 				layers={["inner1", "inner2", "bottom"]}
 			/>
@@ -251,10 +251,7 @@ export default function ESP32EReader() {
 		<assembly.device name="ESP32_E_READER">
 			<EReaderBoard />
 			<Waveshare_3_97inch_ePaper_G />
-			<assembly.cadassembly
-				name="battery_envelope"
-				cadModel={{ glbUrl: batteryEnvelopeUrl, modelUnitToMmScale: 1 }}
-			/>
+			<SparkFun_PRT_13855 />
 			<assembly.cadassembly
 				name="wifi_antenna_envelope"
 				cadModel={{ glbUrl: antennaEnvelopeUrl, modelUnitToMmScale: 1 }}

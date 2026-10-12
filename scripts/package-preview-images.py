@@ -13,4 +13,4 @@ for source in sorted(ENCLOSURE.glob('*.png')):
     encoded = json.dumps({'sha256': hashlib.sha256(data).hexdigest(), 'base64': base64.b64encode(data).decode('ascii')}) + '\n'
     assert len(encoded.encode()) <= 3 * 1024 * 1024, 'Split preview source before upload'
     (OUT / (source.name + '.json')).write_text(encoded)
-print('Preserved eight rendered preview images as checksummed text sources')
+print('Preserved rendered preview images as checksummed text sources')

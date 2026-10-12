@@ -1,48 +1,58 @@
 [
   {
     "path": "assets/components/supplier-step-models-1.zip",
-    "bytes": 1617143,
-    "sha256": "6ecfc552b889854d8b7d3dd4593af8088a054e9b8ef9e2968e20da5c2f1ef3d6",
+    "bytes": 1833353,
+    "sha256": "ab489ca647c84bf4d9e70708bbb50199983683ba5b0663a5f610e70943868074",
     "step_files": [
       "assets/components/C114218.step",
       "assets/components/C133190.step",
+      "assets/components/C133195.step",
       "assets/components/C139797.step",
-      "assets/components/C173752.step"
+      "assets/components/C15220.step"
     ]
   },
   {
     "path": "assets/components/supplier-step-models-2.zip",
-    "bytes": 2178763,
-    "sha256": "6df9fa8afd4b7df6cb38b260827ccf590d4425e78b06f256aa8347c4948c1466",
+    "bytes": 2044723,
+    "sha256": "24d3a9987c7de977026d09918dd1b54dcf936051e9f5e3b99d149d0192474810",
     "step_files": [
-      "assets/components/C324726.step",
-      "assets/components/C202140.step",
-      "assets/components/C2830320.step",
-      "assets/components/C2926676.step"
+      "assets/components/C165948.step",
+      "assets/components/C173752.step",
+      "assets/components/C202112.step",
+      "assets/components/C202140.step"
     ]
   },
   {
     "path": "assets/components/supplier-step-models-3.zip",
-    "bytes": 1834077,
-    "sha256": "06322585b47305c793228f81b056b41f7947428b279ceba433d3fbe8fbe2af6b",
+    "bytes": 1748525,
+    "sha256": "f6dcb5e11603ab9bb89027e597083f9f8eb19d917f30ae45566ad4259d3d6bf2",
     "step_files": [
-      "assets/components/C2927799.step",
+      "assets/components/C2830320.step",
+      "assets/components/C2926676.step",
+      "assets/components/C2927799.step"
+    ]
+  },
+  {
+    "path": "assets/components/supplier-step-models-4.zip",
+    "bytes": 1851591,
+    "sha256": "a4fd912f1115d31920c6a58d001a3150ff8a0c07bb6c6da917b4ab44cb43fee6",
+    "step_files": [
+      "assets/components/C324726.step",
       "assets/components/C388883.step",
       "assets/components/C431541.step",
       "assets/components/C469327.step"
     ]
   },
   {
-    "path": "assets/components/supplier-step-models-4.zip",
-    "bytes": 2495148,
-    "sha256": "a91ba24b048a9dbd5d1e5c713a73fd3cb6ca7800cddc9701c20f68b61f3a3e43",
+    "path": "assets/components/supplier-step-models-5.zip",
+    "bytes": 2173317,
+    "sha256": "f4a80e5f53a07c1f9c69eb30e2902764b9e766b872c45285245b14b5b14cb539",
     "step_files": [
       "assets/components/C520357.step",
       "assets/components/C54313.step",
       "assets/components/C7519.step",
       "assets/components/C82046.step",
-      "imports/USB4105_GF_A/USB4105_GF_A.step",
-      "assets/components/C133195.step"
+      "imports/USB4105_GF_A/USB4105_GF_A.step"
     ]
   }
 ]

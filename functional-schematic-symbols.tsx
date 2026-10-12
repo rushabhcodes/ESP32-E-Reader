@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { schematicLayout } from "./schematic-layout";
-import { pinLabels as chargerPins } from "./imports/BQ24074RGTR";
+import { pinLabels as chargerPins } from "./imports/BQ24073RGTR";
 import { pinLabels as mcuPins } from "./imports/ESP32_C3_WROOM_02U_N4";
 import { pinLabels as regulatorPins } from "./imports/TPS63021DSJR";
 import { pinLabels as sdPins } from "./imports/DM3AT_SF_PEJM5";
@@ -12,7 +12,7 @@ const physicalPinLabels: Record<string, Record<string, readonly string[]>> = {
 };
 
 const functionalSymbols: Record<string, string> = {
-	U1: "BQ24074RGTR",
+	U1: "BQ24073RGTR",
 	U4: "ESP32-C3-WROOM-02U-N4",
 	U5: "TPS63021DSJR",
 	J4: "DM3AT-SF-PEJM5",

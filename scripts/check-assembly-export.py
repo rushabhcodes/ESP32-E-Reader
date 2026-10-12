@@ -15,7 +15,8 @@ from zipfile import ZipFile
 
 
 EXPECTED = {
-    "U1": ("C54313", "top", "0"),
+    "J1": ("C165948", "top", "90"),
+    "U1": ("C15220", "top", "0"),
     "U2": ("C7519", "top", "90"),
     "U3": ("C2927799", "top", "90"),
     "U4": ("C2926676", "top", "0"),
@@ -56,7 +57,8 @@ def main(path: Path):
             raise ValueError(f"{filename}: expected exact supplier footprint {part}")
 
     for filename, part in {
-        "BQ24074RGTR.tsx": "C54313",
+        "BQ24073RGTR.tsx": "C15220",
+        "TYPE_C_31_M_12.tsx": "C165948",
         "ESP32_C3_WROOM_02U_N4.tsx": "C2926676",
         "TPS63021DSJR.tsx": "C202140",
         "SMMS0420_1R5M.tsx": "C133190",
@@ -198,6 +200,66 @@ def main(path: Path):
     for members in groups:
         for member in members[1:]:
             parent[connected_group(member)] = connected_group(members[0])
+
+    # These replacements have different pin functions and contact grouping.
+    # Check the emitted connections, rather than only their BOM identifiers.
+    replacement_nets = {
+        "J1": {
+            **dict.fromkeys((1, 2, 3, 4, 13, 14), "GND"),
+            6: "USB_CC1", 12: "USB_CC2", 7: "USB_DM", 9: "USB_DM",
+            8: "USB_DP", 10: "USB_DP", 15: "USB_VBUS", 16: "USB_VBUS",
+        },
+        "U1": {
+            **dict.fromkeys((4, 5, 8, 15, 17), "GND"),
+            1: "CHARGE_TS", 2: "BATT_P", 3: "BATT_P", 6: "USB_VBUS",
+            9: "CHARGE_STAT", 10: "SYS_OUT", 11: "SYS_OUT",
+            12: "CHARGE_ILIM", 13: "USB_VBUS", 16: "CHARGE_PROG",
+        },
+    }
+    for ref, expected in replacement_nets.items():
+        source_id = next(identity for identity, name in source_names.items() if name == ref)
+        ports = {item["pin_number"]: item for item in source_ports.values()
+                 if item.get("source_component_id") == source_id}
+        for pin, net in expected.items():
+            if connected_group(ports[pin]["source_port_id"]) != connected_group(net_ids[net]):
+                raise ValueError(f"{ref} pin {pin} must connect to {net}")
+        for pin in ((5, 11) if ref == "J1" else (7, 14)):
+            port = ports[pin]
+            if not port.get("do_not_connect") or any(
+                    port["source_port_id"] in item.get("connected_source_port_ids", [])
+                    for item in circuit if item["type"] == "source_trace"):
+                raise ValueError(f"{ref} pin {pin} must remain open")
+    j1 = next(item for item in circuit if item["type"] == "pcb_component"
+              and source_names.get(item.get("source_component_id")) == "J1")
+    contacts = [item for item in circuit if item["type"] == "pcb_smtpad"
+                and item.get("pcb_component_id") == j1["pcb_component_id"]]
+    feet = [item for item in circuit if item["type"] == "pcb_plated_hole"
+            and item.get("pcb_component_id") == j1["pcb_component_id"]]
+    locators = [item for item in circuit if item["type"] == "pcb_hole"
+                and item.get("pcb_component_id") == j1["pcb_component_id"]]
+    if len(contacts) != 12 or len(feet) != 4 or len(locators) != 2:
+        raise ValueError("J1 C165948 needs 12 contact pads, four shell slots and two locators")
+    if any(abs(item["hole_diameter"] - 0.6) > 0.001 for item in locators):
+        raise ValueError("J1 C165948 needs 0.60 mm locator holes")
+    for pad in contacts + feet:
+        physical_hint = next(hint for hint in pad["port_hints"] if re.fullmatch(r"pin\d+", hint))
+        pin = int(physical_hint.removeprefix("pin"))
+        source_port_id = pcb_ports[pad["pcb_port_id"]]["source_port_id"]
+        if f"pin{pin}" not in source_ports[source_port_id]["port_hints"]:
+            raise ValueError(f"J1 physical pad {pin} maps to the wrong source pin")
+        # SBU pads are deliberately unconnected.
+        if pin not in (5, 11) and connected_group(source_port_id) != connected_group(net_ids[replacement_nets["J1"][pin]]):
+            raise ValueError(f"J1 physical pad {pin} maps to the wrong net")
+    charger_id = next(identity for identity, name in source_names.items() if name == "U1")
+    td = next(port for port in source_ports.values()
+              if port.get("source_component_id") == charger_id and port.get("pin_number") == 15)
+    if td.get("name") != "TD":
+        raise ValueError("BQ24073 pin 15 must be TD, with termination enabled by GND")
+    for ref, resistance in {"R7": 5100, "R8": 5100, "R9": 2500, "R31": 10000}.items():
+        resistor = next(item for item in circuit if item["type"] == "source_component" and item["name"] == ref)
+        if resistor.get("resistance") != resistance:
+            raise ValueError(f"{ref}: unexpected USB/charger programming resistance")
+    print("J1 C165948 contact mapping and U1 C15220 grounded TD/charge configuration verified.")
     for pad in all_sw7_pads:
         pin = int(pad["port_hints"][0].removeprefix("pin"))
         source_port = pcb_ports[pad["pcb_port_id"]]["source_port_id"]

@@ -21,7 +21,7 @@ import {
 	testpoints,
 } from "./design-data";
 import { SMMS0420_100M } from "./imports/SMMS0420_100M";
-import { BQ24074RGTR } from "./imports/BQ24074RGTR";
+import { BQ24073RGTR } from "./imports/BQ24073RGTR";
 import { DM3AT_SF_PEJM5 } from "./imports/DM3AT_SF_PEJM5";
 import { DW01A } from "./imports/DW01A";
 import { ESP32_C3_WROOM_02U_N4 } from "./imports/ESP32_C3_WROOM_02U_N4";
@@ -35,7 +35,7 @@ import { TPS63021DSJR } from "./imports/TPS63021DSJR";
 import { S2B_PH_K_S_LF__SN_ } from "./imports/S2B_PH_K_S_LF__SN_";
 import { SI1308EDL_T1_GE3 } from "./imports/SI1308EDL_T1_GE3";
 import { SKRPACE010 } from "./imports/SKRPACE010";
-import { USB4105_GF_A } from "./imports/USB4105_GF_A/USB4105_GF_A";
+import { TYPE_C_31_M_12 } from "./imports/TYPE_C_31_M_12";
 import { USBLC6_2SC6 } from "./imports/USBLC6_2SC6";
 
 const renderChip = (spec: ChipSpec) => {
@@ -89,10 +89,10 @@ const renderChip = (spec: ChipSpec) => {
 		return <SI1308EDL_T1_GE3 key={spec.name} {...importedCommon} />;
 	if (spec.name === "U1")
 		return (
-			<BQ24074RGTR
+			<BQ24073RGTR
 				key={spec.name}
 				{...importedCommon}
-				noConnect={["pin7", "pin14", "pin15"]}
+				noConnect={["pin7", "pin14"]}
 			/>
 		);
 	if (spec.name === "U2")
@@ -153,11 +153,11 @@ const renderChip = (spec: ChipSpec) => {
 
 	if (spec.name === "J1")
 		return (
-			<USB4105_GF_A
+			<TYPE_C_31_M_12
 				key={spec.name}
 				{...importedCommon}
 				noConnect={["SBU1", "SBU2"]}
-				pcbX={spec.pcbX - 1.57}
+				pcbX={spec.pcbX}
 				pcbY={spec.pcbY}
 				pcbRotation={spec.pcbRotation}
 			/>

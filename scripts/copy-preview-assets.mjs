@@ -7,7 +7,6 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 await preparePreviewArchives();
 const files = [
   "assets/components/sources.json", "assets/components/supplier-step-archives.json",
-  "imports/USB4105_GF_A/USB4105_GF_A.obj",
 ];
 for (const name of await readdir(path.join(root, "assets/components")))
   if (name.endsWith(".obj")) files.push("assets/components/" + name);
@@ -16,13 +15,14 @@ files.push(...archives.map((archive) => archive.path));
 const enclosure = [
   "front-chassis.glb", "rear-cover.glb", "display-panel.glb", "display-cushioning.glb",
   "pcb-cover-fasteners.glb", "battery-envelope-DO-NOT-PRINT.glb",
+  "battery-pack.glb", "battery-leads.glb", "battery-plug.glb", "battery-connection.json", "battery-model.json",
   "antenna-envelope-DO-NOT-PRINT.glb", "battery-liner-DO-NOT-PRINT.glb", "battery-adhesive-DO-NOT-PRINT.glb",
   "print/front-chassis.stl", "print/rear-cover.stl", "reader-print-plate.3mf",
   "esp32-reader-printable-stls.zip", "PRINTING.md", "fdm-reference.ini", "enclosure-design.json",
   "pcb-mounts.json", "display-connection.json", "component-inventory.csv", "component-envelopes.csv",
   ...previewImages,
   "stl/mesh-check.json", "stl/clearance-check.json", "stl/assembly-check.json",
-  "stl/display-interface-check.json", "stl/toolpath-check.json", "stl/display-retainer-check.json", "stl/display-connection-check.json", "stl/printability-check.json",
+  "stl/battery-connection-check.json", "stl/display-interface-check.json", "stl/toolpath-check.json", "stl/display-retainer-check.json", "stl/display-connection-check.json", "stl/printability-check.json",
 ];
 files.push(...enclosure.map((name) => "assets/enclosure/" + name));
 // The browser loads OBJ/GLB. Keep supplier STEP originals together in a ZIP;

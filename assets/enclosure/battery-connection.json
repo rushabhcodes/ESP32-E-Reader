@@ -1,0 +1,51 @@
+{
+  "part": {
+    "manufacturer": "SparkFun",
+    "partNumber": "PRT-13855",
+    "description": "Protected rechargeable single-cell lithium-polymer pouch, 2000 mAh",
+    "nominalVoltage": 3.7,
+    "chargeVoltage": 4.2,
+    "capacityMah": 2000,
+    "sizeMm": [49.2, 68.8, 5.6],
+    "productUrl": "https://www.sparkfun.com/lithium-ion-battery-2ah.html",
+    "photoUrl": "https://www.sparkfun.com/media/catalog/product/cache/f3020b7489dcfc4d1d147cf4dad07b7f/1/3/13855-01.jpg",
+    "sourcing": "SparkFun currently excludes international battery shipping. LionCircuits lists this exact part in India but currently reports out of stock. Confirm availability and delivered dimensions before purchase."
+  },
+  "connector": {
+    "boardRef": "BT1",
+    "header": "JST S2B-PH-K-S(LF)(SN)",
+    "housing": "JST PHR-2",
+    "pitchMm": 2.0,
+    "centerX": 26.025,
+    "wireExitY": -13.625,
+    "contactZ": 4.1625,
+    "contactHeightBasis": "Center of the C173752 supplier CAD contact blades, Z 3.875 to 4.450 mm in installed PCB coordinates.",
+    "positivePin": 1,
+    "negativePin": 2,
+    "positiveX": 25.025,
+    "negativeX": 27.025,
+    "positiveNet": "BATT_P",
+    "negativeNet": "BATT_N_RAW",
+    "drawingUrl": "https://www.sparkfun.com/datasheets/Prototyping/Connectors/ePH.pdf"
+  },
+  "leads": {
+    "insulationDiameterMm": 1.0,
+    "bendRadiusMm": 2.0,
+    "positiveColor": "red",
+    "negativeColor": "black",
+    "positiveWaypoints": [[-6.8,25.6,6.5],[-6.8,29.5,8.0],[22.6,29.5,8.0],[22.6,-17.0,8.0],[25.025,-17.0,4.1625],[25.025,-13.625,4.1625]],
+    "negativeWaypoints": [[-5.2,25.6,6.5],[-5.2,28.0,6.5],[20.6,28.0,6.5],[20.6,-18.5,6.5],[27.025,-18.5,4.1625],[27.025,-13.625,4.1625]],
+    "scope": "Designed installation route, not a measured supplier cable. Wire diameter, exit positions, free lead length and bend radius require verification on the delivered pack."
+  },
+  "charging": {
+    "charger": "BQ24074",
+    "isetOhms": 2500,
+    "typicalIsetConstantAOhms": 890,
+    "nominalChargeCurrentMa": 356,
+    "nominalChargeRateC": 0.178,
+    "usbInputLimitMa": 500,
+    "temperatureSensor": false,
+    "scope": "Voltage and capacity selection match the 1-cell 4.2 V charger. Supplier maximum charge/discharge ratings and actual plug polarity remain sample qualification requirements."
+  },
+  "modelScope": "Dimensioned installation model with foil pouch, protected end, leads and keyed mating housing. Cosmetic pouch folds, tape and label are illustrative; this is not OEM CAD or a physical-fit certification."
+}

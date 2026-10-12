@@ -43,11 +43,11 @@ the modeled assembly and reference toolpath generation, within their scopes.
 
 Digital verification completed for this local revision:
 
-- Final build: zero errors, 227 routed traces and 176 ordinary through vias.
+- Final build: zero errors, 224 routed traces and 207 ordinary through vias.
 - Gerber-derived shorts: none on top, bottom, inner1 or inner2.
 - All four screw-hole copper keepouts pass; the candidate BOM and placement export
   contains 87 matching rows with supplier IDs.
-- Native 3D assembly: 96 models, none missing; no case/component collisions.
+- Native 3D assembly: 98 models, none missing; no case/component collisions.
   Screen, PCB, battery and cover installation paths and all four key strokes pass
   the nominal CAD checks.
 - Two connected, manifold printed shells; the reference 0.4 mm nozzle / 0.2 mm
@@ -74,3 +74,26 @@ these screen and enclosure changes and must not be used for this panel order.
 The repository contains hardware and enclosure sources, not reader firmware.
 A working device also requires the specified battery, antenna, microSD, four
 internal PCB screws and cushioning/adhesive supplies listed in the README.
+
+Battery: **SparkFun PRT-13855**, protected 1S LiPo, 3.7 V nominal / 4.2 V
+charge voltage, 2000 mAh, 49.2 × 68.8 × 5.6 mm. The assembly now shows its
+pouch, red/black leads and a mating JST-PH 2-pin plug. Red must reach
+**BT1 pin 1 (BATT_P)**, black **BT1 pin 2 (BATT_N_RAW)**. The black wire
+is the protected battery return, not a direct bypass to system ground.
+The nominal harness route requires **94 mm usable free leads**, including
+installation slack. Verify this, plug polarity, the allowed charge current
+(board nominal 356 mA), dimensions and swelling clearance on the actual pack.
+Our model does not certify an unmeasured supplier cable.
+
+[SparkFun](https://www.sparkfun.com/lithium-ion-battery-2ah.html) currently
+excludes international battery shipping; the exact-part
+[LionCircuits India listing](https://www.lioncircuits.com/parts/PRT-13855)
+currently says out of stock (12 October 2026). Resolve sourcing before placing
+the hardware order. Do not substitute a pack solely by capacity or plug size.
+
+Stock replacements: J1 is now [C165948, HRO TYPE-C-31-M-12](https://jlcpcb.com/partdetail/C165948),
+and U1 is [C15220, TI BQ24073RGTR](https://jlcpcb.com/partdetail/C15220).
+Their footprint/pin mapping and charger TD grounding are updated in the source.
+Confirm live assembly inventory in JLCPCB when ordering; the recent published
+stock figures are cached and do not reserve parts. The display qualification
+gate above still applies.

@@ -1,0 +1,26 @@
+{
+  "part": "PRT-13855",
+  "nominal_geometry_passed": true,
+  "native_models_match_source": true,
+  "wire_case_component_collisions": 0,
+  "connection": {
+    "red": "BT1.1 / BATT_P",
+    "black": "BT1.2 / BATT_N_RAW (protected return)"
+  },
+  "wire_centerline_length_mm": {
+    "positive": 84.558,
+    "negative": 82.977
+  },
+  "required_free_lead_length_mm": 94,
+  "plug_axial_removal_travel_mm": 6.5,
+  "removal_scope": "Rigid plug path, with the case open and flexible cable repositioned; strain and disconnect force require a physical sample.",
+  "charge_current_ma": 356,
+  "physical_battery_qualified": false,
+  "remaining_checks": [
+    "Delivered dimensions and swelling allowance",
+    "Actual keyed plug polarity",
+    "Usable lead length and wire diameter",
+    "Supplier charge/discharge ratings and allowed temperature"
+  ],
+  "scope": "Dimensioned installation model with foil pouch, protected end, leads and keyed mating housing. Cosmetic pouch folds, tape and label are illustrative; this is not OEM CAD or a physical-fit certification."
+}

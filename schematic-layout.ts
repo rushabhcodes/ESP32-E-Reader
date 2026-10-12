@@ -160,8 +160,8 @@ export const schematicLayout: Record<string, SchematicPlacement> = {
 		schY: 10,
 		schPinArrangement: {
 			leftSide: ["pin13", "pin6", "pin9", "pin7"],
-			rightSide: ["pin10", "pin11", "pin2", "pin3", "pin14", "pin15"],
-			bottomSide: ["pin4", "pin5", "pin8", "pin17", "pin1", "pin16", "pin12"],
+			rightSide: ["pin10", "pin11", "pin2", "pin3", "pin14"],
+			bottomSide: ["pin4", "pin5", "pin8", "pin15", "pin17", "pin1", "pin16", "pin12"],
 		},
 	},
 	D1: { schX: 10.5, schY: 13, schRotation: -90 },

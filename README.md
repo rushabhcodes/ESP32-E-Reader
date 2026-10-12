@@ -16,7 +16,7 @@ workflow.
 | Processor | ESP32-C3-WROOM-02U-N4; 4 MB flash, Wi-Fi, Bluetooth LE, external antenna |
 | Storage | MicroSD over SPI |
 | Battery | Protected 1-cell LiPo, 3.7 V nominal; modeled around 2000 mAh SparkFun PRT-13855 |
-| Battery envelope | 49.2 × 68.8 × 5.6 mm nominal, excluding unverified lead and plug |
+| Battery model | 49.2 × 68.8 × 5.6 mm nominal pouch, with red/black leads and a keyed JST-PH plug |
 | USB | USB-C for charging and native ESP32-C3 USB data |
 | Input | Four recessed navigation buttons, wake, reset, main power switch |
 
@@ -104,7 +104,7 @@ that evidence is recorded; no physical sample has been tested.
 | Storage | MicroSD card over shared SPI |
 | USB | USB-C power, native USB data, CC resistors, and USB ESD protection |
 | Battery | Single-cell LiPo through a 2-pin JST-PH connector |
-| Charging | BQ24074 power-path LiPo charger, 500 mA USB input limit |
+| Charging | BQ24073 power-path LiPo charger, 500 mA USB input limit |
 | Battery protection | DW01A with FS8205A dual MOSFET |
 | Logic supply | TPS63021 fixed 3.3 V buck-boost converter |
 | Controls | Back, Confirm, Left, Right, Wake, Reset/Enable, and main power switch |
@@ -119,7 +119,7 @@ that evidence is recorded; no physical sample has been tested.
 | External antenna | Taoglas FXP75.07.0045B, 45 mm cable; rear-cover adhesive mount |
 | J2 display connector | Hirose FH34SRJ-24S-0.5SH(50), 24 positions at 0.5 mm pitch |
 | J4 MicroSD socket | Hirose DM3AT-SF-PEJM5 |
-| J1 USB-C receptacle | GCT USB4105-GF-A |
+| J1 USB-C receptacle | HRO TYPE-C-31-M-12 (JLCPCB C165948) |
 | BT1 battery header | JST S2B-PH-K-S(LF)(SN), 2-pin, 2.0 mm pitch, side entry |
 | Battery | Protected 3.7 V nominal single-cell pack; modeled PRT-13855, 2000 mAh, 49.2 × 68.8 × 5.6 mm |
 | Navigation switches | 4 × Alps Alpine SKRPACE010, bottom-side assembly |
@@ -131,7 +131,9 @@ The [source component list and LCSC/JLCPCB mappings](design-data.ts) and the
 [generated BOM](#fabrication-files) cover the remaining passives, charger,
 protection devices, ESD device, and e-paper bias circuit. The USB-C body is
 checked against the printable case using the local GCT manufacturer OBJ;
-the antenna cable and mating plug remain unmodeled. The display fold is nominal CAD. Confirm the delivered display tail, battery plug polarity,
+the antenna cable remains unmodeled. The battery now has a dimensioned pouch,
+two insulated leads and a mating JST-PH housing; the lead route is an installation
+design rather than measured supplier geometry. The display fold is nominal CAD. Confirm the delivered display tail, battery plug polarity,
 antenna cable path, and screw fit before assembly.
 
 The four navigation buttons share one ESP32 ADC input through a resistor
@@ -177,6 +179,26 @@ Z 3.7. The rear wall remains 1.2 mm thick. The screen's padded ledge, six clips
 and two upper supports are adjusted for the Waveshare glass thickness and active-area offset.
 Print both Rev. H shells as a pair. The battery loads through the open upper
 end of its guides and slides 9.5 mm toward the lower stop before fitting the PCB.
+
+The battery's protected short edge faces +Y. Red and black leads go around
+the open upper end of the guides, down the right-side space beside the pouch,
+then into BT1 from −Y. Red is shown connected to **BT1.1 / BATT_P**; black
+to **BT1.2 / BATT_N_RAW**, which returns through the board's protection MOSFETs.
+The plug must follow these nets: a mechanically matching JST-PH plug alone
+does not establish polarity. This route needs at least **94 mm of usable free
+lead**, including 8 mm installation slack. The supplied pack's wire length and
+polarity are not documented by its current product page and need inspection.
+The body, leads and plug are purchased parts; they add no printed pieces or
+device height. See [battery connection geometry](assets/enclosure/battery-connection.json)
+and [nominal connection checks](assets/enclosure/stl/battery-connection-check.json).
+
+![Selected battery, red/black harness and mating board connector](assets/enclosure/battery-wired-connection.png)
+
+SparkFun's current product page excludes international battery shipping.
+[LionCircuits' India listing](https://www.lioncircuits.com/parts/PRT-13855)
+currently reports this exact part out of stock (checked 12 October 2026).
+Availability must be confirmed before ordering; another 2000 mAh pack is not
+automatically interchangeable in size, wire length or polarity.
 
 | Thickness contribution | mm |
 | --- | ---: |
@@ -372,7 +394,7 @@ Update the checked-in schematic, PCB, and 3D snapshots with:
 bun run snapshot:update
 ```
 
-The Waveshare adaptation builds locally with **227 routed traces and 176
+The current PCB candidate builds locally with **224 routed traces and 207
 ordinary through vias**, with zero build errors and no Gerber-derived shorts
 on top, bottom, inner1 or inner2. Netlist, schematic placement, PCB placement,
 TypeScript, mounting-hole copper clearance and the 87-row assembly export pass.
@@ -482,10 +504,25 @@ regional RF compliance testing because its published 2.5 dBi peak gain
 exceeds the module datasheet's certified-antenna gain limits. Programming,
 screen refresh, SD I/O, and low-battery shutdown still need firmware bring-up.
 
+## Stock replacements (12 October 2026)
+
+J1 uses [HRO TYPE-C-31-M-12, C165948](https://jlcpcb.com/partdetail/C165948)
+with its exact 12-contact supplier footprint, four plated shell slots and two
+0.60 mm locator holes. The paired VBUS/GND pads differ from USB4105; the PCB
+contact mapping and routing are revised accordingly. U1 uses
+[TI BQ24073RGTR, C15220](https://jlcpcb.com/partdetail/C15220).
+Recent published JLCPCB inventory showed 275,527 and 24,987 respectively;
+these are cached figures, not confirmed live assembly stock. Recheck both
+parts in the signed-in JLCPCB assembly order before submitting.
+
 ## Power, charging, and bring-up
 
-- U1 is a [BQ24074 power-path charger](https://www.ti.com/lit/ds/symlink/bq24074.pdf).
-  Its BAT pins charge the cell while its separate OUT pins feed the reader.
+- U1 is a [BQ24073 power-path charger](https://www.ti.com/lit/ds/symlink/bq24073.pdf).
+  JLCPCB C15220 replaces C54313. Pin 15 is TD and is tied to GND to enable
+  termination; it must not be left open as with the former ITERM pin.
+  Its BAT pins charge the cell while its separate 4.4 V OUT pins feed the reader.
+  Use a regulated 5 V USB supply; this passive USB-C input does not negotiate PD.
+  The BQ24073 has a 6.6 V input overvoltage cutoff.
   EN1 = high and EN2 = low select the 500 mA USB input-current limit.
   R9 = 2.5 kΩ sets about **356 mA** nominal fast-charge current
   (890 AΩ / 2500 Ω). Dynamic power management reduces charging when the

@@ -136,8 +136,10 @@ for name,spec in cads.items():
     if spec.get('model_obj_url') or spec.get('model_glb_url'):assert len(emitted[name].data.vertices)>8,f'Fallback CAD for {name}'
 board_parts=[o for n,o in emitted.items() if n in pcb_refs]+[pcb_solid]
 # Check the assembled model actually contains the current printable geometry.
-for name,local in (('front_chassis',front),('rear_cover',rear),('battery_envelope',cell),('battery_liner',liner[0])):
-    assert all(abs(a-b)<.001 for local_axis,native_axis in zip(bounds(local),bounds(emitted[name])) for a,b in zip(local_axis,native_axis)),f'Stale or shifted native CAD: {name}'
+for name,local in (('front_chassis',front),('rear_cover',rear),('battery_pack',cell),('battery_liner',liner[0])):
+    # The printed ink plane is 0.002 mm above the nominal pouch envelope.
+    tolerance=.01 if name=='battery_pack' else .001
+    assert all(abs(a-b)<tolerance for local_axis,native_axis in zip(bounds(local),bounds(emitted[name])) for a,b in zip(local_axis,native_axis)),f'Stale or shifted native CAD: {name}'
 cell_bounds=bounds(cell);liner_bounds=bounds(liner[0]);module_bounds=bounds(emitted['U4'])
 under_battery=[o for o in board_parts if all(min(a[1],b[1])-max(a[0],b[0])>1e-5 for a,b in zip(bounds(o)[:2],liner_bounds[:2]))]
 highest=max(under_battery,key=lambda o:bounds(o)[2][1])
@@ -218,6 +220,62 @@ for reference,compared in ((source_points,native_points),(native_points,source_p
     kd.balance()
     display_deviation=max(display_deviation,max(kd.find(point)[2] for point in compared))
 assert display_deviation<1e-4, 'Native export changed display solid geometry'
+
+# The battery harness is an external connection, not extra PCB BOM components.
+# Check source/native equality, real clearance and the actual netlist endpoints.
+battery_spec=json.loads((ROOT/'assets/enclosure/battery-connection.json').read_text())
+battery_model=json.loads((ROOT/'assets/enclosure/battery-model.json').read_text())
+leads=local_glb('battery-leads.glb');plug=local_glb('battery-plug.glb')
+assert len(leads)==2
+for name,parts in (('battery_leads',leads),('battery_plug',plug)):
+    points=[o.matrix_world@v.co for o in parts for v in o.data.vertices]
+    actual=[emitted[name].matrix_world@v.co for v in emitted[name].data.vertices]
+    maximum=0.
+    for reference,compared in ((points,actual),(actual,points)):
+        kd=KDTree(len(reference))
+        for i,p in enumerate(reference):kd.insert(p,i)
+        kd.balance();maximum=max(maximum,max(kd.find(p)[2] for p in compared))
+    assert maximum<1e-4,f'Native export changed {name}: {maximum}'
+for part in leads+plug:
+    for obstacle in (front,rear,*hardware,*liner,*adhesive,*display):clear('battery harness/case-display-hardware',part,obstacle)
+    for obstacle in board_parts:clear('battery harness/electronics',part,obstacle)
+for part in plug:clear('battery plug/pouch',part,cell)
+# A contact blade can lie entirely inside a solid housing without its surfaces
+# crossing the housing boundary. Test the socket directly, including containment.
+for part in plug:
+    assert solid_intersection_volume(part,emitted['BT1'])<=EPS,'Plug plastic covers the header contacts or latch'
+clear('battery wires separated',leads[0],leads[1])
+plug_original={o:o.matrix_world.copy() for o in plug}
+for step in range(1,14):
+    for part in plug:
+        part.matrix_world=Matrix.Translation(Vector((0,-step*.5,0)))@plug_original[part]
+        for obstacle in (front,rear,cell,*board_parts):clear('battery plug removal with case open',part,obstacle)
+for part,transform in plug_original.items():part.matrix_world=transform
+connector=battery_spec['connector']
+bt_id=next(k for k,v in sources.items() if v=='BT1')
+bt_ports={p['pin_number']:p for p in circuit if p['type']=='source_port' and p['source_component_id']==bt_id}
+pad_records=[p for p in circuit if p['type']=='pcb_plated_hole' and p.get('pcb_component_id')==cads['BT1']['pcb_component_id']]
+for key,pin,color in (('positive',1,'red'),('negative',2,'black')):
+    port=bt_ports[pin]
+    net_id=next(o['source_net_id'] for o in circuit if o['type']=='source_net' and o['name']==connector[key+'Net'])
+    assert any(port['source_port_id'] in o.get('connected_source_port_ids',[]) and net_id in o.get('connected_source_net_ids',[]) for o in circuit if o['type']=='source_trace'),f'BT1 pin {pin} net mismatch'
+    pad=next(p for p in pad_records if p.get('pcb_port_id')==next(p['pcb_port_id'] for p in circuit if p['type']=='pcb_port' and p['source_port_id']==port['source_port_id']))
+    assert abs(pad['x']-connector[key+'X'])<.001,'Harness does not align with the actual board pin'
+    end=battery_model['wire_paths_mm'][key][-1]
+    assert abs(end[0]-pad['x'])<.001 and abs(end[1]-connector['wireExitY'])<.001 and abs(end[2]-connector['contactZ'])<.001
+battery_report={'part':battery_spec['part']['partNumber'],'nominal_geometry_passed':True,
+    'native_models_match_source':True,'wire_case_component_collisions':0,
+    'connection':{'red':'BT1.1 / BATT_P','black':'BT1.2 / BATT_N_RAW (protected return)'},
+    'wire_centerline_length_mm':battery_model['wire_centerline_length_mm'],
+    'required_free_lead_length_mm':battery_model['required_free_lead_length_mm'],
+    'plug_axial_removal_travel_mm':6.5,
+    'removal_scope':'Rigid plug path, with the case open and flexible cable repositioned; strain and disconnect force require a physical sample.',
+    'charge_current_ma':battery_spec['charging']['nominalChargeCurrentMa'],
+    'physical_battery_qualified':False,
+    'remaining_checks':['Delivered dimensions and swelling allowance','Actual keyed plug polarity','Usable lead length and wire diameter','Supplier charge/discharge ratings and allowed temperature'],
+    'scope':battery_spec['modelScope']}
+(STL/'battery-connection-check.json').write_text(json.dumps(battery_report,indent=2)+'\n')
+print('Battery harness nominal geometry and netlist verified',flush=True)
 key_strokes=[];key_refs=['SW6','SW3','SW2','SW4']
 for key,x,ref in zip(keys,DISPLAY_SPEC['controls']['navigationX'],key_refs):
     original=[v.co.copy() for v in key.data.vertices]

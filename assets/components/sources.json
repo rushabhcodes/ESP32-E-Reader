@@ -216,5 +216,33 @@
     "source": "tsci import C324726 --use-exact-footprint --download (JLCPCB EasyEDA supplier STEP model)",
     "sha256": "e08d44d9935b2931d2685a8d5eb5859bcf1518302f08a922d9298ecc006e5576",
     "bytes": 4243456
+  },
+  {
+    "path": "assets/components/C15220.obj",
+    "source": "https://www.lcsc.com/product-detail/C15220.html",
+    "importCommand": "tsci import C15220 --jlcpcb --download --use-exact-footprint",
+    "sha256": "35c63e0b7251ffcc22cf8719f5702b4599aeb413d9743a9de0c8f1424b659670",
+    "bytes": 118663
+  },
+  {
+    "path": "assets/components/C15220.step",
+    "source": "https://www.lcsc.com/product-detail/C15220.html",
+    "importCommand": "tsci import C15220 --jlcpcb --download --use-exact-footprint",
+    "sha256": "ea2a330c46f585a642f64fedcf5753e7a1ed61b2d5731a64c00cac9dbb0a6722",
+    "bytes": 1323229
+  },
+  {
+    "path": "assets/components/C165948.obj",
+    "source": "https://www.lcsc.com/product-detail/C165948.html",
+    "importCommand": "tsci import C165948 --jlcpcb --download --use-exact-footprint",
+    "sha256": "9d7e957178f20137fdd5d62ae84281fe3b5bb3a44262f348d8e129b0a4182320",
+    "bytes": 677525
+  },
+  {
+    "path": "assets/components/C165948.step",
+    "source": "https://www.lcsc.com/product-detail/C165948.html",
+    "importCommand": "tsci import C165948 --jlcpcb --download --use-exact-footprint",
+    "sha256": "3806dacd6082a75cfb24d3ba4b86b3d0c96213134c67e1385eb1599a89b2c461",
+    "bytes": 3046769
   }
 ]

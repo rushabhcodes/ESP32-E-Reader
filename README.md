@@ -442,6 +442,17 @@ The generator updates the STL files, matching GLBs for the tscircuit
 assembly, mesh checks, and ZIP package. The [print guide](assets/enclosure/PRINTING.md)
 also gives the component-clearance and preview-render commands.
 
+Before release checks, refresh lossless CAD/print backups after editing binary models:
+
+```sh
+python3 scripts/package-build-assets.py
+```
+
+The prebuild restores missing GLB and STL files from checksum-verified, compressed
+JSON sources. This handles Git imports that omit printable STL binaries. Direct
+publication also omits duplicate PNG/GLB/STL input files and reconstructs them
+before building; the generated website still includes the original binary files.
+
 After the release checks pass, commit the source and publish with
 `bun run push:release`, then push the commit to GitHub. This command runs
 `tsci push` from the committed runtime files, with original STEP

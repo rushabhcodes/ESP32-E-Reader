@@ -1,0 +1,188 @@
+[
+  {
+    "path": "assets/enclosure/antenna-envelope-DO-NOT-PRINT.glb",
+    "source": "assets/enclosure/binary-sources/bf1cedfb77821ba0.json",
+    "bytes": 12268,
+    "sha256": "29a6c856cc93d4298d47120e66aeb35961c1b1107a200dc729bb0d3f72660f9c"
+  },
+  {
+    "path": "assets/enclosure/battery-adhesive-DO-NOT-PRINT.glb",
+    "source": "assets/enclosure/binary-sources/49d1a2f14fbdf4f9.json",
+    "bytes": 3664,
+    "sha256": "b5fe8582da5d164b2cf1fa57c72f281c35e4d927383fc4a14419b59be602ac07"
+  },
+  {
+    "path": "assets/enclosure/battery-envelope-DO-NOT-PRINT.glb",
+    "source": "assets/enclosure/binary-sources/45039267994550ae.json",
+    "bytes": 12540,
+    "sha256": "2e636f62ac5d3551d73c08e552ea034aeb4ab131ebe8358cd9e34b8f786c9c63"
+  },
+  {
+    "path": "assets/enclosure/battery-leads.glb",
+    "source": "assets/enclosure/binary-sources/035fd5ded348e8cb.json",
+    "bytes": 153892,
+    "sha256": "2216aa7605939479c9f608cf16babc23e15a7779d6a47d8ceec6bf9f8221119c"
+  },
+  {
+    "path": "assets/enclosure/battery-liner-DO-NOT-PRINT.glb",
+    "source": "assets/enclosure/binary-sources/45434bde6ce85479.json",
+    "bytes": 12548,
+    "sha256": "bd056b6776798c2e521f73291b88c028a8229ce5cbcdd1e45e282247bbec9be6"
+  },
+  {
+    "path": "assets/enclosure/battery-pack.glb",
+    "source": "assets/enclosure/binary-sources/13270a7290f85f36.json",
+    "bytes": 161384,
+    "sha256": "91a0a21133687ca5fea2f94fc9141166faebdadf2cc548035ea5f444fbc0b962"
+  },
+  {
+    "path": "assets/enclosure/battery-plug.glb",
+    "source": "assets/enclosure/binary-sources/fe723ad6aa2c4dc0.json",
+    "bytes": 46928,
+    "sha256": "245730afd7e4d7f19a80d7136064725c3a7405e756fbdeb04e3fa55150a6666a"
+  },
+  {
+    "path": "assets/enclosure/cover-snaps-DO-NOT-PRINT.glb",
+    "source": "assets/enclosure/binary-sources/1e6e5f43c0b33ba8.json",
+    "bytes": 13016,
+    "sha256": "3a80f8699f853e2dd073676768afdb664c3fa7c621f7455c018bbebf17ed1ae6"
+  },
+  {
+    "path": "assets/enclosure/display-cushioning.glb",
+    "source": "assets/enclosure/binary-sources/e042ceef1e1802ea.json",
+    "bytes": 30668,
+    "sha256": "06696c70b694b1f37188c91e7485c1b7739f62b676be48f0918e5b411671a76d"
+  },
+  {
+    "path": "assets/enclosure/display-panel.glb",
+    "source": "assets/enclosure/binary-sources/d3236dfd86a55b62.json",
+    "bytes": 134332,
+    "sha256": "a35f0c7a22493566e785e7d514a5df7d528ca4f11e1fe59dac8b1fbc2f654ab0"
+  },
+  {
+    "path": "assets/enclosure/front-chassis.glb",
+    "source": "assets/enclosure/binary-sources/ff71411d0433ba86.json",
+    "bytes": 443100,
+    "sha256": "9ded0219073a402c4813101ffc3e7b2a00a99c68c5913cd27cfaf313705a2f05"
+  },
+  {
+    "path": "assets/enclosure/pcb-cover-fasteners.glb",
+    "source": "assets/enclosure/binary-sources/8de436f86c927499.json",
+    "bytes": 86216,
+    "sha256": "414c2390f310b656dda8b174c4329acb684bdcd394aaed71139a87bddfd98a34"
+  },
+  {
+    "path": "assets/enclosure/print/front-chassis.stl",
+    "source": "assets/enclosure/binary-sources/9e0d51b8da6d3e6b.json",
+    "bytes": 415884,
+    "sha256": "a6df9f2a20d8975c61b52775128d878b670230581622ada4cebe030d4fea2785"
+  },
+  {
+    "path": "assets/enclosure/print/rear-cover.stl",
+    "source": "assets/enclosure/binary-sources/9fd58681cf5e45a6.json",
+    "bytes": 226784,
+    "sha256": "5ce1390950764ed196ea7e290c9969629386cd92567918272c6d19f04ad15d29"
+  },
+  {
+    "path": "assets/enclosure/rear-cover.glb",
+    "source": "assets/enclosure/binary-sources/abed4d598b8d6848.json",
+    "bytes": 228572,
+    "sha256": "10b2dbd93b04f89de7f2e25d31897b85c460cbc34acac12323fdebf699e45755"
+  },
+  {
+    "path": "assets/enclosure/screen-clips-DO-NOT-PRINT.glb",
+    "source": "assets/enclosure/binary-sources/8572ee5868d63d89.json",
+    "bytes": 15728,
+    "sha256": "82a0dbfbe30ba48ae3bd0694b95ae5aca37c8ea3a628ee4aa2969bc5f9cf0b67"
+  },
+  {
+    "path": "assets/enclosure/stl/antenna-envelope-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/120e924ac6db98c0.json",
+    "bytes": 13484,
+    "sha256": "72fe3c4f6e8c8739a154257ce7058114d59503f3776ec93991c05afb0866cae4"
+  },
+  {
+    "path": "assets/enclosure/stl/battery-envelope-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/3d08fff04539140e.json",
+    "bytes": 13484,
+    "sha256": "7f35cc67136d550adf0c5b4f9ccce19e99c3cc67380a3b8864361514a332a5f1"
+  },
+  {
+    "path": "assets/enclosure/stl/button-1-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/47722b287b4c4667.json",
+    "bytes": 40684,
+    "sha256": "4f842ee48c9d0e44aae9031d8dd54c5ba946746e6ddd6644a3a729a575d793e5"
+  },
+  {
+    "path": "assets/enclosure/stl/button-2-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/908988501f06cd7b.json",
+    "bytes": 40684,
+    "sha256": "29ebba852265b884df6a6a151ed040ad7f46211f409a7cffec8b82efddb02579"
+  },
+  {
+    "path": "assets/enclosure/stl/button-3-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/b0db2a79269b910a.json",
+    "bytes": 40684,
+    "sha256": "1fd1978849b5c8dae26697452d987253d5499637148f41380cf208212cb579ef"
+  },
+  {
+    "path": "assets/enclosure/stl/button-4-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/c80c9e55d654c28d.json",
+    "bytes": 40684,
+    "sha256": "15bb5b4b9aa3c23be88ca5a2499bd90f94ef70805ba0d2fa47b6e31574f8b493"
+  },
+  {
+    "path": "assets/enclosure/stl/button-flexures-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/add91f05a262de14.json",
+    "bytes": 178384,
+    "sha256": "505982d2228650f405902d539358ae4affefe4c293a093474d49db7adb5bc848"
+  },
+  {
+    "path": "assets/enclosure/stl/button-moving-1-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/cc5d361ccfe74d17.json",
+    "bytes": 43984,
+    "sha256": "8a31db00bbfdcdc82f1cf29d4d359ca12172826a4baf28b9fa80a2c8735247a8"
+  },
+  {
+    "path": "assets/enclosure/stl/button-moving-2-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/bda4b7fddff18636.json",
+    "bytes": 43784,
+    "sha256": "9ad59fe3034133ffa2e234435e0fe35d9a2321e553fbb7e4d770fd7f1fafdf97"
+  },
+  {
+    "path": "assets/enclosure/stl/button-moving-3-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/6df63743fba23ab7.json",
+    "bytes": 43784,
+    "sha256": "a242fc00846caff3b4c820318651ef9b41468d20c94ecb8a8aa854f4ca6d0bfc"
+  },
+  {
+    "path": "assets/enclosure/stl/button-moving-4-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/b63060544462f2f0.json",
+    "bytes": 44084,
+    "sha256": "a8d5da56317d0b2f8d5a6c579281ecf744e7b381c0fac4540f2f8c0fcc019dd3"
+  },
+  {
+    "path": "assets/enclosure/stl/front-chassis.stl",
+    "source": "assets/enclosure/binary-sources/f20e4bda48a9a0ce.json",
+    "bytes": 415884,
+    "sha256": "fcdc7b23d738b4a95e7eb3af55d216aaa99076652a3eb382847978de86660afb"
+  },
+  {
+    "path": "assets/enclosure/stl/front-rigid-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/f50cb271140fb771.json",
+    "bytes": 220984,
+    "sha256": "758d9b812b1b69452a590a54e2bbd028479c8c3266a7784857a31912c96adc41"
+  },
+  {
+    "path": "assets/enclosure/stl/rear-cover.stl",
+    "source": "assets/enclosure/binary-sources/6bc144e0e7796a38.json",
+    "bytes": 226784,
+    "sha256": "4bb41689e72e208356ffa860aa1e805c36e9a869030210d3eb891c0e37bc515b"
+  },
+  {
+    "path": "assets/enclosure/stl/rear-rigid-DO-NOT-PRINT.stl",
+    "source": "assets/enclosure/binary-sources/b326376352136468.json",
+    "bytes": 213984,
+    "sha256": "739f77df889d8ec9f22928fc5dc8d08a6876fc2d8adad254df01a7967d44dd99"
+  }
+]

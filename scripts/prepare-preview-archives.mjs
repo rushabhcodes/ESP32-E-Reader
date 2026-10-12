@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { zipSync, strToU8 } from "fflate";
+import { restoreBuildAssets } from "./restore-build-assets.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const enclosure = path.join(root, "assets/enclosure");
@@ -18,6 +19,7 @@ export const previewImages = [
 // Git-linked releases omit ZIP/3MF binaries. Recreate them from tracked
 // STEP/STL/JSON sources using the same pinned encoder as local packaging.
 export async function preparePreviewArchives({ supplier = true, print = true, images = true, updateSupplier = false } = {}) {
+  await restoreBuildAssets();
   if (images) {
     for (const name of previewImages) {
       const destination = path.join(enclosure, name);

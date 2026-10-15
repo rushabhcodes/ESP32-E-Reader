@@ -319,16 +319,25 @@ export const CircuitSections = () => (
 		/>
 
 		{diodes.map((spec) => (
-			<MBR0530T1G
-				key={spec.name}
-				name={spec.name}
-				pcbX={spec.pcbX}
-				pcbY={spec.pcbY}
-				pcbRotation={spec.pcbRotation}
-				layer={spec.layer}
-				supplierPartNumbers={supplierPartNumbersFor(spec.name)}
-				{...schematicPlacementFor(spec.name)}
-			/>
+			<Fragment key={spec.name}>
+				<MBR0530T1G
+					name={spec.name}
+					pcbX={spec.pcbX}
+					pcbY={spec.pcbY}
+					pcbRotation={spec.pcbRotation}
+					layer={spec.layer}
+					pcbSx={{ "& silkscreentext": { visibility: "hidden" } }}
+					supplierPartNumbers={supplierPartNumbersFor(spec.name)}
+					{...schematicPlacementFor(spec.name)}
+				/>
+				<silkscreentext
+					text={spec.name}
+					pcbX={spec.pcbX + 3.4}
+					pcbY={spec.pcbY}
+					fontSize="0.75mm"
+					layer={spec.layer}
+				/>
+			</Fragment>
 		))}
 
 		{chips.map(renderChip)}

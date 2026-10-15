@@ -51,13 +51,15 @@
     "path": "assets/components/C82046.obj",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C82046.obj?uuid=e9d505c99b6c436aaf827a29c5ba4f84",
     "sha256": "7c8e2c97e9b3e5c32c1eca57a40e13681407e988333317e3024a8635b37b7344",
-    "bytes": 61981
+    "bytes": 61981,
+    "importCommand": "tsci import C82046 --jlcpcb --use-exact-footprint"
   },
   {
     "path": "assets/components/C82046.step",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C82046.step?uuid=e9d505c99b6c436aaf827a29c5ba4f84",
     "sha256": "f2468af30d27a00c11bf5070ed3293c491829997423ccad7906ca52893418de7",
-    "bytes": 1130934
+    "bytes": 1130934,
+    "importCommand": "tsci import C82046 --jlcpcb --use-exact-footprint"
   },
   {
     "path": "assets/components/C173752.obj",

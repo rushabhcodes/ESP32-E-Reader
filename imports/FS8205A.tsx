@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import localC2830320obj from "../assets/components/C2830320.obj";
 import type { ChipProps } from "@tscircuit/props";
 
@@ -12,8 +13,37 @@ const pinLabels = {
 
 export const FS8205A = (props: ChipProps<typeof pinLabels>) => {
 	return (
-		<chip
-			pinLabels={pinLabels}
+		<mosfet
+			channelType="n"
+			mosfetMode="enhancement"
+			// One physical package containing two common-drain N-channel MOSFETs.
+			// Explicit ports avoid assigning a single-FET symbol's pin roles.
+			symbol={
+				<symbol>
+					<schematicrect width={1.6} height={0.8} isFilled={false} />
+					<schematictext text="{REF}" schY={0.3} fontSize={0.2} />
+					{Object.entries(pinLabels).map(([pin, labels], index) => (
+						<Fragment key={pin}>
+							<port
+								name={labels[0]}
+								aliases={[pin]}
+								pinNumber={index + 1}
+								direction={index < 3 ? "left" : "right"}
+								schX={index < 3 ? -1.2 : 1.2}
+								schY={index < 3 ? 0.2 - index * 0.2 : -0.2 + (index - 3) * 0.2}
+								schStemLength={0.4}
+							/>
+							<schematictext
+								text={labels[0]}
+								schX={index < 3 ? -0.7 : 0.7}
+								schY={index < 3 ? 0.2 - index * 0.2 : -0.2 + (index - 3) * 0.2}
+								anchor={index < 3 ? "left" : "right"}
+								fontSize={0.1}
+							/>
+						</Fragment>
+					))}
+				</symbol>
+			}
 			supplierPartNumbers={{
 				jlcpcb: ["C2830320"],
 			}}
@@ -100,8 +130,7 @@ export const FS8205A = (props: ChipProps<typeof pinLabels>) => {
 				</footprint>
 			}
 			cadModel={{
-				objUrl:
-					localC2830320obj,
+				objUrl: localC2830320obj,
 				pcbRotationOffset: 180,
 				modelOriginPosition: {
 					x: 0.000025399999913133797,

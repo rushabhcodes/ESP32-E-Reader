@@ -1,5 +1,5 @@
 import objPath from "../assets/components/C324726.obj"
-import type { ChipProps } from "@tscircuit/props"
+import type { ConnectorProps } from "@tscircuit/props"
 
 const pinLabels = {
 	pin1: "NC1",
@@ -30,9 +30,9 @@ const pinLabels = {
 	pin26: "SHIELD2",
 } as const;
 
-export const FH34SRJ_24S_0_5SH_50_ = (props: ChipProps<typeof pinLabels>) => {
+export const FH34SRJ_24S_0_5SH_50_ = (props: ConnectorProps) => {
   return (
-    <chip
+    <connector
       pinLabels={pinLabels}
       supplierPartNumbers={{
   "jlcpcb": [

@@ -16,7 +16,7 @@ const functionalSymbols: Record<string, string> = {
 	U4: "ESP32-C3-WROOM-02U-N4",
 	U5: "TPS63021DSJR",
 	J4: "DM3AT-SF-PEJM5",
-	J2: "FH12-24S-0.5SH",
+	J2: "FH34SRJ-24S-0.5SH(50)",
 };
 
 // Explicit symbols reserve space at the corners for supply and ground labels.

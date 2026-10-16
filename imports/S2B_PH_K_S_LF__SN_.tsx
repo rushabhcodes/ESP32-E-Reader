@@ -1,21 +1,21 @@
 import localC173752obj from "../assets/components/C173752.obj";
-import type { ChipProps } from "@tscircuit/props";
+import type { ConnectorProps } from "@tscircuit/props";
 
 const pinLabels = {
 	pin1: ["pin1"],
 	pin2: ["pin2"],
 } as const;
 
-export const S2B_PH_K_S_LF__SN_ = (props: ChipProps<typeof pinLabels>) => {
+export const S2B_PH_K_S_LF__SN_ = (props: ConnectorProps) => {
 	return (
-		<chip
+		<connector
 			pinLabels={pinLabels}
 			supplierPartNumbers={{
 				jlcpcb: ["C173752"],
 			}}
 			manufacturerPartNumber="S2B-PH-K-S(LF)(SN)"
 			footprint={
-				<footprint>
+				<footprint insertionDirection="from_top">
 					<platedhole
 						portHints={["pin1"]}
 						pcbX="0.97499805mm"

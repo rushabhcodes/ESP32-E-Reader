@@ -308,7 +308,8 @@ and planes; a two-layer cost reduction would require a separate redesign.
 
 ```text
 .
-├── index.circuit.tsx       # Board outline, planes, keepouts, and net routing
+├── index.circuit.tsx       # Display, battery, enclosure, and PCB assembly
+├── reader-board.tsx        # Board outline, planes, keepouts, and net routing
 ├── circuit-sections.tsx    # Functional schematic sections and components
 ├── design-data.ts          # Parts, placement, sourcing, nets, and trace widths
 ├── schematic-layout.ts     # Explicit positions for all 94 parts on five sheets
@@ -337,6 +338,20 @@ fresh routing. `verified-pcb-routes.json` stores the validated routing baseline;
 its guard compares all physical geometry, connectivity, keepouts, widths and
 rules. Any physical change invokes routing again. Check the guard with
 `bun scripts/check-routing-cache.mjs`.
+
+`bun run check:electrical-pads` verifies that every electrical pad belongs to a
+source port before accepting the built board. This catches visible footprints
+that the router otherwise omits, including the USBLC6 protection array. The
+switch and protection-array footprints are imported with
+`tsci import <C-number> --jlcpcb --use-exact-footprint`; their supplier copper
+geometry and local CAD models are retained.
+
+The connector-access checker currently recommends the nearest board edge for
+every side-entry connector. BT1 intentionally mates toward the battery lead
+slot (-Y), and J2 receives the display ribbon from the bottom (-Y). Both are
+internal connections with modeled cable paths, so the right-edge recommendation
+is an advisory limitation of that heuristic. These two warnings remain visible;
+no DRC category is disabled.
 
 ## Getting started
 

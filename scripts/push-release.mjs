@@ -39,13 +39,13 @@ try {
       throw new Error(`Source exceeds the safe registry request size: ${file}. Split downloadable archives before publishing.`);
   }
   const pkg = JSON.parse(await readFile(path.join(project, "package.json"), "utf8"));
-  const expected = pkg.version;
   const child = spawn(process.execPath, [path.join(root, "node_modules/.bin/tsci"), "push", "index.circuit.tsx", "--compress"], { cwd: project, stdio: "inherit" });
   const code = await new Promise((resolve, reject) => { child.once("error", reject); child.once("exit", resolve); });
   const published = JSON.parse(await readFile(path.join(project, "package.json"), "utf8")).version;
-  if (published !== expected) throw new Error(`Published ${published}; commit package.json to match the registry version.`);
+  // tsci push increments the version in its staging checkout. Verify that
+  // actual release, including the updated package.json, rather than the input version.
   const packageName = pkg.name.replace(/^@tsci\//, "").replace(".", "/");
-  const identity = { package_name_with_version: `${packageName}@${expected}` };
+  const identity = { package_name_with_version: `${packageName}@${published}` };
   const { filesystem_map: remote } = await post("package_releases/get_filesystem_map", identity);
   if (Object.keys(remote).length !== files.length) throw new Error(`Release source has ${Object.keys(remote).length} files; expected ${files.length}.`);
   for (const file of files) {

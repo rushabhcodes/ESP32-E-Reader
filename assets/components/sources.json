@@ -3,13 +3,15 @@
     "path": "assets/components/C139797.obj",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C139797.obj?uuid=00d848a7e8384bbd9286566957e8bb9c",
     "sha256": "798aee9a042fe688660254c699b54c21d3035efcff536c0bd4942e746023b7de",
-    "bytes": 127398
+    "bytes": 127398,
+    "importCommand": "tsci import C139797 --jlcpcb --use-exact-footprint"
   },
   {
     "path": "assets/components/C139797.step",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C139797.step?uuid=00d848a7e8384bbd9286566957e8bb9c",
     "sha256": "61eae03e06fce37b4997d41d369e7a7ce5ef59e56d140c0f685eee61cc8b9493",
-    "bytes": 1689331
+    "bytes": 1689331,
+    "importCommand": "tsci import C139797 --jlcpcb --use-exact-footprint"
   },
   {
     "path": "assets/components/C388883.obj",
@@ -125,13 +127,15 @@
     "path": "assets/components/C7519.obj",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C7519.obj?uuid=229b69761e2c45dba6a83d8866dec72d",
     "sha256": "b4a68fd1399fd2ab9e7baf51fd4bb6dd8b2a8be45c2b632e1f2c84723c5d7e45",
-    "bytes": 565628
+    "bytes": 565628,
+    "importCommand": "tsci import C7519 --jlcpcb --use-exact-footprint"
   },
   {
     "path": "assets/components/C7519.step",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C7519.step?uuid=229b69761e2c45dba6a83d8866dec72d",
     "sha256": "53901e8dbe77366e4c00f90fd3613933fd2db1f1453ddc9eee51d8a18d44dbff",
-    "bytes": 3277419
+    "bytes": 3277419,
+    "importCommand": "tsci import C7519 --jlcpcb --use-exact-footprint"
   },
   {
     "path": "assets/components/C54313.obj",
@@ -185,13 +189,15 @@
     "path": "assets/components/C431541.obj",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C431541.obj?uuid=52f1cee24f744214bc077f746cfb201a",
     "sha256": "643ac778792498bd9afe118d0b4e8f7375112f09b82f8b8d4980603f66b6d826",
-    "bytes": 172907
+    "bytes": 172907,
+    "importCommand": "tsci import C431541 --jlcpcb --use-exact-footprint"
   },
   {
     "path": "assets/components/C431541.step",
     "source": "https://modelcdn.tscircuit.com/easyeda_models/assets/C431541.step?uuid=52f1cee24f744214bc077f746cfb201a",
     "sha256": "b19a22ee573a22d213a9aa2b52c9358f305f2250e56e71f127dc8d9f546977fa",
-    "bytes": 1473354
+    "bytes": 1473354,
+    "importCommand": "tsci import C431541 --jlcpcb --use-exact-footprint"
   },
   {
     "path": "assets/components/C133195.obj",

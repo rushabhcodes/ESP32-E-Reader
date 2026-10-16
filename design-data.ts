@@ -944,6 +944,8 @@ export const chips: ChipSpec[] = [
 	{
 		name: "JP1",
 		value: "BOOT",
+		// Unpopulated recovery contacts: a passive BOOT-to-GND interface.
+		kind: "connector",
 		footprint: kicad("Jumper/SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"),
 		pins: ["1", "2"],
 		section: "mcu_power",

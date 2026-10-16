@@ -1,5 +1,5 @@
 import localC114218obj from "../assets/components/C114218.obj";
-import type { ChipProps } from "@tscircuit/props";
+import type { ConnectorProps } from "@tscircuit/props";
 
 export const pinLabels = {
 	pin1: ["DAT2"],
@@ -23,9 +23,9 @@ const pinAttributes = {
 	pin6: { requiresGround: true },
 } as const;
 
-export const DM3AT_SF_PEJM5 = (props: ChipProps<typeof pinLabels>) => {
+export const DM3AT_SF_PEJM5 = (props: ConnectorProps) => {
 	return (
-		<chip
+		<connector
 			pinLabels={pinLabels}
 			pinAttributes={pinAttributes}
 			supplierPartNumbers={{

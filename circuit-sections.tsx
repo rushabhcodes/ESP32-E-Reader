@@ -128,9 +128,7 @@ const renderChip = (spec: ChipSpec) => {
 			/>
 		);
 	if (spec.name === "SW7")
-		return (
-			<MSK12C02_HB key={spec.name} {...importedCommon} />
-		);
+		return <MSK12C02_HB key={spec.name} {...importedCommon} />;
 
 	const common = {
 		name: spec.name,
@@ -349,6 +347,12 @@ export const CircuitSections = () => (
 				footprintVariant="pad"
 				padShape="circle"
 				padDiameter="1.5mm"
+				footprint={
+					<footprint>
+						<smtpad portHints={["pin1"]} shape="circle" radius="0.75mm" />
+						<courtyardcircle radius="1mm" />
+					</footprint>
+				}
 				doNotPlace
 				pcbX={testpoint.pcbX}
 				pcbY={testpoint.pcbY}

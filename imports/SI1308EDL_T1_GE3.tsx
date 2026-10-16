@@ -9,8 +9,7 @@ const pinLabels = {
 
 export const SI1308EDL_T1_GE3 = (props: ChipProps<typeof pinLabels>) => {
 	return (
-		<chip
-			pinLabels={pinLabels}
+		<mosfet channelType="n" mosfetMode="enhancement"
 			symbol={
 				<symbol>
 					<schematictext text="{REF}" schX={0.25} schY={0.15} fontSize={0.25} />
